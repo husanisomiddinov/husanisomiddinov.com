@@ -29,6 +29,10 @@
     {
       "name": "Jetson Nano",
       "description": "When I want CUDA in a shoebox for edge ML experiments without melting the MacBook."
+    },
+    {
+      "name": "Fitbit Air",
+      "description": "Lets me systemize my health, at least to a certain extent."
     }
   ]
 }
