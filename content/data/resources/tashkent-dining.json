@@ -1,0 +1,119 @@
+[
+  {
+    "category": "Cafes & Bakeries",
+    "places": [
+      {
+        "name": "Bon!",
+        "description": "Has multiples branches, so my opinion doesn't universally apply to all the branches. Good place to have informal meetings, to catch up with friends, or just to get some work done on your laptop. Bigger and central branches can get a bit noisy. Good coffees overall. I love the fact that they don't charge extra amount for lactose-free milk. Meals are average (and a bit inconsistent in taste). Solid option for an average day."
+      }, 
+      {
+        "name": "Gloria Jean's",
+        "description": "One of the newer cafes. Service quality is below average. Good lemon tea. Very average or below average coffee and meals. But a great place to study or get your work done. Not as popular as Bon! or Safia, but quite peaceful."
+      }, 
+      {
+        "name": "Safia",
+        "description": "Multiple branches. And it is more of a bakery than a cafe. Prices are slightly lower than Bon's. Very great cappuccino. Their lemon tea used to be great, but borderline awful right now. Not a good study place. Most branches are very noisy. Meals are good, but portions are a bit small. One of the best club sandwichs I have tried in Tashkent."
+      }, 
+      {
+        "name": "Beans and Brews",
+        "description": "Pricier than Bon! or Safia, but an impeccable work/study location. Usually very few people in any branch. Locations are also quite comfy. Only tried their cappuccino. It was fine. Other drinks were low-key bad, though. Didn't like any of their teas. Had a breakfast once, and it was also pretty average. The reason I'd go there is because of the space. It is not as crowded as other cafes."
+      }, 
+      {
+        "name": "Community Coffee Bar",
+        "description": "One of the best study/work cafes in Tashkent. Coffee is fine, meals are below average. Has a few locations in Tashkent. Some days, I spent the entire day working there. Peaceful with amazing cafe aesthetic with persian carpets in all branches."
+      }, 
+      {
+        "name": "Tary",
+        "description": "A kazakh cafe chain. They have only one location in Tashkent. A premium place. The design aesthetic is minimalistic, combining kazakh national elements to a white backdrop. They also have branches across the world. Across central asia and even in downtown Chicago. I liked their coffee. Above average coffee. I recommend trying their baursak. It is a traditional kazakh fried dough food. Tastes great. They also give a cup of water for free all the time, which is a great addition. Overall, a great place for informal meetings, dates, or just catching up with friends. The prices are above average. More expensive than Bnb or Community Coffee Bar. "
+      }, 
+      {
+        "name": "Costa Coffee",
+        "description": "The average paycheck is higher than the rest. Coffee can be both good and bad depending on the branch. (The one near Eco park has slightly better baristas). Can be a great study space too, but almost all branches get too crowded on a good day. And the locations don't have many available outlets. They also put their AC on full blast, which can get very cold even when the weather is hot."
+      }, 
+      {
+        "name": "Tim's",
+        "description": "I like their club-sandwich. They add soy sauce and it usually turns out great. The vibe is inviting. Coffee is good, too. Some of their outlets don't work. But other than that, it is a very solid option for a quick bite/work session."
+      }, 
+      {
+        "name": "Global Coffee",
+        "description": "Multiple branches across the city. Coffee can be good depending on the barista. Definitely not a study space. The locations are very tiny. It is more like a quick grab-and-go place. "
+      }, 
+      {
+        "name": "Yes Coffee",
+        "description": "Has multiple branches throughout the city. Very average to bad coffee depending on the branch. But the locations are quite comfy. Not too noisy. Can be a good study/work place. But they would benefit from having more outlets. "
+      },
+      {
+        "name": "Shavi Coffee",
+        "description": "The location of Shavi is literally perfect. The street is green and fresh. Not too many people. Like-minded contingent. The coffee is also pretty good. So far, I liked their cappuccino the most. The prices can be high, though. Definitely more expensive than most coffeeshops in Tashkent. But if 10-20k uzs doesn't make much difference, then it is worth it. The pastery can be even more expensive. The interior is quite cozy. Gives off lock-in vibes, so I can work there for a good amount of time. It is also close to the best running routes, so, an optimal location to get the morning caffeine after the run. "
+      },
+      {
+        "name": "Paul",
+        "description": "One of the cafes on the expensive side. Meals are okay. Had a breakfast there once, and the portions aren't irreasonably small. I can be full without having to spend too much. One downside is they usually don't have proper lactose-free milk for their coffee. They have other alternative milk options, like almond or banana even, but I don't like them."
+      }, 
+      {
+        "name": "Pie Republic",
+        "description": "Entered, I think, only once. I am not a big fan of sugary stuff, and Pie Republic is quite sweet. Too sweet for me. Not a good study space. I'd imagine it as a great place to hang out with friends, but the vibe just isn't there for me."
+      }, 
+      {
+        "name": "Cafe Dosan",
+        "description": "Friend said their matcha was good, so I visited with another friend, once. We both tried their matcha latte. Average. Can be a good place to hang out with friends and study together, but I'd not imagine myself working there. I need my deep focus. The music can be too load too, at times."
+      }, 
+      {
+        "name": "Rassvet",
+        "description": "It is a unique coffeeshop. They combined coffee and running. They organize races in the morning and the end of the race route is usually at the cafe. The coffee is good. The vibe is quite cozy, but they would really benefit from more outlets. Overall, a good location for a morning run and a good coffee."
+      },
+      {
+        "name": "Coffee Campus",
+        "description": "I've been there a couple times. The coffee is below average. The only reason why I'd go there is because of the space. The place is tiny, but is usually very empty. Can be a good place to get some mild work done, but not good for deep focus. The location is also a bit weird. Doesn't have many cafes around. Located around government buildings. "
+      }, 
+      {
+        "name": "Chaykof",
+        "description": "Tried it a couple times in the past. The coffee is okay. Breakfast meals are pretty good too. Worth the price. The atmosphere is cozy and inviting, but I don't see it as a work or study place. It's been a while since I've visited, so they might have changed."
+      }
+    ]
+  }, 
+  {
+    "category": "Uzbek Cuisine",
+    "places": [
+      {
+        "name": "Not yet",
+        "description": "The owner will fill out this when he is not lazy."
+      }
+    ]
+  }, 
+  {
+    "category": "Asian Cuisine",
+    "places": [
+      {
+        "name": "Yapona Mama",
+        "description": "Not a big asian-food aficionado. Been at Yapona Mama a couple times. Chicken rolls are good, but the rest would need some better work. Good, cozy atmosphere. Not too lavish, inviting. Not the best soy sauce. And would be better if they offered a bigger range of drinks - hard to find something healthy."
+      }, 
+      {
+        "name": "The rest will be added later",
+        "description": "The owner will fill out this when he is not lazy."
+      }
+    ]
+  }, 
+  {
+    "category": "European Cuisine",
+    "places": [
+      {
+        "name": "To be added later",
+        "description": "The owner will fill out this when he is not lazy."
+      }
+    ]
+  }, 
+  {
+    "category": "Burgers",
+    "places": [
+      {
+        "name": "ШЕФ BURGER",
+        "description": ""
+      }, 
+      {
+        "name": "Burger Embassy",
+        "description": ""
+      }
+    ]
+  } 
+]

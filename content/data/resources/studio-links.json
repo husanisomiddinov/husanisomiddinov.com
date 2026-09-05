@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Arsenal",
+    "description": "My digital armor",
+    "url": "/arsenal"
+  },
+  {
+    "name": "Heuristics",
+    "description": "Nineteen rules I live by",
+    "url": "/heuristics"
+  },
+  {
+    "name": "Quotes",
+    "description": "Lowkey badass lines",
+    "url": "/quotes"
+  },
+  {
+    "name": "Tashkent Dining Recommendations",
+    "description": "Dining recommendations for Tashkent",
+    "url": "/studio/tashkent"
+  }
+]

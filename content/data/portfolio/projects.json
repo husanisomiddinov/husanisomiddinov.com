@@ -1,0 +1,99 @@
+[
+  {
+    "slug": "personal-website",
+    "kind": "web",
+    "title": "Personal Website",
+    "summary": "This website you're currently browsing.",
+    "description": "## Context\nThis is my personal digital home and long-term publishing platform. I use it to document projects, ideas, reading notes, writing, and ongoing experiments while keeping full ownership of content and presentation.\n\nThe goal is to make the site feel less like a static resume and more like a living system that evolves with my work.\n\n## Product Structure\nThe website is organized into focused sections so each type of content has its own clear surface.\n\n- Home and About pages for identity and current direction\n- Projects pages with individual deep-dive routes for each build\n- Reading and Writing sections for books and long-form posts\n- Studio pages for curated resources and personal artifacts\n- Additional pages like Arsenal, Facts, Quotes, and Heuristics\n\nThis structure supports both fast skimming and deep exploration.\n\n## Technical Architecture\nThe site is built with Next.js and TypeScript, using static generation patterns for fast load times and predictable deploys.\n\n- Framework: Next.js\n- Language: TypeScript\n- UI system: Chakra UI\n- Content rendering: MDX via `next-mdx-remote`\n- SEO: route-level metadata with `next-seo`\n\nMost pages are data-driven through JSON/MDX content sources, which keeps editorial updates separate from UI logic.\n\n## Content System and Authoring Workflow\nA core design principle is content-first development: write or edit data files, then let reusable page templates handle rendering.\n\n- Portfolio data lives in structured JSON (project metadata, links, artwork)\n- Long-form pages use MDX for readable writing + embedded media support\n- Dynamic routes (for example, project and reading detail pages) are statically generated\n- Shared components ensure a consistent visual language across sections\n\nThis approach makes it easy to expand the site without repeatedly changing page code.\n\n## Design Direction\nThe interface favors clean typography, restrained color usage, and subtle editorial framing. Artwork banners and curated visuals are used intentionally to give each page a distinct mood without sacrificing readability.\n\nNavigation is deliberately minimal so users can quickly move between identity, work, and thought.\n\n## What This Project Demonstrates\nThis project demonstrates end-to-end ownership of product, engineering, and narrative: information architecture, frontend implementation, content strategy, and iterative refinement.\n\nIt is both a portfolio and an operating system for my work, designed to keep growing as new projects and writing are published.",
+    "tech": ["Next.js", "TypeScript", "Chakra UI"],
+    "date": "2022 June – Present",
+    "status": "in-progress",
+    "links": {
+      "live": "https://husanisomiddinov.com",
+      "github": "https://github.com/husanisomiddinov/personal-website"
+    },
+    "painting": {
+      "src": "/paintings/rome-star-wars.png",
+      "credit": "Rome and Star Wars collage artwork.",
+      "width": 1080,
+      "height": 803
+    }
+  },
+  {
+    "slug": "ros2-slam",
+    "kind": "robotics",
+    "title": "ROS2 SLAM & Autonomous Navigation",
+    "summary": "A full ROS2 mapping and navigation pipeline for TurtleBot3 in Gazebo, from SLAM map generation to autonomous multi-goal execution.",
+    "description": "## Context\nBuilt as an intern onboarding task for the MD25010 grant project at New Uzbekistan University, this project implements a full SLAM and autonomous navigation pipeline in ROS2 using TurtleBot3 in Gazebo.\n\nThe objective was to produce a reproducible, end-to-end robotics workflow: containerized setup, map creation, autonomous mission execution, and measurable results.\n\n## System Architecture\nThe stack combines ROS2, Nav2, SLAM Toolbox, Gazebo, and RViz inside Docker, with browser-based VNC for launching and observing the robotics desktop environment.\n\n- ROS2 package build and runtime orchestration inside a consistent container\n- Gazebo simulation for robot/world dynamics\n- SLAM Toolbox for map generation in lifelong mapping mode\n- Nav2 for localization, planning, and goal-following\n- RViz for map and navigation state inspection\n\nThis architecture avoids local dependency drift and makes reruns predictable across machines.\n\n## Execution Flow\nThe workflow is intentionally divided into three stages so each milestone is independently verifiable.\n\n### Part A - Environment and Package Setup\n- Build and launch containerized workspace with Docker Compose\n- Build the ROS2 package via colcon\n- Configure TurtleBot3 model and runtime environment\n\n### Part B - Mapping (SLAM)\n- Launch Gazebo + RViz + SLAM stack\n- Teleoperate the robot to maximize map coverage\n- Export occupancy grid map artifacts for reuse\n\n### Part C - Autonomous Navigation\n- Switch from mapping to full navigation stack\n- Run scripted multi-goal execution (`send_nav_goals`) or manual goal placement\n- Log mission outcomes into CSV for evaluation\n\n## Results\nNavigation evaluation reached 5 out of 5 goal completions with low terminal error, and every run produced auditable artifacts (saved maps, screenshots, and navigation logs).\n\n- Goal completion: 5/5 SUCCESS\n- Arrival error range: approximately 0.03m to 0.11m\n- Runtime metrics: per-goal timing stored for comparison and tuning\n\n## Engineering Decisions and Reliability Work\nA key part of the project was making robotics-in-container execution reliable enough for repeated testing.\n\n- Enabled software rendering (`LIBGL_ALWAYS_SOFTWARE=1`) to stabilize Gazebo without GPU passthrough\n- Mounted map directories to preserve outputs between container sessions\n- Blocked problematic external model host lookup to prevent startup hangs\n\nThese choices improved startup stability and made the environment practical for iterative experimentation.\n\n## Deliverable Value\nThis repository is a reference implementation for ROS2 simulation workflows that need repeatability, observability, and measurable navigation outcomes.\n\nIt provides a clean base for future extensions such as Nav2 parameter tuning, map quality analysis, expanded waypoint missions, and benchmarking alternative planning strategies.",
+    "tech": ["ROS2", "Python", "Nav2", "Gazebo", "Docker"],
+    "date": "2026",
+    "status": "completed",
+    "links": {
+      "github": "https://github.com/husanisomiddinov/md25010-ros2-slam"
+    },
+    "painting": {
+      "src": "/paintings/the-course-of-empire.png",
+      "credit": "Thomas Cole — The Course of Empire: Destruction, 1836. The New-York Historical Society.",
+      "width": 1080,
+      "height": 686
+    }
+  },
+  {
+    "slug": "apollo-ai",
+    "kind": "ml",
+    "title": "Apollo AI",
+    "summary": "An AI-powered crop stress detection platform that classifies plant conditions from smartphone or drone imagery with a web-first, mobile-friendly workflow.",
+    "description": "## Context\nApollo AI is an AI500 Hackathon 2025 Stage 2 submission focused on democratizing precision agriculture by making crop diagnostics accessible from standard phone and drone images.\n\nThe project is built as a deployed prototype, combining an interactive product experience with a production-style inference backend.\n\n## Problem and Objective\nFarmers and field operators often lack quick, low-cost diagnostic tools that can be used directly in real-world conditions.\n\nApollo AI addresses this by providing:\n- Fast image-based crop stress classification\n- A low-friction user experience that works on mobile devices\n- Multiple access paths (web interface and Telegram bot)\n\n## System Architecture\nThe platform is split into a modern frontend and a Python inference backend.\n\n- Frontend: Next.js 15 (App Router), React 19, Tailwind CSS\n- Backend: FastAPI deployed as serverless functions on Vercel\n- Inference runtime: ONNX Runtime for efficient model execution\n- Visualization: Three.js-based interactive 3D Drone Scanner\n\nThis architecture supports responsive UX, clear API boundaries, and deployment-ready scalability for prototype usage.\n\n## AI Model\nThe classification engine is based on a ResNet-18 model trained on PlantVillage data.\n\n- Dataset scale: 70k+ images\n- Target: crop stress and disease class detection\n- Reported demo-class performance: up to 99% accuracy\n\nThe model pipeline is integrated into a user-facing flow so inference is not isolated from product behavior.\n\n## Product Experience\nThe frontend emphasizes usability for non-technical users and field-friendly workflows.\n\n- Mobile-first responsive layouts\n- Glass-morphism visual language for clear, modern UI\n- Dedicated demo route (`/demo`) for testing classification flow\n- Visual storytelling via 3D scanner interaction\n\n## Telegram Bot Integration\nA Telegram assistant extends access for users who prefer messaging-first interactions.\n\n- Provides instant analysis support and app access flow\n- Uses a polling architecture\n- Runs locally or on a VPS even when web deployment is on Vercel\n\nThis makes the platform more reachable across different user behavior patterns.\n\n## What This Project Demonstrates\nApollo AI demonstrates end-to-end product engineering across ML inference, backend API design, interactive frontend experience, and multi-channel delivery.\n\nIt also shows practical deployment thinking: model serving on serverless infrastructure, modern React architecture, and user-facing tooling designed for fast iteration in a hackathon-to-product trajectory.",
+    "tech": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "FastAPI",
+      "ONNX Runtime",
+      "Computer Vision",
+      "ResNet-18",
+      "Three.js"
+    ],
+    "date": "2025 October – Present",
+    "status": "in-progress",
+    "links": {
+      "live": "https://tryapollo.vercel.app",
+      "github": "https://github.com/bilalsea2/apollo-ai"
+    },
+    "painting": {
+      "src": "/paintings/guernica.png",
+      "credit": "Pablo Picasso — Guernica, 1937. Museo Reina Sofia, Madrid.",
+      "width": 1080,
+      "height": 489
+    }
+  },
+  {
+    "slug": "sentiment-analysis",
+    "kind": "ml",
+    "title": "Sentiment Analysis Web App",
+    "summary": "A Flask web app that classifies IMDB movie reviews with a NumPy logistic regression model and compares results against scikit-learn.",
+    "description": "## Context\nThis is the first project in my Vibecoding Ascent challenge and was designed as a full sentiment analysis pipeline for movie reviews, from preprocessing to model training to browser-based inference.\n\nInstead of relying only on framework abstractions, I built the core model logic myself to understand the mechanics of text classification at a first-principles level.\n\n## Problem and Objective\nThe goal was to classify IMDB reviews as positive or negative while comparing a custom implementation against a standard library baseline.\n\nI wanted to answer two questions:\n- Can a NumPy-only logistic regression implementation reach competitive performance?\n- Which parts of the text pipeline matter most for practical sentiment quality?\n\n## Modeling Approach\nThe primary model is logistic regression implemented from scratch in NumPy and optimized with gradient descent.\n\n- Loss function: binary cross-entropy\n- Training iterations: 1,000\n- Learning rate: 0.1\n- Output: binary sentiment prediction\n\nBuilding the optimizer manually made it easier to inspect training behavior and understand how parameter updates respond to sparse features.\n\n## Feature Engineering Pipeline\nReview text is transformed into TF-IDF vectors with both unigrams and bigrams, capped at 5,000 features.\n\n- Unigrams capture broad sentiment-bearing words\n- Bigrams capture short phrase context that can flip polarity\n- Preprocessing/cleaning modules keep train-time and inference-time transformations consistent\n\nThis setup balances representation quality with computational efficiency.\n\n## Benchmarking and Performance\nTo validate the custom implementation, I trained a parallel scikit-learn baseline on the same data setup and compared outcomes directly.\n\n- Dataset: IMDB movie reviews (50,000 total)\n- Custom NumPy logistic regression: approximately 85-88% validation accuracy\n- scikit-learn comparison model: similar accuracy range\n\nThe comparison showed that the custom model remains competitive while being fully transparent and inspectable.\n\n## Productization and Tooling\nThe project is wrapped in a Flask web app so users can input any review and receive an immediate sentiment prediction.\n\nSupporting scripts handle the full workflow:\n- Model training\n- Feature extraction and visualization generation\n- Prediction testing\n\nThis made experimentation repeatable and reduced friction between model iteration and UI-facing inference.\n\n## What This Project Demonstrates\nThis project demonstrates practical ML engineering across data preprocessing, feature design, optimization, benchmarking, and deployment integration.\n\nMore importantly, it built strong intuition for linear models and NLP feature spaces, which provides a grounded foundation for later work with larger frameworks and deep learning systems.",
+    "tech": ["Python", "Flask", "NumPy", "TF-IDF"],
+    "date": "2025-03-01",
+    "status": "completed",
+    "links": {
+      "github": "https://github.com/husanisomiddinov/sentiment-analysis-webapp"
+    },
+    "painting": {
+      "src": "/paintings/the-wave.png",
+      "credit": "Katsushika Hokusai — The Great Wave off Kanagawa (Thirty-six Views of Mount Fuji), c. 1830–1832.",
+      "width": 4335,
+      "height": 2990
+    },
+    "papers": [
+      {
+        "title": "TF-IDF Feature Engineering for Text Classification",
+        "notes": "Used TF-IDF vectorization with unigrams and bigrams to represent IMDB reviews as sparse numeric features, capped at 5,000 dimensions."
+      },
+      {
+        "title": "Logistic Regression via Gradient Descent",
+        "notes": "Built a binary classifier from scratch in NumPy with cross-entropy optimization (learning rate 0.1, 1,000 iterations) and compared it against scikit-learn."
+      }
+    ]
+  }
+]

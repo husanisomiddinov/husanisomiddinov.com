@@ -1,0 +1,34 @@
+{
+  "software": [
+    {
+      "name": "Cursor",
+      "description": "My primary code editor since I ended up getting free tokens in a Cursor Cafe event."
+    },
+    {
+      "name": "Obsidian",
+      "description": "I write down everything here. Really, everything."
+    },
+    {
+      "name": "Claude CLI",
+      "description": "My shortcut to Claude when I'm already in the terminal for quick questions, tiny scripts, that sort of thing."
+    }
+  ],
+  "hardware": [
+    {
+      "name": "Macbook Pro M4",
+      "description": "The best investment I've made in my life so far."
+    },
+    {
+      "name": "Iphone 12 Pro",
+      "description": "To scroll on Twitter when working on my laptop becomes impossible."
+    },
+    {
+      "name": "Raspberry Pi",
+      "description": "Small boards for side projects, GPIO tinkering, and anything that doesn't need a full machine on my desk."
+    },
+    {
+      "name": "Jetson Nano",
+      "description": "When I want CUDA in a shoebox for edge ML experiments without melting the MacBook."
+    }
+  ]
+}

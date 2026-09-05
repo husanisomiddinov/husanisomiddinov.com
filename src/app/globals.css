@@ -1,1 +1,183 @@
 @import "tailwindcss";
+
+@theme {
+  /* Warm khaki instead of neutral gray — pairs better with the monospace
+     body copy (same instinct as mono-heavy sites like masonjwang.com,
+     which sit on a warm putty tone rather than stark white/gray). */
+  --color-page-bg: #e6e4d6;
+
+  --color-brand-50: #f6f7f4;
+  --color-brand-100: #e8ebe0;
+  --color-brand-200: #c2cb9c;
+  --color-brand-300: #a8b47a;
+  --color-brand-400: #8d9d58;
+  --color-brand-500: #5b6529;
+  --color-brand-600: #4d5628;
+  --color-brand-700: #3f4721;
+  --color-brand-800: #31381a;
+  --color-brand-900: #232913;
+
+  /* gray-600/700 darkened again from the original AA-minimum tuning
+     (#6a6a6a / #5f5f5f, ~5:1 on the page bg) to a AAA-range ~8.3:1 and
+     ~13:1 — gray-600 is the site's default body-text color (used almost
+     everywhere reading happens), so this is the single biggest lever for
+     comfortable, low-strain reading. gray-400/500 stay put as the lighter
+     secondary/meta tier (dates, labels), keeping a real visual hierarchy
+     between primary and secondary text. */
+  --color-gray-50: #f8f8f7;
+  --color-gray-100: #f4f0e8;
+  --color-gray-200: #e9e9e7;
+  --color-gray-300: #d9d9d7;
+  --color-gray-400: #6f6f6c;
+  --color-gray-500: #6c6c69;
+  --color-gray-600: #4a4944;
+  --color-gray-700: #37352f;
+  --color-gray-800: #37352f;
+  --color-gray-900: #111111;
+
+  --font-sans: var(--font-geist-mono), ui-monospace, "SF Mono", "Cascadia Code",
+    Menlo, Consolas, monospace;
+
+  /* Regular body copy stays at Geist Mono's true regular (400). Titles get
+     real bold (700) *and* switch to the dark-ink gray below instead of the
+     olive accent — the actual "boldness" on mono-heavy sites like
+     masonjwang.com comes from near-black-on-muted-gray contrast, not raw
+     weight alone, so both move together. */
+  --font-weight-semibold: 700;
+  --font-weight-bold: 700;
+
+  --max-width-content: 30rem;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-page-bg);
+}
+
+body {
+  background-color: var(--color-page-bg);
+  color: var(--color-gray-600);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  text-decoration-thickness: 1px;
+}
+
+::selection {
+  background-color: var(--color-brand-500);
+  color: var(--color-brand-50);
+}
+
+em,
+i {
+  font-style: normal;
+}
+
+.bookshelf-book {
+  cursor: pointer;
+}
+
+.bookshelf-book:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.bookshelf-book:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Hand-authored prose styles — a direct port of the old theme's withProse()
+   config. Written by hand rather than routed through @tailwindcss/typography
+   so the rendered MDX matches the old site exactly, without fighting that
+   plugin's own opinionated defaults (max-width, code blocks, etc). */
+.prose h1 {
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-gray-800);
+  text-align: center;
+  font-size: 1.375rem;
+  line-height: 1.35;
+  font-weight: var(--font-weight-semibold);
+}
+
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  margin-top: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-gray-800);
+  font-size: 1.125rem;
+  line-height: 1.35;
+  font-weight: var(--font-weight-semibold);
+}
+
+.prose h2:first-of-type,
+.prose h3:first-of-type,
+.prose h4:first-of-type {
+  margin-top: 1rem;
+}
+
+.prose p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--color-gray-600);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.prose strong {
+  font-weight: 700;
+  color: var(--color-gray-800);
+}
+
+.prose ul,
+.prose ol {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.prose ul li,
+.prose ol li {
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+  line-height: 1.6;
+}
+
+.prose ul li p,
+.prose ol li p {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.prose a {
+  color: var(--color-brand-500);
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  color: var(--color-brand-600);
+}
+
+.prose a:focus {
+  box-shadow: none !important;
+}
+
+.prose hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-color: var(--color-gray-300);
+}
