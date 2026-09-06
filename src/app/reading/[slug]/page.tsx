@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { Prose, BookshelfLazy } from "@/components";
+import { Prose, BookshelfLazy, PageTitle } from "@/components";
 import { getAllBookSlugs, getAllBooks, getBook, toReadingShelfBooks } from "@/lib/books";
 import { buildMetadata } from "@/lib/metadata";
 import { defaultOpenGraphImages } from "@/config/seo";
@@ -53,9 +53,7 @@ export default async function BookPage({
       </div>
       <div className="flex flex-col gap-3">
         <div className="flex flex-col items-start">
-          <h1 className="text-lg leading-snug font-bold text-gray-800 md:text-xl">
-            {metadata.title}
-          </h1>
+          <PageTitle>{metadata.title}</PageTitle>
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-sans text-base text-gray-600">
             <span>By: {metadata.author}</span>
             {hasCompleted ? (

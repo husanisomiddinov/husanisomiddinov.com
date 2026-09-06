@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PaintingThumb } from "@/components";
+import { PaintingThumb, PageTitle } from "@/components";
 import { ArrowRightIcon } from "@/components/icons";
 import { getProjects } from "@/lib/data";
 import type { Project, ProjectKind } from "@/types";
@@ -88,9 +88,7 @@ export default function ProjectsPage() {
   return (
     <div className="flex w-full flex-col items-stretch gap-8">
       <div>
-        <h1 className="text-lg leading-snug font-bold text-gray-800 md:text-xl">
-          Projects
-        </h1>
+        <PageTitle>Projects</PageTitle>
         <p className="mt-1 text-base text-gray-600">
           Things I&apos;ve built across robotics, machine learning, and the web.
         </p>

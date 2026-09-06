@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/icons";
+import { PageTitle } from "@/components";
 import { getStudioLinks } from "@/lib/data";
 import type { StudioLink } from "@/types";
 import { buildMetadata } from "@/lib/metadata";
@@ -49,9 +50,7 @@ export default function StudioPage() {
   return (
     <div className="flex w-full flex-col items-stretch gap-6">
       <div>
-        <h1 className="text-lg leading-snug font-bold text-gray-800 md:text-xl">
-          Studio
-        </h1>
+        <PageTitle>Studio</PageTitle>
         <p className="mt-1 text-base text-gray-600">A workshop side of things.</p>
       </div>
       <div className="flex flex-col">

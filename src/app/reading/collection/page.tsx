@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { getAllBooks } from "@/lib/books";
 import { CollectionBrowser, type CollectionBook } from "@/components/CollectionBrowser";
+import { BackLink, PageTitle } from "@/components";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
@@ -25,15 +25,8 @@ export default function CollectionPage() {
   return (
     <div className="flex w-full flex-col items-stretch gap-6">
       <div>
-        <Link
-          href="/reading"
-          className="font-sans text-sm text-gray-500 no-underline hover:text-brand-500"
-        >
-          ← Back to the shelf
-        </Link>
-        <h1 className="mt-3 text-lg leading-snug font-bold text-gray-800 md:text-xl">
-          The collection
-        </h1>
+        <BackLink href="/reading">← Back to the shelf</BackLink>
+        <PageTitle className="mt-3">The collection</PageTitle>
         <p className="mt-1 text-base text-gray-600">
           Every book on the shelf. Search the shelf, filter by status, and switch between
           cover and list views.

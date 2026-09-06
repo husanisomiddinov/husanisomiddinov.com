@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PaintingBanner } from "@/components";
+import { BackLink, PaintingBanner } from "@/components";
 import { siteUrl } from "@/config/site";
 import { getAllProjectSlugs, getProject } from "@/lib/data";
 import { isHttpUrl } from "@/lib/url";
@@ -148,12 +147,7 @@ export default async function ProjectPage({
   return (
     <div className="flex w-full flex-col items-start gap-4">
       <div className="w-full">
-        <Link
-          href="/projects"
-          className="font-sans text-sm text-gray-500 no-underline hover:text-brand-500"
-        >
-          ← projects
-        </Link>
+        <BackLink href="/projects">← projects</BackLink>
       </div>
 
       {project.painting && <PaintingBanner painting={project.painting} />}

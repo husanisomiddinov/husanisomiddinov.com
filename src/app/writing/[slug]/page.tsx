@@ -4,7 +4,7 @@ import sizeOf from "image-size";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Prose } from "@/components";
+import { BackLink, PageTitle, Prose } from "@/components";
 import {
   getAllWritingMetadata,
   getAllWritingSlugs,
@@ -86,15 +86,8 @@ export default async function WritingPostPage({
   return (
     <div className="flex w-full flex-col items-start gap-4">
       <div className="w-full">
-        <Link
-          href="/writing"
-          className="font-sans text-sm text-gray-500 no-underline hover:text-brand-500"
-        >
-          ← Essays
-        </Link>
-        <h1 className="mt-3 mb-2 text-lg leading-snug font-bold text-gray-800 md:text-xl">
-          {post.title}
-        </h1>
+        <BackLink href="/writing">← Essays</BackLink>
+        <PageTitle className="mt-3 mb-2">{post.title}</PageTitle>
         <p className="font-sans text-sm text-gray-500">
           {post.date}
           {readingTime ? ` · ${readingTime} min read` : ""}
