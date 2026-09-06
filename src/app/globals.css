@@ -1,10 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  /* Warm khaki instead of neutral gray — pairs better with the monospace
-     body copy (same instinct as mono-heavy sites like masonjwang.com,
-     which sit on a warm putty tone rather than stark white/gray). */
-  --color-page-bg: #e6e4d6;
+  /* Exact match to masonjwang.com's page background (rgb(226,227,216)). */
+  --color-page-bg: #e2e3d8;
 
   --color-brand-50: #f6f7f4;
   --color-brand-100: #e8ebe0;
@@ -17,20 +15,18 @@
   --color-brand-800: #31381a;
   --color-brand-900: #232913;
 
-  /* gray-600/700 darkened again from the original AA-minimum tuning
-     (#6a6a6a / #5f5f5f, ~5:1 on the page bg) to a AAA-range ~8.3:1 and
-     ~13:1 — gray-600 is the site's default body-text color (used almost
-     everywhere reading happens), so this is the single biggest lever for
-     comfortable, low-strain reading. gray-400/500 stay put as the lighter
-     secondary/meta tier (dates, labels), keeping a real visual hierarchy
-     between primary and secondary text. */
+  /* gray-600 matches masonjwang.com's actual body text color exactly
+     (oklch(0.1496 0 0) ≈ #0b0b0b — his own site's `body { color }`).
+     His secondary/meta tier only clears ~3:1 contrast on his background,
+     which fails AA and would undo the earlier readability fix, so that
+     one wasn't carried over — gray-400/500 stay as they were. */
   --color-gray-50: #f8f8f7;
   --color-gray-100: #f4f0e8;
   --color-gray-200: #e9e9e7;
   --color-gray-300: #d9d9d7;
   --color-gray-400: #6f6f6c;
   --color-gray-500: #6c6c69;
-  --color-gray-600: #4a4944;
+  --color-gray-600: #0b0b0b;
   --color-gray-700: #37352f;
   --color-gray-800: #37352f;
   --color-gray-900: #111111;
