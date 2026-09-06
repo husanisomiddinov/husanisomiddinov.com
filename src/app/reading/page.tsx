@@ -2,9 +2,10 @@ import Link from "next/link";
 import NextImage from "next/image";
 import { getAllBooks } from "@/lib/books";
 import type { ReadingShelfBook } from "@/types";
-import { BookshelfLazy } from "@/components";
+import { Bookshelf } from "@/components";
 import { ArrowRightIcon } from "@/components/icons";
 import { buildMetadata } from "@/lib/metadata";
+import { isBookRead } from "@/lib/reading-status";
 
 export const metadata = buildMetadata({
   title: "Books | Husan Isomiddinov",
@@ -27,7 +28,7 @@ function buildSummaryExcerpt(summaryContent?: string): string {
 }
 
 function BookCard({ book, index }: { book: ListingBook; index: number }) {
-  const hasCompleted = book.date && book.rating;
+  const hasCompleted = isBookRead(book);
 
   return (
     <div className="flex flex-col gap-5 scroll-mt-20">
@@ -50,7 +51,9 @@ function BookCard({ book, index }: { book: ListingBook; index: number }) {
         </div>
         <div className="flex grow flex-col items-start gap-2">
           <div className="flex w-full items-start justify-between gap-3">
-            <h2 className="text-base leading-snug font-bold text-gray-800">{book.title}</h2>
+            <h2 className="text-base leading-snug font-bold text-gray-800">
+              {book.title}
+            </h2>
             <span className="shrink-0 -translate-x-1 text-gray-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
               <ArrowRightIcon />
             </span>
@@ -58,14 +61,26 @@ function BookCard({ book, index }: { book: ListingBook; index: number }) {
           <p className="font-sans text-base text-gray-500">{book.author}</p>
           {hasCompleted ? (
             <p className="font-sans text-sm text-gray-600">
-              Read: {book.date} <span className="text-gray-400">·</span>{" "}
-              <span className="font-bold text-gray-800">Rating: {book.rating}/10</span>
+              Read: {book.date}
+              {book.rating != null && (
+                <>
+                  {" "}
+                  <span className="text-gray-400">·</span>{" "}
+                  <span className="font-bold text-gray-800">
+                    Rating: {book.rating}/10
+                  </span>
+                </>
+              )}
             </p>
           ) : (
-            <p className="font-sans text-sm font-bold text-brand-500">Currently Reading</p>
+            <p className="font-sans text-sm font-bold text-brand-500">
+              Currently Reading
+            </p>
           )}
           {book.summaryExcerpt && (
-            <p className="line-clamp-4 text-sm text-gray-700">{book.summaryExcerpt}</p>
+            <p className="line-clamp-4 text-sm text-gray-700">
+              {book.summaryExcerpt}
+            </p>
           )}
         </div>
       </Link>
@@ -74,17 +89,17 @@ function BookCard({ book, index }: { book: ListingBook; index: number }) {
 }
 
 export default function ReadingPage() {
-  const books = getAllBooks().map(({ summaryContent, ...book }): ListingBook => ({
-    ...book,
-    summaryExcerpt: buildSummaryExcerpt(summaryContent),
-  }));
+  const books = getAllBooks().map(
+    ({ summaryContent, ...book }): ListingBook => ({
+      ...book,
+      summaryExcerpt: buildSummaryExcerpt(summaryContent),
+    }),
+  );
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="mb-2">
-        <BookshelfLazy books={books} />
-      </div>
-      <div className="mb-4 flex justify-center">
+      <Bookshelf books={books} />
+      <div className="flex justify-center">
         <Link
           href="/reading/collection"
           className="rounded-full border border-gray-300 px-5 py-1.5 font-sans text-sm text-gray-600 no-underline transition-all duration-200 hover:border-brand-500 hover:bg-brand-500 hover:text-brand-50"

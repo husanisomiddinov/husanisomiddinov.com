@@ -75,20 +75,6 @@ i {
   font-style: normal;
 }
 
-.bookshelf-book {
-  cursor: pointer;
-}
-
-.bookshelf-book:focus:not(:focus-visible) {
-  outline: none;
-}
-
-.bookshelf-book:focus-visible {
-  outline: 2px solid var(--color-brand-500);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
-
 /* Hand-authored prose styles — a direct port of the old theme's withProse()
    config. Written by hand rather than routed through @tailwindcss/typography
    so the rendered MDX matches the old site exactly, without fighting that

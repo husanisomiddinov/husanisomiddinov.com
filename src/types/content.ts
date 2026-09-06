@@ -6,8 +6,8 @@ export interface PageMetadata {
 export interface Book {
   title: string;
   author: string;
-  date?: string;
-  rating?: number;
+  date?: string | null;
+  rating?: number | null;
   coverImage: string;
   spineColor: string;
   textColor: string;

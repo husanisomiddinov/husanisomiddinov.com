@@ -11,12 +11,6 @@
     "links": {
       "live": "https://husanisomiddinov.com",
       "github": "https://github.com/husanisomiddinov/personal-website"
-    },
-    "painting": {
-      "src": "/paintings/rome-star-wars.png",
-      "credit": "Rome and Star Wars collage artwork.",
-      "width": 1080,
-      "height": 803
     }
   },
   {
@@ -30,12 +24,6 @@
     "status": "completed",
     "links": {
       "github": "https://github.com/husanisomiddinov/md25010-ros2-slam"
-    },
-    "painting": {
-      "src": "/paintings/the-course-of-empire.png",
-      "credit": "Thomas Cole — The Course of Empire: Destruction, 1836. The New-York Historical Society.",
-      "width": 1080,
-      "height": 686
     }
   },
   {
@@ -59,12 +47,6 @@
     "links": {
       "live": "https://tryapollo.vercel.app",
       "github": "https://github.com/bilalsea2/apollo-ai"
-    },
-    "painting": {
-      "src": "/paintings/guernica.png",
-      "credit": "Pablo Picasso — Guernica, 1937. Museo Reina Sofia, Madrid.",
-      "width": 1080,
-      "height": 489
     }
   },
   {
@@ -78,12 +60,6 @@
     "status": "completed",
     "links": {
       "github": "https://github.com/husanisomiddinov/sentiment-analysis-webapp"
-    },
-    "painting": {
-      "src": "/paintings/the-wave.png",
-      "credit": "Katsushika Hokusai — The Great Wave off Kanagawa (Thirty-six Views of Mount Fuji), c. 1830–1832.",
-      "width": 4335,
-      "height": 2990
     },
     "papers": [
       {

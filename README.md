@@ -42,6 +42,21 @@ The sitemap is generated natively by `src/app/sitemap.ts` — no separate script
 MDX is compiled server-side via `next-mdx-remote/rsc`; frontmatter parsing
 uses `gray-matter`.
 
+## Bookshelf
+
+The reading pages share `Bookshelf.tsx`: server-rendered controls with one
+selected-book state. It loads `components/bookshelf/createShelfScene.ts` in the
+browser for Three.js rendering. Styling lives in `Bookshelf.module.css` and uses
+the site's existing color tokens.
+
+- Browse by dragging, selecting a spine, or using the arrows and keyboard-accessible slider.
+- Open a book through its detail link; book pages initialize the shelf to that book.
+- Reduced-motion settings disable interpolation. Rendering stops when idle or offscreen.
+- Unavailable WebGL falls back to a cover preview with working controls; missing
+  3D cover images use a generated title cover.
+- The scene owns its GPU resources, observers, and pointer listeners and disposes
+  them on unmount. Reading status is shared through `lib/reading-status.ts`.
+
 ## Environment variables
 
 All optional — see `.env.local.example`. Without them the site still builds;

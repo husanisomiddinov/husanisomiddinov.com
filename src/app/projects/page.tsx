@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PaintingThumb, PageTitle } from "@/components";
+import { PageTitle } from "@/components";
 import { ArrowRightIcon } from "@/components/icons";
 import { getProjects } from "@/lib/data";
 import type { Project, ProjectKind } from "@/types";
@@ -41,13 +41,16 @@ function groupProjects(projects: Project[]): ProjectGroup[] {
   })).filter((g) => g.items.length > 0);
 }
 
-function ProjectRow({ project, isLast }: { project: Project; isLast: boolean }) {
+function ProjectRow({
+  project,
+  isLast,
+}: {
+  project: Project;
+  isLast: boolean;
+}) {
   return (
     <div>
       <div className="group relative -mx-4 flex items-start gap-5 rounded-lg px-4 py-5 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04]">
-        {project.painting && (
-          <PaintingThumb painting={project.painting} width={120} aspectRatio={4 / 3} />
-        )}
         <div className="flex min-w-0 flex-1 flex-col items-start gap-2">
           <div className="flex w-full items-start justify-between gap-3">
             <div>
@@ -58,7 +61,9 @@ function ProjectRow({ project, isLast }: { project: Project; isLast: boolean }) 
                 {project.title}
               </Link>
               {project.date && (
-                <p className="mt-0.5 font-sans text-sm text-gray-500">{project.date}</p>
+                <p className="mt-0.5 font-sans text-sm text-gray-500">
+                  {project.date}
+                </p>
               )}
             </div>
             <span className="shrink-0 -translate-x-1 text-gray-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">

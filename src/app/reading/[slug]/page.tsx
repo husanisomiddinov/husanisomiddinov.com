@@ -1,8 +1,14 @@
 import { notFound } from "next/navigation";
-import { Prose, BookshelfLazy, PageTitle } from "@/components";
-import { getAllBookSlugs, getAllBooks, getBook, toReadingShelfBooks } from "@/lib/books";
+import { Prose, Bookshelf, PageTitle } from "@/components";
+import {
+  getAllBookSlugs,
+  getAllBooks,
+  getBook,
+  toReadingShelfBooks,
+} from "@/lib/books";
 import { buildMetadata } from "@/lib/metadata";
 import { defaultOpenGraphImages } from "@/config/seo";
+import { isBookRead, readingStatusLabel } from "@/lib/reading-status";
 
 export function generateStaticParams() {
   return getAllBookSlugs().map((slug) => ({ slug }));
@@ -18,10 +24,7 @@ export async function generateMetadata({
   if (!book) return {};
 
   const { metadata } = book;
-  const hasCompleted = metadata.date && metadata.rating;
-  const description = hasCompleted
-    ? `By: ${metadata.author} - Read: ${metadata.date} - Rating: ${metadata.rating}/10`
-    : `By: ${metadata.author} - Currently Reading`;
+  const description = `By: ${metadata.author} - ${readingStatusLabel(metadata)}`;
 
   return buildMetadata({
     title: metadata.title,
@@ -44,13 +47,11 @@ export default async function BookPage({
 
   const books = toReadingShelfBooks(getAllBooks());
   const { metadata } = book;
-  const hasCompleted = metadata.date && metadata.rating;
+  const hasCompleted = isBookRead(metadata);
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="mb-8">
-        <BookshelfLazy books={books} currentSlug={slug} />
-      </div>
+      <Bookshelf books={books} currentSlug={slug} />
       <div className="flex flex-col gap-3">
         <div className="flex flex-col items-start">
           <PageTitle>{metadata.title}</PageTitle>
@@ -60,13 +61,21 @@ export default async function BookPage({
               <>
                 <span className="text-gray-400">·</span>
                 <span>Read: {metadata.date}</span>
-                <span className="text-gray-400">·</span>
-                <span className="font-bold text-gray-800">Rating: {metadata.rating}/10</span>
+                {metadata.rating != null && (
+                  <>
+                    <span className="text-gray-400">·</span>
+                    <span className="font-bold text-gray-800">
+                      Rating: {metadata.rating}/10
+                    </span>
+                  </>
+                )}
               </>
             ) : (
               <>
                 <span className="text-gray-400">·</span>
-                <span className="font-bold text-brand-500">Currently Reading</span>
+                <span className="font-bold text-brand-500">
+                  Currently Reading
+                </span>
               </>
             )}
           </div>

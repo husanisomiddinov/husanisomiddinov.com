@@ -3,8 +3,14 @@
 import { useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
 import NextImage from "next/image";
-import { ArrowRightIcon, GridIcon, ListIcon, SearchIcon } from "@/components/icons";
+import {
+  ArrowRightIcon,
+  GridIcon,
+  ListIcon,
+  SearchIcon,
+} from "@/components/icons";
 import type { ReadingShelfBook } from "@/types";
+import { isBookRead as isRead } from "@/lib/reading-status";
 
 export type CollectionBook = Pick<
   ReadingShelfBook,
@@ -13,10 +19,6 @@ export type CollectionBook = Pick<
 
 type StatusFilter = "all" | "read" | "reading";
 type ViewMode = "grid" | "list";
-
-function isRead(book: CollectionBook): boolean {
-  return Boolean(book.date && book.rating);
-}
 
 function FilterTab({
   label,
@@ -35,7 +37,9 @@ function FilterTab({
       onClick={onClick}
       aria-pressed={isActive}
       className={`border-b pb-1 font-sans text-sm font-medium transition-colors duration-200 hover:text-brand-500 focus-visible:outline-2 focus-visible:outline-brand-500 focus-visible:outline-offset-2 ${
-        isActive ? "border-brand-500 text-brand-500" : "border-transparent text-gray-500"
+        isActive
+          ? "border-brand-500 text-brand-500"
+          : "border-transparent text-gray-500"
       }`}
     >
       {label}
@@ -62,7 +66,9 @@ function ViewToggleButton({
       aria-pressed={isActive}
       onClick={onClick}
       className={`flex size-8 items-center justify-center rounded-md transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-brand-500 focus-visible:outline-offset-2 ${
-        isActive ? "bg-brand-500 text-brand-50" : "text-gray-600 hover:text-brand-500"
+        isActive
+          ? "bg-brand-500 text-brand-50"
+          : "text-gray-600 hover:text-brand-500"
       }`}
     >
       {children}
@@ -95,7 +101,9 @@ function GridCard({ book, eager }: { book: CollectionBook; eager: boolean }) {
           <p className="line-clamp-2 font-sans text-sm leading-snug font-bold text-gray-800">
             {book.title}
           </p>
-          <p className="truncate font-sans text-xs text-gray-500">{book.author}</p>
+          <p className="truncate font-sans text-xs text-gray-500">
+            {book.author}
+          </p>
         </div>
       </div>
     </Link>
@@ -110,12 +118,20 @@ function ListRow({ book }: { book: CollectionBook }) {
     >
       <div className="flex items-baseline justify-between gap-4 border-b border-gray-200 py-2.5">
         <div className="flex min-w-0 items-baseline gap-3">
-          <p className="truncate font-sans text-base font-bold text-gray-800">{book.title}</p>
-          <p className="shrink-0 truncate font-sans text-sm text-gray-500">{book.author}</p>
+          <p className="truncate font-sans text-base font-bold text-gray-800">
+            {book.title}
+          </p>
+          <p className="shrink-0 truncate font-sans text-sm text-gray-500">
+            {book.author}
+          </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <span className="font-sans text-xs whitespace-nowrap text-gray-400">
-            {isRead(book) ? `${book.rating}/10` : "Reading"}
+            {isRead(book)
+              ? book.rating == null
+                ? "Read"
+                : `${book.rating}/10`
+              : "Reading"}
           </span>
           <span className="-translate-x-1 text-gray-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
             <ArrowRightIcon />
@@ -143,7 +159,8 @@ export function CollectionBrowser({ books }: { books: CollectionBook[] }) {
       if (status === "reading" && isRead(book)) return false;
       if (!q) return true;
       return (
-        book.title.toLowerCase().includes(q) || book.author.toLowerCase().includes(q)
+        book.title.toLowerCase().includes(q) ||
+        book.author.toLowerCase().includes(q)
       );
     });
   }, [books, query, status]);
@@ -184,17 +201,27 @@ export function CollectionBrowser({ books }: { books: CollectionBook[] }) {
           />
         </div>
         <div className="flex items-center gap-1">
-          <ViewToggleButton label="Grid view" isActive={view === "grid"} onClick={() => setView("grid")}>
+          <ViewToggleButton
+            label="Grid view"
+            isActive={view === "grid"}
+            onClick={() => setView("grid")}
+          >
             <GridIcon />
           </ViewToggleButton>
-          <ViewToggleButton label="List view" isActive={view === "list"} onClick={() => setView("list")}>
+          <ViewToggleButton
+            label="List view"
+            isActive={view === "list"}
+            onClick={() => setView("list")}
+          >
             <ListIcon />
           </ViewToggleButton>
         </div>
       </div>
 
       {filtered.length === 0 ? (
-        <p className="py-8 text-center text-base text-gray-500">No books match your search.</p>
+        <p className="py-8 text-center text-base text-gray-500">
+          No books match your search.
+        </p>
       ) : view === "grid" ? (
         <div className="grid grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-3 md:grid-cols-4">
           {filtered.map((book, index) => (

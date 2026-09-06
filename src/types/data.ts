@@ -17,13 +17,6 @@ interface ProjectLinks {
   twitter?: string;
 }
 
-export interface ProjectPainting {
-  src: string;
-  credit: string;
-  width: number;
-  height: number;
-}
-
 interface ProjectPaper {
   title: string;
   notes?: string;
@@ -39,7 +32,6 @@ export interface Project {
   date?: string;
   status?: ProjectStatus;
   links?: ProjectLinks;
-  painting?: ProjectPainting;
   papers?: ProjectPaper[];
 }
 

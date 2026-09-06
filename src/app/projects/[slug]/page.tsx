@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { BackLink, PaintingBanner } from "@/components";
+import { BackLink } from "@/components";
 import { siteUrl } from "@/config/site";
 import { getAllProjectSlugs, getProject } from "@/lib/data";
 import { isHttpUrl } from "@/lib/url";
@@ -100,7 +100,6 @@ export async function generateMetadata({
   if (!project) return {};
 
   const pageUrl = `${siteUrl}/projects/${project.slug}`;
-  const ogImageUrl = project.painting?.src ? `${siteUrl}${project.painting.src}` : undefined;
 
   return buildMetadata({
     title: `${project.title} | Projects | Husan Isomiddinov`,
@@ -109,16 +108,6 @@ export async function generateMetadata({
     openGraph: {
       url: pageUrl,
       type: "article",
-      ...(ogImageUrl && {
-        images: [
-          {
-            url: ogImageUrl,
-            alt: project.title,
-            ...(project.painting?.width != null && { width: project.painting.width }),
-            ...(project.painting?.height != null && { height: project.painting.height }),
-          },
-        ],
-      }),
     },
   });
 }
@@ -136,7 +125,7 @@ export default async function ProjectPage({
 
   const linkEntries = Object.entries(project.links ?? {}).filter(
     (entry): entry is [string, string] =>
-      typeof entry[1] === "string" && isHttpUrl(entry[1])
+      typeof entry[1] === "string" && isHttpUrl(entry[1]),
   );
 
   const descriptionBlocks = parseDescriptionBlocks(project.description);
@@ -150,10 +139,10 @@ export default async function ProjectPage({
         <BackLink href="/projects">← projects</BackLink>
       </div>
 
-      {project.painting && <PaintingBanner painting={project.painting} />}
-
       <div className="w-full">
-        <p className="mb-1 font-sans text-lg font-bold text-gray-800">{project.title}</p>
+        <p className="mb-1 font-sans text-lg font-bold text-gray-800">
+          {project.title}
+        </p>
 
         {(project.date || techLine) && (
           <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-0 font-sans text-sm text-gray-400">
@@ -163,7 +152,9 @@ export default async function ProjectPage({
           </div>
         )}
 
-        <p className="text-base leading-[1.6] text-gray-600">{project.summary}</p>
+        <p className="text-base leading-[1.6] text-gray-600">
+          {project.summary}
+        </p>
 
         {linkEntries.length > 0 && (
           <div className="flex flex-wrap items-center gap-x-6 gap-y-1 pt-2">
@@ -186,7 +177,9 @@ export default async function ProjectPage({
         <>
           <hr className="w-full border-gray-300" />
           <div className="w-full">
-            <p className="mb-2 font-sans text-base font-medium text-brand-500">Description</p>
+            <p className="mb-2 font-sans text-base font-medium text-brand-500">
+              Description
+            </p>
             {!hasDescription ? (
               <p className="text-base leading-[1.6] text-gray-500">
                 {project.status === "planned"
@@ -211,11 +204,21 @@ export default async function ProjectPage({
 
                   if (block.type === "list") {
                     return (
-                      <div key={idx} className="flex w-full flex-col items-start gap-1">
+                      <div
+                        key={idx}
+                        className="flex w-full flex-col items-start gap-1"
+                      >
                         {block.items.map((item, itemIdx) => (
-                          <div key={`${idx}-${itemIdx}`} className="flex w-full items-start gap-2">
-                            <span className="leading-[1.6] text-gray-500">•</span>
-                            <span className="text-base leading-[1.6] text-gray-600">{item}</span>
+                          <div
+                            key={`${idx}-${itemIdx}`}
+                            className="flex w-full items-start gap-2"
+                          >
+                            <span className="leading-[1.6] text-gray-500">
+                              •
+                            </span>
+                            <span className="text-base leading-[1.6] text-gray-600">
+                              {item}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -223,7 +226,10 @@ export default async function ProjectPage({
                   }
 
                   return (
-                    <p key={idx} className="text-base leading-[1.6] text-gray-600">
+                    <p
+                      key={idx}
+                      className="text-base leading-[1.6] text-gray-600"
+                    >
                       {block.text}
                     </p>
                   );
@@ -238,15 +244,23 @@ export default async function ProjectPage({
         <>
           <hr className="w-full border-gray-300" />
           <div id="papers" className="w-full">
-            <p className="mb-2 font-sans text-base font-medium text-brand-500">Papers Read</p>
+            <p className="mb-2 font-sans text-base font-medium text-brand-500">
+              Papers Read
+            </p>
             <div className="flex w-full flex-col items-start gap-2">
               {project.papers!.map((paper, idx) => (
                 <div key={idx} className="flex w-full items-baseline gap-2">
-                  <span className="font-sans font-medium text-brand-500">•</span>
+                  <span className="font-sans font-medium text-brand-500">
+                    •
+                  </span>
                   <div className="flex flex-1 flex-col items-start">
-                    <p className="font-sans text-base font-medium text-gray-600">{paper.title}</p>
+                    <p className="font-sans text-base font-medium text-gray-600">
+                      {paper.title}
+                    </p>
                     {paper.notes && (
-                      <p className="mt-0.5 text-base leading-[1.6] text-gray-600">{paper.notes}</p>
+                      <p className="mt-0.5 text-base leading-[1.6] text-gray-600">
+                        {paper.notes}
+                      </p>
                     )}
                   </div>
                 </div>
