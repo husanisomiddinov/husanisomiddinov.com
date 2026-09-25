@@ -8,6 +8,7 @@ import type {
   Arsenal,
   StudioLink,
   DiningCategory,
+  Experience,
 } from "@/types/data";
 
 const dataDir = path.join(process.cwd(), "content", "data");
@@ -40,6 +41,10 @@ export function getFacts(): Fact[] {
 
 export function getHeuristics(): Heuristic[] {
   return loadJson<Heuristic[]>("personal", "heuristics");
+}
+
+export function getExperiences(): Experience[] {
+  return loadJson<Experience[]>("personal", "experiences");
 }
 
 // Portfolio data

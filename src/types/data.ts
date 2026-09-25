@@ -51,6 +51,16 @@ export interface StudioLink {
   url: string;
 }
 
+export interface Experience {
+  slug: string;
+  name: string;
+  role: string;
+  date: string;
+  description: string;
+  logo: string;
+  url?: string;
+}
+
 interface DiningPlace {
   name: string;
   description: string;

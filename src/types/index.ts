@@ -9,4 +9,5 @@ export type {
   Arsenal,
   StudioLink,
   DiningCategory,
+  Experience,
 } from "./data";

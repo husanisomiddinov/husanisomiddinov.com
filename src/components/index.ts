@@ -5,3 +5,4 @@ export { Prose } from "./Prose";
 export { Bookshelf } from "./Bookshelf";
 export { PageTitle } from "./PageTitle";
 export { BackLink } from "./BackLink";
+export { Experiences } from "./Experiences";
