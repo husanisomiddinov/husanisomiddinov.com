@@ -7,12 +7,12 @@ function ExperienceRow({ experience }: { experience: Experience }) {
 
   return (
     <div className="group relative -mx-4 flex items-center gap-5 rounded-lg px-4 py-4 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04]">
-      <div className="relative h-20 w-28 shrink-0">
+      <div className="relative h-14 w-24 shrink-0">
         <Image
           src={logo}
           alt={`${name} logo`}
           fill
-          sizes="112px"
+          sizes="96px"
           loading="eager"
           className="object-contain object-left opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-100"
         />
