@@ -4,8 +4,26 @@
     "name": "Higgsfield",
     "role": "Growth Manager",
     "date": "June 2026 – September 2026",
-    "description": "Built a centralized platform to scrape, vet, and cold-email YouTube creators matching Higgsfield's content style, processing 126+ creators and 225+ videos per month into a self-serve dashboard handling onboarding and payment.",
+    "description": "Quit to build something of my own.",
     "logo": "/images/logos/higgsfield.png",
     "url": "https://higgsfield.ai"
+  },
+  {
+    "slug": "agora",
+    "name": "Agora",
+    "role": "Founder",
+    "date": "January 2025 – May 2026",
+    "description": "Exited at 19.",
+    "logo": "/images/logos/agora.png",
+    "url": "https://agorawriting.com"
+  },
+  {
+    "slug": "new-uzbekistan-university",
+    "name": "New Uzbekistan University",
+    "role": "Hardware Researcher",
+    "date": "January 2026 – May 2026",
+    "description": "Tweaked a few robots.",
+    "logo": "/images/logos/new-uzbekistan-university.png",
+    "url": "https://newuu.uz"
   }
 ]
