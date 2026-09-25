@@ -6,8 +6,8 @@ function ExperienceRow({ experience }: { experience: Experience }) {
   const { name, role, date, description, logo, url } = experience;
 
   return (
-    <div className="group relative -mx-4 flex items-start gap-5 rounded-lg px-4 py-4 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04]">
-      <div className="relative h-7 w-28 shrink-0 self-start">
+    <div className="group relative -mx-4 flex items-center gap-5 rounded-lg px-4 py-4 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04]">
+      <div className="relative h-20 w-28 shrink-0">
         <Image
           src={logo}
           alt={`${name} logo`}
