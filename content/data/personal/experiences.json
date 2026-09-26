@@ -25,5 +25,14 @@
     "description": "Tweaked a few robots.",
     "logo": "/images/logos/new-uzbekistan-university.png",
     "url": "https://newuu.uz"
+  },
+  {
+    "slug": "apollo",
+    "name": "Apollo",
+    "role": "Co-Founder",
+    "date": "November 2025 – April 2026",
+    "description": "Taught computers to see.",
+    "logo": "/images/logos/apollo.png",
+    "url": "https://tryapollo.uz"
   }
 ]
