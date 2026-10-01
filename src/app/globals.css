@@ -42,7 +42,8 @@
   --font-weight-semibold: 700;
   --font-weight-bold: 700;
 
-  --max-width-content: 30rem;
+  /* Matches akbar.one's content column (660px at a 16px root). */
+  --max-width-content: 41.25rem;
 }
 
 html {
