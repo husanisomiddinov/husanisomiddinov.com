@@ -8,26 +8,19 @@ const socialLinks = [
   { href: "https://hida115.substack.com/", label: "Substack" },
 ];
 
+/** Renders as plain <p>/<a> so it inherits the site's `.prose` link
+ * style — meant to be nested inside <Prose>, not used standalone. */
 export default function SocialIcons() {
   return (
-    <div className="flex flex-wrap justify-center items-center gap-x-3 gap-y-1">
+    <p>
       {socialLinks.map(({ href, label }, i) => (
         <Fragment key={label}>
-          <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="no-underline hover:no-underline"
-          >
-            <span className="text-base font-sans text-gray-500 transition-colors duration-200 hover:text-brand-500">
-              {label}
-            </span>
+          <a href={href} target="_blank" rel="noopener noreferrer">
+            {label}
           </a>
-          {i < socialLinks.length - 1 && (
-            <span className="text-gray-300 select-none">|</span>
-          )}
+          {i < socialLinks.length - 1 && " · "}
         </Fragment>
       ))}
-    </div>
+    </p>
   );
 }
