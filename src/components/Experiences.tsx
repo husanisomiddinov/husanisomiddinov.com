@@ -77,7 +77,7 @@ function ExperienceRow({
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-fit font-sans text-sm text-gray-500 underline decoration-gray-400 underline-offset-2 transition-colors duration-300 ease-out hover:text-brand-500 hover:decoration-brand-500 after:absolute after:inset-0 after:content-['']"
+            className="w-fit font-sans text-sm text-gray-500 underline decoration-dotted decoration-brand-300 underline-offset-4 transition-colors duration-300 ease-out hover:text-brand-500 hover:decoration-brand-500 after:absolute after:inset-0 after:content-['']"
           >
             {name}
           </a>

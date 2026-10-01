@@ -148,11 +148,16 @@ i {
 
 .prose a {
   color: var(--color-brand-500);
-  text-decoration: underline;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--color-brand-300);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
 }
 
 .prose a:hover {
   color: var(--color-brand-600);
+  text-decoration-color: var(--color-brand-500);
 }
 
 .prose a:focus {
