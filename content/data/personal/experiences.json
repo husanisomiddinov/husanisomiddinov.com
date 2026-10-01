@@ -6,6 +6,7 @@
     "date": "June 2026 – September 2026",
     "description": "Quit to build something of my own.",
     "logo": "/images/logos/higgsfield.png",
+    "logoColor": "/images/logos/higgsfield.png",
     "url": "https://higgsfield.ai"
   },
   {
@@ -15,6 +16,7 @@
     "date": "January 2025 – May 2026",
     "description": "Exited at 19.",
     "logo": "/images/logos/agora.png",
+    "logoColor": "/images/logos/agora-color.png",
     "url": "https://agorawriting.com"
   },
   {
@@ -24,6 +26,7 @@
     "date": "January 2026 – May 2026",
     "description": "Tweaked a few robots.",
     "logo": "/images/logos/new-uzbekistan-university.png",
+    "logoColor": "/images/logos/new-uzbekistan-university-color.png",
     "url": "https://newuu.uz"
   },
   {
@@ -33,6 +36,7 @@
     "date": "November 2025 – April 2026",
     "description": "Taught computers to see.",
     "logo": "/images/logos/apollo-leaf-v2.png",
+    "logoColor": "/images/logos/apollo-leaf-color.png",
     "url": "https://tryapollo.uz"
   }
 ]

@@ -58,6 +58,7 @@ export interface Experience {
   date: string;
   description: string;
   logo: string;
+  logoColor: string;
   url?: string;
 }
 
