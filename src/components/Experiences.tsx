@@ -3,7 +3,11 @@ import type { Experience } from "@/types";
 import { ArrowUpRightIcon } from "@/components/icons";
 
 function ExperienceRow({ experience }: { experience: Experience }) {
-  const { name, role, date, description, logo, logoColor, url } = experience;
+  const { name, role, date, description, logo, logoColor, logoScale, url } =
+    experience;
+  const logoStyle = logoScale
+    ? { transform: `scale(${logoScale})`, transformOrigin: "left center" }
+    : undefined;
 
   return (
     <div className="group relative -mx-4 flex items-center gap-5 rounded-lg px-4 py-4 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04]">
@@ -14,6 +18,7 @@ function ExperienceRow({ experience }: { experience: Experience }) {
           fill
           sizes="112px"
           loading="eager"
+          style={logoStyle}
           className="object-contain object-left opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-0"
         />
         <Image
@@ -23,6 +28,7 @@ function ExperienceRow({ experience }: { experience: Experience }) {
           fill
           sizes="112px"
           loading="eager"
+          style={logoStyle}
           className="object-contain object-left opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100"
         />
       </div>

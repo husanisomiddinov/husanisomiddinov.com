@@ -59,6 +59,7 @@ export interface Experience {
   description: string;
   logo: string;
   logoColor: string;
+  logoScale?: number;
   url?: string;
 }
 
