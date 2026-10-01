@@ -149,8 +149,10 @@ i {
 
 .prose a {
   /* A touch more vivid than brand-500, so it doesn't blend into the
-     lighter gray body text — a 15% step toward brand-400. */
-  color: #63702f;
+     lighter gray body text — a 30% step toward brand-400, plus a
+     bit of extra weight for emphasis without going full bold. */
+  color: #6a7637;
+  font-weight: 600;
   text-decoration-line: underline;
   text-decoration-style: dotted;
   text-decoration-color: var(--color-brand-300);
