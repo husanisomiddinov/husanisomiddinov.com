@@ -10,15 +10,15 @@ function ExperienceRow({ experience }: { experience: Experience }) {
     : undefined;
 
   return (
-    <div className="group relative -mx-4 flex items-center gap-5 rounded-lg px-4 py-4 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04]">
-      <div className="relative h-16 w-28 shrink-0">
+    <div className="group relative -mx-4 flex items-center gap-4 rounded-lg px-4 py-4 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04]">
+      <div className="relative h-10 w-16 shrink-0">
         {logoColor ? (
           <>
             <Image
               src={logo}
               alt={`${name} logo`}
               fill
-              sizes="112px"
+              sizes="64px"
               loading="eager"
               style={logoStyle}
               className="object-contain object-left opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-0"
@@ -28,7 +28,7 @@ function ExperienceRow({ experience }: { experience: Experience }) {
               alt=""
               aria-hidden
               fill
-              sizes="112px"
+              sizes="64px"
               loading="eager"
               style={logoStyle}
               className="object-contain object-left opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100"
@@ -39,7 +39,7 @@ function ExperienceRow({ experience }: { experience: Experience }) {
             src={logo}
             alt={`${name} logo`}
             fill
-            sizes="112px"
+            sizes="64px"
             loading="eager"
             style={logoStyle}
             className="object-contain object-left opacity-70"
