@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
 import type { ReadingShelfBook } from "@/types";
@@ -145,12 +144,6 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
           <h2 className={styles.title}>{book.title}</h2>
           <p className={styles.author}>{book.author}</p>
         </div>
-        <Link className={styles.open} href={book.slug}>
-          {currentSlug && book.slug === `/reading/${currentSlug}`
-            ? "Reading now"
-            : "Open book"}
-          <span aria-hidden="true">↗</span>
-        </Link>
       </div>
     </section>
   );

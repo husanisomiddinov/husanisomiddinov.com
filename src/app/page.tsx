@@ -24,6 +24,7 @@ export default async function Home() {
   return (
     <>
       <Prose>{page.content}</Prose>
+      <hr className="mt-8 border-gray-300" />
       <Experiences experiences={experiences} />
       <div className="mt-6 border-t border-gray-300 pt-6 text-center">
         <SocialIcons />
