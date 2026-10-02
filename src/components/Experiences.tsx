@@ -133,13 +133,22 @@ function ExperienceGallery({
   // cropped. The side column stacks under its own width; the main
   // column's width is solved so both columns land at the same total
   // height, so the block still reads as one clean aligned rectangle.
+  // The gap-1 (4px) seams between stacked side photos are fixed pixel
+  // amounts while the columns are percentage-based, so the solve is
+  // only exact at one reference width — use the page's content width
+  // (--max-width-content, 660px), since that's what this row renders
+  // at on any viewport wide enough to show the full-size gallery.
+  const GAP_PX = 4;
+  const REFERENCE_WIDTH_PX = 660;
   const mainInverseRatio = main.height / main.width;
   const sideInverseRatioSum = side.reduce(
     (sum, img) => sum + img.height / img.width,
     0,
   );
+  const sideGapTotal = GAP_PX * (side.length - 1);
   const sideFraction =
-    mainInverseRatio / (sideInverseRatioSum + mainInverseRatio);
+    (mainInverseRatio - sideGapTotal / REFERENCE_WIDTH_PX) /
+    (sideInverseRatioSum + mainInverseRatio);
   const mainFraction = 1 - sideFraction;
 
   return (
@@ -157,7 +166,7 @@ function ExperienceGallery({
       </div>
       <div
         style={{ width: `${sideFraction * 100}%` }}
-        className="flex shrink-0 flex-col gap-1"
+        className="flex shrink-0 flex-col gap-1 overflow-hidden"
       >
         {side.map((img) => (
           <Image
