@@ -19,14 +19,6 @@ const KIND_LABEL: Record<ProjectKind, string> = {
   web: "Web",
 };
 
-function TechChip({ label }: { label: string }) {
-  return (
-    <span className="rounded-md bg-gray-100 px-2 py-0.5 font-sans text-xs text-gray-600">
-      {label}
-    </span>
-  );
-}
-
 interface ProjectGroup {
   kind: ProjectKind;
   label: string;
@@ -74,11 +66,9 @@ function ProjectRow({
             {project.summary}
           </p>
           {project.tech && project.tech.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-0.5">
-              {project.tech.map((t) => (
-                <TechChip key={t} label={t} />
-              ))}
-            </div>
+            <p className="pt-0.5 font-sans text-sm text-gray-500">
+              {project.tech.join(" · ")}
+            </p>
           )}
         </div>
       </div>
