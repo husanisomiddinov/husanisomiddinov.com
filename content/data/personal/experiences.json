@@ -43,6 +43,7 @@
     "description": "Taught computers to see.",
     "logo": "/images/logos/apollo-leaf-v2.png",
     "logoColor": "/images/logos/apollo-leaf-color.png",
-    "url": "https://tryapollo.uz"
+    "url": "https://tryapollo.uz",
+    "images": ["/images/experiences/apollo/ai500-win.jpg"]
   }
 ]

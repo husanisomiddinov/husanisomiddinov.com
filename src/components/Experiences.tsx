@@ -114,6 +114,21 @@ function ExperienceGallery({
   const [main, ...rest] = images;
   const sideImages = rest.slice(0, 4);
 
+  if (sideImages.length === 0) {
+    return (
+      <div className="relative mt-2 aspect-[16/10] w-full overflow-hidden rounded-lg border border-gray-200">
+        <Image
+          src={main}
+          alt={alt}
+          fill
+          quality={95}
+          sizes="(max-width: 640px) 100vw, 660px"
+          className="object-cover"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="mt-2 grid aspect-[16/10] w-full grid-cols-2 gap-1 overflow-hidden rounded-lg border border-gray-200">
       <div className="relative h-full w-full">
@@ -126,23 +141,21 @@ function ExperienceGallery({
           className="object-cover"
         />
       </div>
-      {sideImages.length > 0 && (
-        <div className="grid grid-cols-2 grid-rows-2 gap-1">
-          {sideImages.map((src) => (
-            <div key={src} className="relative h-full w-full">
-              <Image
-                src={src}
-                alt=""
-                aria-hidden
-                fill
-                quality={95}
-                sizes="(max-width: 640px) 25vw, 165px"
-                className="object-cover"
-              />
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="grid grid-cols-2 grid-rows-2 gap-1">
+        {sideImages.map((src) => (
+          <div key={src} className="relative h-full w-full">
+            <Image
+              src={src}
+              alt=""
+              aria-hidden
+              fill
+              quality={95}
+              sizes="(max-width: 640px) 25vw, 165px"
+              className="object-cover"
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
