@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { Experience } from "@/types";
+import type { Experience, ExperienceImage } from "@/types";
 
 function ExperienceRow({
   experience,
@@ -108,52 +108,69 @@ function ExperienceGallery({
   images,
   alt,
 }: {
-  images: string[];
+  images: ExperienceImage[];
   alt: string;
 }) {
-  const [main, ...rest] = images;
-  const sideImages = rest.slice(0, 4);
+  const [main, ...side] = images;
 
-  if (sideImages.length === 0) {
+  if (side.length === 0) {
     return (
-      <div className="relative mt-2 aspect-[16/10] w-full overflow-hidden rounded-lg border border-gray-200">
+      <div className="mt-2 w-full overflow-hidden rounded-lg border border-gray-200">
         <Image
-          src={main}
+          src={main.src}
           alt={alt}
-          fill
+          width={main.width}
+          height={main.height}
           quality={95}
           sizes="(max-width: 640px) 100vw, 660px"
-          className="object-cover"
+          className="h-auto w-full"
         />
       </div>
     );
   }
 
+  // Every photo renders at its own true aspect ratio — nothing is
+  // cropped. The side column stacks under its own width; the main
+  // column's width is solved so both columns land at the same total
+  // height, so the block still reads as one clean aligned rectangle.
+  const mainInverseRatio = main.height / main.width;
+  const sideInverseRatioSum = side.reduce(
+    (sum, img) => sum + img.height / img.width,
+    0,
+  );
+  const sideFraction =
+    mainInverseRatio / (sideInverseRatioSum + mainInverseRatio);
+  const mainFraction = 1 - sideFraction;
+
   return (
-    <div className="mt-2 grid aspect-[16/10] w-full grid-cols-2 gap-1 overflow-hidden rounded-lg border border-gray-200">
-      <div className="relative h-full w-full">
+    <div className="mt-2 flex w-full gap-1 overflow-hidden rounded-lg border border-gray-200">
+      <div style={{ width: `${mainFraction * 100}%` }} className="shrink-0">
         <Image
-          src={main}
+          src={main.src}
           alt={alt}
-          fill
+          width={main.width}
+          height={main.height}
           quality={95}
-          sizes="(max-width: 640px) 50vw, 330px"
-          className="object-cover"
+          sizes="(max-width: 640px) 60vw, 400px"
+          className="h-auto w-full"
         />
       </div>
-      <div className="grid grid-cols-2 grid-rows-2 gap-1">
-        {sideImages.map((src) => (
-          <div key={src} className="relative h-full w-full">
-            <Image
-              src={src}
-              alt=""
-              aria-hidden
-              fill
-              quality={95}
-              sizes="(max-width: 640px) 25vw, 165px"
-              className="object-cover"
-            />
-          </div>
+      <div
+        style={{ width: `${sideFraction * 100}%` }}
+        className="flex shrink-0 flex-col gap-1"
+      >
+        {side.map((img) => (
+          <Image
+            key={img.src}
+            src={img.src}
+            alt=""
+            aria-hidden
+            width={img.width}
+            height={img.height}
+            quality={95}
+            sizes="(max-width: 640px) 40vw, 260px"
+            className="h-auto w-full"
+          />
         ))}
       </div>
     </div>

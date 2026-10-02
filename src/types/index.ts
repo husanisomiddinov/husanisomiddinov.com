@@ -10,4 +10,5 @@ export type {
   StudioLink,
   DiningCategory,
   Experience,
+  ExperienceImage,
 } from "./data";

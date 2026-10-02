@@ -18,11 +18,11 @@
     "logoColor": "/images/logos/new-uzbekistan-university-color.png",
     "url": "https://newuu.uz",
     "images": [
-      "/images/experiences/nuu/quadruped.jpg",
-      "/images/experiences/nuu/humanoid-unboxing.jpg",
-      "/images/experiences/nuu/lidar-robot.jpg",
-      "/images/experiences/nuu/rviz-slam.jpg",
-      "/images/experiences/nuu/jetson-nano.jpg"
+      { "src": "/images/experiences/nuu/quadruped.jpg", "width": 1280, "height": 958 },
+      { "src": "/images/experiences/nuu/humanoid-unboxing.jpg", "width": 960, "height": 1280 },
+      { "src": "/images/experiences/nuu/lidar-robot.jpg", "width": 1280, "height": 562 },
+      { "src": "/images/experiences/nuu/rviz-slam.jpg", "width": 2000, "height": 1500 },
+      { "src": "/images/experiences/nuu/jetson-nano.jpg", "width": 960, "height": 1280 }
     ]
   },
   {
@@ -44,6 +44,10 @@
     "logo": "/images/logos/apollo-leaf-v2.png",
     "logoColor": "/images/logos/apollo-leaf-color.png",
     "url": "https://tryapollo.uz",
-    "images": ["/images/experiences/apollo/ai500-win.jpg"]
+    "images": [
+      { "src": "/images/experiences/apollo/ai500-win.jpg", "width": 1280, "height": 854 },
+      { "src": "/images/experiences/apollo/pitch-1.jpg", "width": 853, "height": 1280 },
+      { "src": "/images/experiences/apollo/pitch-2.jpg", "width": 1280, "height": 853 }
+    ]
   }
 ]

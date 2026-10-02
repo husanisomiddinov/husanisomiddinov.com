@@ -62,8 +62,16 @@ export interface Experience {
   logoScale?: number;
   url?: string;
   /** Optional photo gallery: first image is the large one on the
-   * left, the rest tile in a 2x2 grid on the right. */
-  images?: string[];
+   * left, the rest stack in a column on the right. Width/height are
+   * each photo's real pixel dimensions, used to size both columns so
+   * every photo renders at its true aspect ratio — nothing cropped. */
+  images?: ExperienceImage[];
+}
+
+export interface ExperienceImage {
+  src: string;
+  width: number;
+  height: number;
 }
 
 interface DiningPlace {
