@@ -61,6 +61,9 @@ export interface Experience {
   logoColor?: string;
   logoScale?: number;
   url?: string;
+  /** Optional photo gallery: first image is the large one on the
+   * left, the rest tile in a 2x2 grid on the right. */
+  images?: string[];
 }
 
 interface DiningPlace {

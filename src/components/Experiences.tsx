@@ -10,8 +10,17 @@ function ExperienceRow({
   isFirst: boolean;
   isLast: boolean;
 }) {
-  const { name, role, date, description, logo, logoColor, logoScale, url } =
-    experience;
+  const {
+    name,
+    role,
+    date,
+    description,
+    logo,
+    logoColor,
+    logoScale,
+    url,
+    images,
+  } = experience;
   const logoStyle = logoScale
     ? { transform: `scale(${logoScale})`, transformOrigin: "center" }
     : undefined;
@@ -84,10 +93,56 @@ function ExperienceRow({
         ) : (
           <p className="font-sans text-sm text-gray-500">{name}</p>
         )}
-        <p className="text-base leading-[1.6] text-gray-600 opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-100">
+        <p className="text-[0.9375rem] leading-[1.6] text-gray-600 opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-100">
           {description}
         </p>
+        {images && images.length > 0 && (
+          <ExperienceGallery images={images} alt={`${name} photos`} />
+        )}
       </div>
+    </div>
+  );
+}
+
+function ExperienceGallery({
+  images,
+  alt,
+}: {
+  images: string[];
+  alt: string;
+}) {
+  const [main, ...rest] = images;
+  const sideImages = rest.slice(0, 4);
+
+  return (
+    <div className="mt-2 grid aspect-[16/10] w-full grid-cols-2 gap-1 overflow-hidden rounded-lg border border-gray-200">
+      <div className="relative h-full w-full">
+        <Image
+          src={main}
+          alt={alt}
+          fill
+          quality={95}
+          sizes="(max-width: 640px) 50vw, 330px"
+          className="object-cover"
+        />
+      </div>
+      {sideImages.length > 0 && (
+        <div className="grid grid-cols-2 grid-rows-2 gap-1">
+          {sideImages.map((src) => (
+            <div key={src} className="relative h-full w-full">
+              <Image
+                src={src}
+                alt=""
+                aria-hidden
+                fill
+                quality={95}
+                sizes="(max-width: 640px) 25vw, 165px"
+                className="object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

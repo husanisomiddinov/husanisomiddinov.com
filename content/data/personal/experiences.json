@@ -9,6 +9,23 @@
     "url": "https://higgsfield.ai"
   },
   {
+    "slug": "new-uzbekistan-university",
+    "name": "New Uzbekistan University",
+    "role": "Hardware Researcher",
+    "date": "January 2026 – June 2026",
+    "description": "Designed the transmitter coils and floor layout for a wireless charging system for moving rovers alongside Professor Belov; arranged coils to cover the whole floor without wasting power, so robots charge as they move instead of docking.",
+    "logo": "/images/logos/new-uzbekistan-university.png",
+    "logoColor": "/images/logos/new-uzbekistan-university-color.png",
+    "url": "https://newuu.uz",
+    "images": [
+      "/images/experiences/nuu/quadruped.jpg",
+      "/images/experiences/nuu/humanoid-unboxing.jpg",
+      "/images/experiences/nuu/lidar-robot.jpg",
+      "/images/experiences/nuu/rviz-slam.jpg",
+      "/images/experiences/nuu/jetson-nano.jpg"
+    ]
+  },
+  {
     "slug": "agora",
     "name": "Agora",
     "role": "Founder",
@@ -17,16 +34,6 @@
     "logo": "/images/logos/agora.png",
     "logoColor": "/images/logos/agora-color.png",
     "url": "https://agorawriting.com"
-  },
-  {
-    "slug": "new-uzbekistan-university",
-    "name": "New Uzbekistan University",
-    "role": "Hardware Researcher",
-    "date": "January 2026 – May 2026",
-    "description": "Tweaked a few robots.",
-    "logo": "/images/logos/new-uzbekistan-university.png",
-    "logoColor": "/images/logos/new-uzbekistan-university-color.png",
-    "url": "https://newuu.uz"
   },
   {
     "slug": "apollo",
