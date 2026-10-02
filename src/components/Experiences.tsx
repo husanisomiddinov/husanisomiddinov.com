@@ -25,7 +25,7 @@ function ExperienceRow({
         />
         <span
           aria-hidden
-          className="relative z-10 mt-1.5 h-[11px] w-[11px] rounded-full border-2 border-gray-400 bg-[var(--color-page-bg)] transition-colors duration-300 ease-out group-hover:border-gray-800"
+          className="relative z-10 mt-1.5 h-[9px] w-[9px] rounded-[2px] border border-gray-400 bg-[var(--color-page-bg)] transition-colors duration-300 ease-out group-hover:border-gray-800"
         />
       </div>
       <div className="relative h-9 w-9">
