@@ -6,7 +6,12 @@
     "date": "June 2026 – September 2026",
     "description": "Quit to build something of my own.",
     "logo": "/images/logos/higgsfield.png",
-    "url": "https://higgsfield.ai"
+    "url": "https://higgsfield.ai",
+    "images": [
+      { "src": "/images/experiences/higgsfield/iman-gadzhi-billboard.jpg", "width": 960, "height": 1280 },
+      { "src": "/images/experiences/higgsfield/office-meeting.jpg", "width": 1280, "height": 960 },
+      { "src": "/images/experiences/higgsfield/desk-setup.jpg", "width": 960, "height": 1280 }
+    ]
   },
   {
     "slug": "new-uzbekistan-university",
