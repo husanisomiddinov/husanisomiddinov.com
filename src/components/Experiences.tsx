@@ -129,57 +129,110 @@ function ExperienceGallery({
     );
   }
 
-  // Every photo renders at its own true aspect ratio — nothing is
-  // cropped. The side column stacks under its own width; the main
-  // column's width is solved so both columns land at the same total
-  // height, so the block still reads as one clean aligned rectangle.
-  // The gap-1 (4px) seams between stacked side photos are fixed pixel
-  // amounts while the columns are percentage-based, so the solve is
-  // only exact at one reference width — use the page's content width
-  // (--max-width-content, 660px), since that's what this row renders
-  // at on any viewport wide enough to show the full-size gallery.
-  const GAP_PX = 4;
-  const REFERENCE_WIDTH_PX = 660;
-  const mainInverseRatio = main.height / main.width;
-  const sideInverseRatioSum = side.reduce(
-    (sum, img) => sum + img.height / img.width,
-    0,
-  );
-  const sideGapTotal = GAP_PX * (side.length - 1);
-  const sideFraction =
-    (mainInverseRatio - sideGapTotal / REFERENCE_WIDTH_PX) /
-    (sideInverseRatioSum + mainInverseRatio);
-  const mainFraction = 1 - sideFraction;
+  // With just one or two side photos, every photo (including the
+  // side ones) can render at its own true aspect ratio: solve for the
+  // column-width split where the main photo and the stacked side
+  // column land at the same total height, so nothing is cropped and
+  // the block still reads as one clean aligned rectangle.
+  if (side.length <= 2) {
+    // The gap-1 (4px) seams between stacked side photos are fixed
+    // pixel amounts while the columns are percentage-based, so the
+    // solve is only exact at one reference width — use the page's
+    // content width (--max-width-content, 660px), since that's what
+    // this row renders at on any viewport wide enough to show the
+    // full-size gallery.
+    const GAP_PX = 4;
+    const REFERENCE_WIDTH_PX = 660;
+    const mainInverseRatio = main.height / main.width;
+    const sideInverseRatioSum = side.reduce(
+      (sum, img) => sum + img.height / img.width,
+      0,
+    );
+    const sideGapTotal = GAP_PX * (side.length - 1);
+    const sideFraction =
+      (mainInverseRatio - sideGapTotal / REFERENCE_WIDTH_PX) /
+      (sideInverseRatioSum + mainInverseRatio);
+    const mainFraction = 1 - sideFraction;
+
+    return (
+      <div className="mt-2 flex w-full gap-1 overflow-hidden rounded-lg border border-gray-200">
+        <div style={{ width: `${mainFraction * 100}%` }} className="shrink-0">
+          <Image
+            src={main.src}
+            alt={alt}
+            width={main.width}
+            height={main.height}
+            quality={95}
+            sizes="(max-width: 640px) 60vw, 400px"
+            className="h-auto w-full"
+          />
+        </div>
+        <div
+          style={{ width: `${sideFraction * 100}%` }}
+          className="flex shrink-0 flex-col gap-1 overflow-hidden"
+        >
+          {side.map((img) => (
+            <Image
+              key={img.src}
+              src={img.src}
+              alt=""
+              aria-hidden
+              width={img.width}
+              height={img.height}
+              quality={95}
+              sizes="(max-width: 640px) 40vw, 260px"
+              className="h-auto w-full"
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // With three or more side photos, stacking them all in one
+  // exact-fit column (above) squeezes each one down to a sliver to
+  // match the main photo's height. Past two, switch to a proper
+  // 2-column square thumbnail grid instead — a light, expected crop
+  // for small previews, in exchange for each one actually being
+  // legible. The main photo still keeps its full aspect ratio.
+  const mainWidthPct = 56;
+  const sideWidthPct = 100 - mainWidthPct;
 
   return (
-    <div className="mt-2 flex w-full gap-1 overflow-hidden rounded-lg border border-gray-200">
-      <div style={{ width: `${mainFraction * 100}%` }} className="shrink-0">
+    <div className="mt-2 flex w-full items-start gap-1">
+      <div
+        style={{ width: `${mainWidthPct}%` }}
+        className="shrink-0 overflow-hidden rounded-lg border border-gray-200"
+      >
         <Image
           src={main.src}
           alt={alt}
           width={main.width}
           height={main.height}
           quality={95}
-          sizes="(max-width: 640px) 60vw, 400px"
+          sizes="(max-width: 640px) 56vw, 370px"
           className="h-auto w-full"
         />
       </div>
       <div
-        style={{ width: `${sideFraction * 100}%` }}
-        className="flex shrink-0 flex-col gap-1 overflow-hidden"
+        style={{ width: `${sideWidthPct}%` }}
+        className="grid shrink-0 grid-cols-2 gap-1"
       >
         {side.map((img) => (
-          <Image
+          <div
             key={img.src}
-            src={img.src}
-            alt=""
-            aria-hidden
-            width={img.width}
-            height={img.height}
-            quality={95}
-            sizes="(max-width: 640px) 40vw, 260px"
-            className="h-auto w-full"
-          />
+            className="relative aspect-square overflow-hidden rounded-lg border border-gray-200"
+          >
+            <Image
+              src={img.src}
+              alt=""
+              aria-hidden
+              fill
+              quality={95}
+              sizes="(max-width: 640px) 22vw, 145px"
+              className="object-cover"
+            />
+          </div>
         ))}
       </div>
     </div>
