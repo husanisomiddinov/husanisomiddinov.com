@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
-import { Prose, SocialIcons, Experiences } from "@/components";
+import { Prose, SocialIcons, Experiences, BioTimeline } from "@/components";
 import { getHomePage } from "@/lib/pages";
 import { getExperiences } from "@/lib/data";
 import { buildMetadata } from "@/lib/metadata";
+import { bioMilestones } from "../../content/data/personal/bio-timeline";
 
 export async function generateMetadata() {
   const page = await getHomePage();
@@ -23,8 +24,9 @@ export default async function Home() {
 
   return (
     <>
+      <Prose>{page.content}</Prose>
+      <BioTimeline milestones={bioMilestones} />
       <Prose>
-        {page.content}
         <SocialIcons />
       </Prose>
       <hr className="mt-8 border-gray-300" />
