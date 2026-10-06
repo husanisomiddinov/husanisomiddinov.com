@@ -12,7 +12,7 @@
       "Gazebo",
       "Docker"
     ],
-    "date": "2026",
+    "date": "May 2026",
     "status": "completed",
     "links": {
       "github": "https://github.com/husanisomiddinov/md25010-ros2-slam"
