@@ -174,3 +174,24 @@ i {
   margin-bottom: 1rem;
   border-color: var(--color-gray-300);
 }
+
+@keyframes project-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.project-enter {
+  animation: project-enter 500ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-enter {
+    animation: none;
+  }
+}

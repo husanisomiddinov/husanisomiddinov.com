@@ -1,23 +1,5 @@
 [
   {
-    "slug": "personal-website",
-    "kind": "web",
-    "title": "Personal Website",
-    "summary": "This website you're currently browsing.",
-    "description": "## Context\nThis is my personal digital home and long-term publishing platform. I use it to document projects, ideas, reading notes, writing, and ongoing experiments while keeping full ownership of content and presentation.\n\nThe goal is to make the site feel less like a static resume and more like a living system that evolves with my work.\n\n## Product Structure\nThe website is organized into focused sections so each type of content has its own clear surface.\n\n- Home and About pages for identity and current direction\n- Projects pages with individual deep-dive routes for each build\n- Reading and Writing sections for books and long-form posts\n- Studio pages for curated resources and personal artifacts\n- Additional pages like Arsenal, Facts, Quotes, and Heuristics\n\nThis structure supports both fast skimming and deep exploration.\n\n## Technical Architecture\nThe site is built with Next.js and TypeScript, using static generation patterns for fast load times and predictable deploys.\n\n- Framework: Next.js\n- Language: TypeScript\n- UI system: Chakra UI\n- Content rendering: MDX via `next-mdx-remote`\n- SEO: route-level metadata with `next-seo`\n\nMost pages are data-driven through JSON/MDX content sources, which keeps editorial updates separate from UI logic.\n\n## Content System and Authoring Workflow\nA core design principle is content-first development: write or edit data files, then let reusable page templates handle rendering.\n\n- Portfolio data lives in structured JSON (project metadata, links, artwork)\n- Long-form pages use MDX for readable writing + embedded media support\n- Dynamic routes (for example, project and reading detail pages) are statically generated\n- Shared components ensure a consistent visual language across sections\n\nThis approach makes it easy to expand the site without repeatedly changing page code.\n\n## Design Direction\nThe interface favors clean typography, restrained color usage, and subtle editorial framing. Artwork banners and curated visuals are used intentionally to give each page a distinct mood without sacrificing readability.\n\nNavigation is deliberately minimal so users can quickly move between identity, work, and thought.\n\n## What This Project Demonstrates\nThis project demonstrates end-to-end ownership of product, engineering, and narrative: information architecture, frontend implementation, content strategy, and iterative refinement.\n\nIt is both a portfolio and an operating system for my work, designed to keep growing as new projects and writing are published.",
-    "tech": [
-      "Next.js",
-      "TypeScript",
-      "Chakra UI"
-    ],
-    "date": "2022 June – Present",
-    "status": "in-progress",
-    "links": {
-      "live": "https://husanisomiddinov.com",
-      "github": "https://github.com/husanisomiddinov/personal-website"
-    }
-  },
-  {
     "slug": "ros2-slam",
     "kind": "robotics",
     "title": "ROS2 SLAM & Autonomous Navigation",
@@ -68,6 +50,26 @@
         "width": 3024,
         "height": 1964
       }
+    ],
+    "cover": [
+      {
+        "src": "/images/projects/ros2-slam/screenshot4.png",
+        "alt": "RViz navigating the saved TurtleBot3 map",
+        "width": 3024,
+        "height": 1964
+      },
+      {
+        "src": "/images/projects/ros2-slam/screenshot3.png",
+        "alt": "Completed occupancy map in RViz",
+        "width": 3024,
+        "height": 1964
+      },
+      {
+        "src": "/images/projects/ros2-slam/screenshot1.png",
+        "alt": "Occupancy map at 25% coverage",
+        "width": 3024,
+        "height": 1964
+      }
     ]
   },
   {
@@ -91,7 +93,33 @@
     "links": {
       "live": "https://tryapollo.vercel.app",
       "github": "https://github.com/bilalsea2/apollo-ai"
-    }
+    },
+    "cover": [
+      {
+        "src": "/images/projects/apollo-ai/aerial-rows.jpg",
+        "alt": "Rows of young crops at golden hour",
+        "width": 1600,
+        "height": 1067
+      },
+      {
+        "src": "/images/projects/apollo-ai/leaf-macro.jpg",
+        "alt": "Close-up of a leaf",
+        "width": 1600,
+        "height": 2844
+      },
+      {
+        "src": "/images/projects/apollo-ai/drone.jpg",
+        "alt": "Drone over a field",
+        "width": 1600,
+        "height": 1143
+      },
+      {
+        "src": "/images/projects/apollo-ai/farmer-phone.jpg",
+        "alt": "Farmer photographing a plant with a phone",
+        "width": 1600,
+        "height": 1066
+      }
+    ]
   },
   {
     "slug": "sentiment-analysis",
@@ -118,6 +146,58 @@
       {
         "title": "Logistic Regression via Gradient Descent",
         "notes": "Built a binary classifier from scratch in NumPy with cross-entropy optimization (learning rate 0.1, 1,000 iterations) and compared it against scikit-learn."
+      }
+    ],
+    "cover": [
+      {
+        "src": "/images/projects/sentiment-analysis/feature_comparison.png",
+        "alt": "Top TF-IDF features for positive versus negative sentiment",
+        "width": 4170,
+        "height": 2368
+      },
+      {
+        "src": "/images/projects/sentiment-analysis/top_tfidf_features.png",
+        "alt": "Top 15 TF-IDF features for each sentiment",
+        "width": 4769,
+        "height": 1768
+      }
+    ]
+  },
+  {
+    "slug": "personal-website",
+    "kind": "web",
+    "title": "Personal Website",
+    "summary": "This website you're currently browsing.",
+    "description": "## Context\nThis is my personal digital home and long-term publishing platform. I use it to document projects, ideas, reading notes, writing, and ongoing experiments while keeping full ownership of content and presentation.\n\nThe goal is to make the site feel less like a static resume and more like a living system that evolves with my work.\n\n## Product Structure\nThe website is organized into focused sections so each type of content has its own clear surface.\n\n- Home and About pages for identity and current direction\n- Projects pages with individual deep-dive routes for each build\n- Reading and Writing sections for books and long-form posts\n- Studio pages for curated resources and personal artifacts\n- Additional pages like Arsenal, Facts, Quotes, and Heuristics\n\nThis structure supports both fast skimming and deep exploration.\n\n## Technical Architecture\nThe site is built with Next.js and TypeScript, using static generation patterns for fast load times and predictable deploys.\n\n- Framework: Next.js\n- Language: TypeScript\n- UI system: Chakra UI\n- Content rendering: MDX via `next-mdx-remote`\n- SEO: route-level metadata with `next-seo`\n\nMost pages are data-driven through JSON/MDX content sources, which keeps editorial updates separate from UI logic.\n\n## Content System and Authoring Workflow\nA core design principle is content-first development: write or edit data files, then let reusable page templates handle rendering.\n\n- Portfolio data lives in structured JSON (project metadata, links, artwork)\n- Long-form pages use MDX for readable writing + embedded media support\n- Dynamic routes (for example, project and reading detail pages) are statically generated\n- Shared components ensure a consistent visual language across sections\n\nThis approach makes it easy to expand the site without repeatedly changing page code.\n\n## Design Direction\nThe interface favors clean typography, restrained color usage, and subtle editorial framing. Artwork banners and curated visuals are used intentionally to give each page a distinct mood without sacrificing readability.\n\nNavigation is deliberately minimal so users can quickly move between identity, work, and thought.\n\n## What This Project Demonstrates\nThis project demonstrates end-to-end ownership of product, engineering, and narrative: information architecture, frontend implementation, content strategy, and iterative refinement.\n\nIt is both a portfolio and an operating system for my work, designed to keep growing as new projects and writing are published.",
+    "tech": [
+      "Next.js",
+      "TypeScript",
+      "Chakra UI"
+    ],
+    "date": "2022 June – Present",
+    "status": "in-progress",
+    "links": {
+      "live": "https://husanisomiddinov.com",
+      "github": "https://github.com/husanisomiddinov/personal-website"
+    },
+    "cover": [
+      {
+        "src": "/images/projects/personal-website/home.png",
+        "alt": "Home page with the scroll-driven bio timeline",
+        "width": 1366,
+        "height": 896
+      },
+      {
+        "src": "/images/projects/personal-website/experiences.png",
+        "alt": "Experiences timeline with photo galleries",
+        "width": 1396,
+        "height": 796
+      },
+      {
+        "src": "/images/projects/personal-website/writing.png",
+        "alt": "Essays list with thumbnails",
+        "width": 1366,
+        "height": 896
       }
     ]
   }

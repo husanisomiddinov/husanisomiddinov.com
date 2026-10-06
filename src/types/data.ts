@@ -34,6 +34,8 @@ export interface Project {
   links?: ProjectLinks;
   papers?: ProjectPaper[];
   images?: ProjectImage[];
+  /** Images for the projects index card strip, in display order. */
+  cover?: ProjectImage[];
 }
 
 export interface ProjectImage {
@@ -41,7 +43,7 @@ export interface ProjectImage {
   alt: string;
   caption?: string;
   /** Description heading this image belongs under; it renders after that section's text. */
-  section: string;
+  section?: string;
 
   width: number;
   height: number;
