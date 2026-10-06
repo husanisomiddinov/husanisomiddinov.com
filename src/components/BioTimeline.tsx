@@ -1,78 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useScrollRail } from "@/lib/useScrollRail";
 import type { BioMilestone } from "../../content/data/personal/bio-timeline";
 
 /** Rail column width in px — keep in sync with the grid-cols value below. */
 const RAIL_WIDTH = 28;
 
 export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [fillPercent, setFillPercent] = useState(0);
-  const [reducedMotion, setReducedMotion] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-  );
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const onChange = () => setReducedMotion(media.matches);
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
-  }, []);
-
-  // Highlights whichever block is passing through the center of the
-  // viewport — the same reference point the fill line's progress
-  // below is measured against, so the two stay visually in sync.
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          const index = blockRefs.current.indexOf(
-            entry.target as HTMLDivElement,
-          );
-          if (index !== -1) setActiveIndex(index);
-        }
-      },
-      { rootMargin: "-50% 0px -50% 0px", threshold: 0 },
-    );
-    for (const el of blockRefs.current) {
-      if (el) observer.observe(el);
-    }
-    return () => observer.disconnect();
-  }, [milestones]);
-
-  // Continuous scroll progress for the rail's fill line, measured
-  // against that same viewport-center reference point.
-  useEffect(() => {
-    let ticking = false;
-    const update = () => {
-      ticking = false;
-      const el = containerRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const viewportCenter = window.innerHeight * 0.5;
-      const progress = (viewportCenter - rect.top) / rect.height;
-      setFillPercent(Math.min(1, Math.max(0, progress)) * 100);
-    };
-    const onScroll = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
-      }
-    };
-    requestAnimationFrame(update);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
+  const { containerRef, registerItem, activeIndex, fillPercent, reducedMotion } =
+    useScrollRail(milestones.length);
 
   return (
     <div ref={containerRef} className="relative mt-2 flex w-full flex-col">
@@ -110,12 +46,7 @@ export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
                 }`}
               />
             </div>
-            <div
-              ref={(el) => {
-                blockRefs.current[index] = el;
-              }}
-              className="flex min-w-0 flex-col gap-1"
-            >
+            <div ref={registerItem(index)} className="flex min-w-0 flex-col gap-1">
               <p
                 className={`font-sans text-sm font-bold transition-colors duration-500 ease-out ${
                   active ? "text-brand-600" : "text-gray-400"

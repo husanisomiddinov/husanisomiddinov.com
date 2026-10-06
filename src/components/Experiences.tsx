@@ -1,14 +1,24 @@
+"use client";
+
 import Image from "next/image";
+import { useScrollRail } from "@/lib/useScrollRail";
 import type { Experience, ExperienceImage } from "@/types";
+
+/** Rail column width in px — keep in sync with the grid-cols value below. */
+const RAIL_WIDTH = 12;
 
 function ExperienceRow({
   experience,
   isFirst,
   isLast,
+  active,
+  registerRef,
 }: {
   experience: Experience;
   isFirst: boolean;
   isLast: boolean;
+  active: boolean;
+  registerRef: (el: HTMLElement | null) => void;
 }) {
   const {
     name,
@@ -26,7 +36,11 @@ function ExperienceRow({
     : undefined;
 
   return (
-    <div className="group relative -mx-4 grid grid-cols-[12px_36px_1fr] gap-x-4 rounded-lg px-4 py-5 transition-colors duration-300 ease-out hover:bg-gray-800/[0.03]">
+    <div
+      ref={registerRef}
+      className={`group relative -mx-4 grid gap-x-4 rounded-lg px-4 py-5 transition-colors duration-300 ease-out hover:bg-gray-800/[0.03] ${active ? "bg-gray-800/[0.03]" : ""}`}
+      style={{ gridTemplateColumns: `${RAIL_WIDTH}px 36px 1fr` }}
+    >
       <div className="relative flex justify-center">
         <span
           aria-hidden
@@ -34,7 +48,11 @@ function ExperienceRow({
         />
         <span
           aria-hidden
-          className="relative z-10 mt-1.5 h-[9px] w-[9px] rounded-[2px] border border-gray-400 bg-[var(--color-page-bg)] transition-colors duration-300 ease-out group-hover:border-gray-800"
+          className={`relative z-10 mt-1.5 h-[9px] w-[9px] rounded-[2px] border transition-colors duration-500 ease-out group-hover:border-brand-600 group-hover:bg-brand-500 ${
+            active
+              ? "border-brand-600 bg-brand-500"
+              : "border-gray-400 bg-[var(--color-page-bg)]"
+          }`}
         />
       </div>
       <div className="relative h-9 w-9">
@@ -47,7 +65,7 @@ function ExperienceRow({
               sizes="36px"
               loading="eager"
               style={logoStyle}
-              className="object-contain opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-0"
+              className={`object-contain opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-0 ${active ? "opacity-0" : ""}`}
             />
             <Image
               src={logoColor}
@@ -57,7 +75,7 @@ function ExperienceRow({
               sizes="36px"
               loading="eager"
               style={logoStyle}
-              className="object-contain opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100"
+              className={`object-contain opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100 ${active ? "opacity-100" : ""}`}
             />
           </>
         ) : (
@@ -93,7 +111,9 @@ function ExperienceRow({
         ) : (
           <p className="font-sans text-sm text-gray-500">{name}</p>
         )}
-        <p className="text-[0.9375rem] leading-[1.6] text-gray-600 opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-100">
+        <p
+          className={`text-[0.9375rem] leading-[1.6] text-gray-600 opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-100 ${active ? "opacity-100" : ""}`}
+        >
           {description}
         </p>
         {images && images.length > 0 && (
@@ -240,18 +260,32 @@ function ExperienceGallery({
 }
 
 export function Experiences({ experiences }: { experiences: Experience[] }) {
+  const { containerRef, registerItem, activeIndex, fillPercent, reducedMotion } =
+    useScrollRail(experiences.length);
+
   if (experiences.length === 0) {
     return null;
   }
 
   return (
-    <div className="mt-6 flex w-full flex-col">
+    <div ref={containerRef} className="relative mt-6 flex w-full flex-col">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-0 w-px bg-brand-500"
+        style={{
+          left: RAIL_WIDTH / 2,
+          height: `${fillPercent}%`,
+          transition: reducedMotion ? "none" : "height 150ms linear",
+        }}
+      />
       {experiences.map((experience, index) => (
         <ExperienceRow
           key={experience.slug}
           experience={experience}
           isFirst={index === 0}
           isLast={index === experiences.length - 1}
+          active={index === activeIndex}
+          registerRef={registerItem(index)}
         />
       ))}
     </div>
