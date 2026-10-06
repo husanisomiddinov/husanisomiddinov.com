@@ -39,6 +39,10 @@ export interface Project {
 export interface ProjectImage {
   src: string;
   alt: string;
+  caption?: string;
+  /** Description heading this image belongs under; it renders after that section's text. */
+  section: string;
+
   width: number;
   height: number;
 }
