@@ -76,6 +76,12 @@ export default async function BookPage({
                 <span className="font-bold text-brand-500">
                   Currently Reading
                 </span>
+                {metadata.started && (
+                  <>
+                    <span className="text-gray-400">·</span>
+                    <span>Started: {metadata.started}</span>
+                  </>
+                )}
               </>
             )}
           </div>

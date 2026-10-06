@@ -8,6 +8,8 @@ export interface Book {
   author: string;
   date?: string | null;
   rating?: number | null;
+  /** Month the book was started, shown while it's still being read. */
+  started?: string;
   coverImage: string;
   spineColor: string;
   textColor: string;
@@ -21,6 +23,7 @@ export type ReadingShelfBook = Pick<
   | "author"
   | "date"
   | "rating"
+  | "started"
   | "coverImage"
   | "spineColor"
   | "textColor"

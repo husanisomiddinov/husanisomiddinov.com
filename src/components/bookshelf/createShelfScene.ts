@@ -22,12 +22,13 @@ function bookPose(index: number, selected: number) {
   };
 }
 
-/** Owns only GPU resources and pointer input. React owns the selected book. */
+/** Owns only GPU resources and pointer input. React owns the selected book and navigation. */
 export function createShelfScene(
   host: HTMLElement,
   books: ReadingShelfBook[],
   initialIndex: number,
   onSelect: (index: number) => void,
+  onOpen: (index: number) => void,
   onUnavailable: (error: unknown) => void,
 ): ShelfScene {
   if (
@@ -376,7 +377,11 @@ export function createShelfScene(
     host.setPointerCapture(event.pointerId);
   }
   function pointerMove(event: PointerEvent) {
-    if (!gesture || event.pointerId !== gesture.id) return;
+    if (!gesture) {
+      if (event.pointerType === "mouse") hover(event);
+      return;
+    }
+    if (event.pointerId !== gesture.id) return;
     const dx = event.clientX - gesture.x;
     const dy = event.clientY - gesture.y;
     if (!gesture.dragged && Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) {
@@ -394,29 +399,34 @@ export function createShelfScene(
         ),
       );
   }
+  function pickBook(event: PointerEvent): number {
+    const bounds = host.getBoundingClientRect();
+    raycaster.setFromCamera(
+      new THREE.Vector2(
+        ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
+        (-(event.clientY - bounds.top) / bounds.height) * 2 + 1,
+      ),
+      camera,
+    );
+    const hit = raycaster.intersectObjects(
+      volumes.filter(({ group }) => group.visible).map(({ group }) => group),
+      true,
+    )[0];
+    if (!hit) return -1;
+    const index = volumes.findIndex(({ group }) => group === hit.object.parent);
+    if (index < 0)
+      throw new Error("Bookshelf: selected mesh has no owning book");
+    return index;
+  }
+  function hover(event: PointerEvent) {
+    host.style.cursor = pickBook(event) === selected ? "pointer" : "";
+  }
   function pointerUp(event: PointerEvent) {
     if (!gesture || event.pointerId !== gesture.id) return;
     if (!gesture.dragged && Math.abs(event.clientY - gesture.y) < 10) {
-      const bounds = host.getBoundingClientRect();
-      raycaster.setFromCamera(
-        new THREE.Vector2(
-          ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
-          (-(event.clientY - bounds.top) / bounds.height) * 2 + 1,
-        ),
-        camera,
-      );
-      const hit = raycaster.intersectObjects(
-        volumes.filter(({ group }) => group.visible).map(({ group }) => group),
-        true,
-      )[0];
-      if (hit) {
-        const index = volumes.findIndex(
-          ({ group }) => group === hit.object.parent,
-        );
-        if (index < 0)
-          throw new Error("Bookshelf: selected mesh has no owning book");
-        onSelect(index);
-      }
+      const index = pickBook(event);
+      if (index === selected) onOpen(index);
+      else if (index >= 0) onSelect(index);
     }
     gesture = null;
     if (host.hasPointerCapture(event.pointerId))

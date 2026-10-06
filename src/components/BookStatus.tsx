@@ -5,12 +5,18 @@ import type { ReadingShelfBook } from "@/types";
 export function BookStatus({
   book,
 }: {
-  book: Pick<ReadingShelfBook, "date" | "rating">;
+  book: Pick<ReadingShelfBook, "date" | "rating" | "started">;
 }) {
   if (!isBookRead(book)) {
     return (
-      <p className="font-sans text-sm font-bold text-brand-500">
-        Currently Reading
+      <p className="font-sans text-sm text-gray-600">
+        <span className="font-bold text-brand-500">Currently Reading</span>
+        {book.started && (
+          <>
+            {" "}
+            <span className="text-gray-400">·</span> Started: {book.started}
+          </>
+        )}
       </p>
     );
   }

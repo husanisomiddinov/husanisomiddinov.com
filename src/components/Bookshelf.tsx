@@ -8,6 +8,7 @@ import {
   type CSSProperties,
 } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
 import type { ReadingShelfBook } from "@/types";
 import type { ShelfScene } from "./bookshelf/createShelfScene";
@@ -42,6 +43,7 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
   const [status, setStatus] = useState<"loading" | "ready" | "unavailable">(
     "loading",
   );
+  const router = useRouter();
   const host = useRef<HTMLDivElement>(null);
   const scene = useRef<ShelfScene | null>(null);
   const selection = useRef(selected);
@@ -50,6 +52,14 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
       setSelected(Math.max(0, Math.min(books.length - 1, index)));
     },
     [books.length],
+  );
+
+  const open = useCallback(
+    (index: number) => {
+      const target = books[index]?.slug;
+      if (target && target !== `/reading/${currentSlug}`) router.push(target);
+    },
+    [books, currentSlug, router],
   );
 
   useEffect(() => {
@@ -75,6 +85,7 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
           books,
           selection.current,
           select,
+          open,
           unavailable,
         );
         setStatus("ready");
@@ -85,7 +96,7 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
       scene.current?.dispose();
       scene.current = null;
     };
-  }, [books, select]);
+  }, [books, select, open]);
 
   const book = books[selected];
   const progress = books.length > 1 ? (selected / (books.length - 1)) * 100 : 0;

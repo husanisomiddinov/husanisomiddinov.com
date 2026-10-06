@@ -20,11 +20,12 @@ export async function getBook(slug: string): Promise<MdxContent<Book> | undefine
 
 /** Strips `summaryContent` — the Bookshelf only needs the shelf-display fields. */
 export function toReadingShelfBooks(books: Book[]): ReadingShelfBook[] {
-  return books.map(({ title, author, date, rating, coverImage, spineColor, textColor, slug }) => ({
+  return books.map(({ title, author, date, rating, started, coverImage, spineColor, textColor, slug }) => ({
     title,
     author,
     date,
     rating,
+    started,
     coverImage,
     spineColor,
     textColor,
