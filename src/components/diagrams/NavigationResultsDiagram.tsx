@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { InlineCode, StepDiagram, type DiagramStep } from "./StepDiagram";
+import {
+  InlineCode,
+  StepDiagram,
+  useAnimationsEnabled,
+  useCycle,
+  type DiagramStep,
+} from "./StepDiagram";
 
 const FLOW = "#5b84b8";
 const OLIVE = "#5b6529";
@@ -237,4 +243,10 @@ export function NavigationResultsDiagram() {
       {({ active, animate }) => <Scene active={active} animate={animate} />}
     </StepDiagram>
   );
+}
+
+export function NavigationResultsPreview() {
+  const animate = useAnimationsEnabled();
+  const active = useCycle(GOALS.length, 1800, animate);
+  return <Scene active={active} animate={animate} />;
 }

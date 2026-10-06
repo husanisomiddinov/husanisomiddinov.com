@@ -17,39 +17,9 @@
     "links": {
       "github": "https://github.com/husanisomiddinov/md25010-ros2-slam"
     },
-    "images": [
-      {
-        "src": "/images/projects/ros2-slam/screenshot1.png",
-        "alt": "RViz showing the occupancy map about 25% built",
-        "caption": "25% coverage",
-        "section": "Part B - Mapping (SLAM)",
-        "width": 3024,
-        "height": 1964
-      },
-      {
-        "src": "/images/projects/ros2-slam/screenshot2.png",
-        "alt": "RViz showing the occupancy map about 60% built",
-        "caption": "60% coverage",
-        "section": "Part B - Mapping (SLAM)",
-        "width": 3024,
-        "height": 1964
-      },
-      {
-        "src": "/images/projects/ros2-slam/screenshot3.png",
-        "alt": "RViz showing the completed occupancy map",
-        "caption": "Full map",
-        "section": "Part B - Mapping (SLAM)",
-        "width": 3024,
-        "height": 1964
-      },
-      {
-        "src": "/images/projects/ros2-slam/screenshot4.png",
-        "alt": "RViz with the Nav2 panel during autonomous navigation on the saved map",
-        "caption": "Navigation",
-        "section": "Part C - Autonomous Navigation",
-        "width": 3024,
-        "height": 1964
-      }
+    "previews": [
+      "execution-flow",
+      "navigation-results"
     ]
   },
   {

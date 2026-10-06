@@ -33,18 +33,8 @@ export interface Project {
   status?: ProjectStatus;
   links?: ProjectLinks;
   papers?: ProjectPaper[];
-  images?: ProjectImage[];
-}
-
-export interface ProjectImage {
-  src: string;
-  alt: string;
-  caption?: string;
-  /** Description heading this image belongs under; it renders after that section's text. */
-  section?: string;
-
-  width: number;
-  height: number;
+  /** Diagram names (see components/diagrams) shown as live previews on the projects index. */
+  previews?: string[];
 }
 
 interface ArsenalItem {

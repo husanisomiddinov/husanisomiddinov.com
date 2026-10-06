@@ -33,6 +33,17 @@ export function useAnimationsEnabled(): boolean {
   return enabled;
 }
 
+/** Steps through 0..length-1 on a timer, for auto-playing previews. */
+export function useCycle(length: number, ms: number, enabled: boolean): number {
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    if (!enabled) return;
+    const id = setInterval(() => setIndex((i) => (i + 1) % length), ms);
+    return () => clearInterval(id);
+  }, [length, ms, enabled]);
+  return index;
+}
+
 /** Click-through diagram: a scene that reacts to the active step, tabs to pick a step, and a text panel. */
 export function StepDiagram({
   steps,

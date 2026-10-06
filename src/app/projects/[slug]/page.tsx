@@ -1,5 +1,4 @@
 import { Fragment, type ReactNode } from "react";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { BackLink } from "@/components";
 import { ProjectProgressBar } from "@/components/ProjectProgressBar";
@@ -7,7 +6,6 @@ import { DIAGRAMS } from "@/components/diagrams";
 import { siteUrl } from "@/config/site";
 import { getAllProjectSlugs, getProject } from "@/lib/data";
 import { isHttpUrl } from "@/lib/url";
-import type { ProjectImage } from "@/types";
 import { buildMetadata } from "@/lib/metadata";
 
 type DescriptionBlock =
@@ -70,10 +68,10 @@ interface ArticleSection {
   weight: number;
 }
 
-function buildSections(
-  blocks: DescriptionBlock[],
-  images: ProjectImage[],
-): { intro: number; sections: ArticleSection[] } {
+function buildSections(blocks: DescriptionBlock[]): {
+  intro: number;
+  sections: ArticleSection[];
+} {
   let intro = 0;
   const sections: ArticleSection[] = [];
   let current: ArticleSection | null = null;
@@ -97,11 +95,6 @@ function buildSections(
           : block.text.length;
     if (current) current.weight += size;
     else intro += size;
-  }
-
-  for (const img of images) {
-    const owner = sections.find((sec) => sec.title === img.section);
-    if (owner) owner.weight += 300;
   }
 
   return { intro, sections };
@@ -173,43 +166,6 @@ function parseDescriptionBlocks(description?: string): DescriptionBlock[] {
   return blocks;
 }
 
-function ProjectGallery({ images }: { images: ProjectImage[] }) {
-  const cols =
-    images.length >= 3
-      ? "sm:grid-cols-3"
-      : images.length === 2
-        ? "sm:grid-cols-2"
-        : "";
-  return (
-    <div className={`my-2 grid w-full grid-cols-1 gap-2 ${cols}`}>
-      {images.map((img) => (
-        <figure key={img.src} className="flex flex-col gap-1">
-          <div className="overflow-hidden rounded-lg border border-gray-200">
-            <Image
-              src={img.src}
-              alt={img.alt}
-              width={img.width}
-              height={img.height}
-              quality={90}
-              sizes={
-                images.length >= 3
-                  ? "(max-width: 640px) 100vw, 220px"
-                  : "(max-width: 640px) 100vw, 660px"
-              }
-              className="h-auto w-full"
-            />
-          </div>
-          {img.caption && (
-            <figcaption className="font-sans text-sm text-gray-500">
-              {img.caption}
-            </figcaption>
-          )}
-        </figure>
-      ))}
-    </div>
-  );
-}
-
 export function generateStaticParams() {
   return getAllProjectSlugs().map((slug) => ({ slug }));
 }
@@ -257,24 +213,8 @@ export default async function ProjectPage({
   const hasPapers = (project.papers?.length ?? 0) > 0;
   const techLine = project.tech?.join(" · ");
 
-  const { intro, sections } = buildSections(
-    descriptionBlocks,
-    project.images ?? [],
-  );
+  const { intro, sections } = buildSections(descriptionBlocks);
   const sectionNumber = new Map(sections.map((sec) => [sec.title, sec.number]));
-
-  const galleryAfter = new Map<number, ProjectImage[]>();
-  let currentHeading = "";
-  descriptionBlocks.forEach((block, i) => {
-    if (block.type === "heading") currentHeading = block.text;
-    const next = descriptionBlocks[i + 1];
-    if (!next || next.type === "heading") {
-      const images = (project.images ?? []).filter(
-        (img) => img.section === currentHeading,
-      );
-      if (images.length > 0) galleryAfter.set(i, images);
-    }
-  });
 
   const progressSections = [
     { id: "project-top", label: "intro", weight: Math.max(intro, 400) },
@@ -404,13 +344,7 @@ export default async function ProjectPage({
                   </p>
                 );
               })();
-              const gallery = galleryAfter.get(idx);
-              return (
-                <Fragment key={idx}>
-                  {node}
-                  {gallery && <ProjectGallery images={gallery} />}
-                </Fragment>
-              );
+              return <Fragment key={idx}>{node}</Fragment>;
             })
           )}
         </article>

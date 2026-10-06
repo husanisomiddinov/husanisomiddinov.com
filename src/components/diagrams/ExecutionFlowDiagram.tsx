@@ -1,6 +1,12 @@
 "use client";
 
-import { InlineCode, StepDiagram, type DiagramStep } from "./StepDiagram";
+import {
+  InlineCode,
+  StepDiagram,
+  useAnimationsEnabled,
+  useCycle,
+  type DiagramStep,
+} from "./StepDiagram";
 
 const FLOW = "#5b84b8";
 const IDLE = "#c9c9c6";
@@ -413,4 +419,10 @@ export function ExecutionFlowDiagram() {
       {({ active, animate }) => <Scene active={active} animate={animate} />}
     </StepDiagram>
   );
+}
+
+export function ExecutionFlowPreview() {
+  const animate = useAnimationsEnabled();
+  const active = useCycle(SCENES.length, 2600, animate);
+  return <Scene active={active} animate={animate} />;
 }

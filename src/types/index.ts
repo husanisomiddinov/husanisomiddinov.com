@@ -11,5 +11,4 @@ export type {
   DiningCategory,
   Experience,
   ExperienceImage,
-  ProjectImage,
 } from "./data";
