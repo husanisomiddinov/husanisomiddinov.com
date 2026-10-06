@@ -275,6 +275,7 @@ export function Experiences({ experiences }: { experiences: Experience[] }) {
         style={{
           left: RAIL_WIDTH / 2,
           height: `${fillPercent}%`,
+          transform: "translateX(-50%)",
           transition: reducedMotion ? "none" : "height 150ms linear",
         }}
       />

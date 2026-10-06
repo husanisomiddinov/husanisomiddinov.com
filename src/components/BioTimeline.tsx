@@ -18,6 +18,7 @@ export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
         style={{
           left: RAIL_WIDTH / 2,
           height: `${fillPercent}%`,
+          transform: "translateX(-50%)",
           transition: reducedMotion ? "none" : "height 150ms linear",
         }}
       />
