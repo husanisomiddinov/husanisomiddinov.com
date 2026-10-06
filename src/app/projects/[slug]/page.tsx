@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { BackLink } from "@/components";
 import { ProjectProgressBar } from "@/components/ProjectProgressBar";
+import { DIAGRAMS } from "@/components/diagrams";
 import { siteUrl } from "@/config/site";
 import { getAllProjectSlugs, getProject } from "@/lib/data";
 import { isHttpUrl } from "@/lib/url";
@@ -12,7 +13,8 @@ import { buildMetadata } from "@/lib/metadata";
 type DescriptionBlock =
   | { type: "heading"; level: 2 | 3; text: string }
   | { type: "paragraph"; text: string }
-  | { type: "list"; items: string[] };
+  | { type: "list"; items: string[] }
+  | { type: "diagram"; name: string };
 
 const LINK_LABELS: Record<string, string> = {
   github: "GitHub",
@@ -88,7 +90,11 @@ function buildSections(
       continue;
     }
     const size =
-      block.type === "list" ? block.items.join(" ").length : block.text.length;
+      block.type === "list"
+        ? block.items.join(" ").length
+        : block.type === "diagram"
+          ? 400
+          : block.text.length;
     if (current) current.weight += size;
     else intro += size;
   }
@@ -127,6 +133,14 @@ function parseDescriptionBlocks(description?: string): DescriptionBlock[] {
     if (!line) {
       flushParagraph();
       flushList();
+      continue;
+    }
+
+    const diagram = /^\[\[diagram:([a-z0-9-]+)\]\]$/.exec(line);
+    if (diagram) {
+      flushParagraph();
+      flushList();
+      blocks.push({ type: "diagram", name: diagram[1] });
       continue;
     }
 
@@ -377,6 +391,11 @@ export default async function ProjectPage({
                       ))}
                     </ul>
                   );
+                }
+
+                if (block.type === "diagram") {
+                  const Diagram = DIAGRAMS[block.name];
+                  return Diagram ? <Diagram /> : null;
                 }
 
                 return (
