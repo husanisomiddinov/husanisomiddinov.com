@@ -5,7 +5,7 @@ import { useScrollRail } from "@/lib/useScrollRail";
 import type { Experience, ExperienceImage } from "@/types";
 
 /** Rail column width in px — keep in sync with the grid-cols value below. */
-const RAIL_WIDTH = 12;
+const RAIL_WIDTH = 28;
 
 function ExperienceRow({
   experience,
