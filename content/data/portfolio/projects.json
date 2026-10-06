@@ -50,26 +50,6 @@
         "width": 3024,
         "height": 1964
       }
-    ],
-    "cover": [
-      {
-        "src": "/images/projects/ros2-slam/screenshot4.png",
-        "alt": "RViz navigating the saved TurtleBot3 map",
-        "width": 3024,
-        "height": 1964
-      },
-      {
-        "src": "/images/projects/ros2-slam/screenshot3.png",
-        "alt": "Completed occupancy map in RViz",
-        "width": 3024,
-        "height": 1964
-      },
-      {
-        "src": "/images/projects/ros2-slam/screenshot1.png",
-        "alt": "Occupancy map at 25% coverage",
-        "width": 3024,
-        "height": 1964
-      }
     ]
   },
   {

@@ -34,8 +34,6 @@ export interface Project {
   links?: ProjectLinks;
   papers?: ProjectPaper[];
   images?: ProjectImage[];
-  /** Images for the projects index card strip, in display order. */
-  cover?: ProjectImage[];
 }
 
 export interface ProjectImage {

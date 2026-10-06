@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon } from "@/components/icons";
+import { isHttpUrl } from "@/lib/url";
 import type { Project, ProjectImage, ProjectKind } from "@/types";
 
 const KIND_ORDER: ProjectKind[] = ["robotics", "ml", "web"];
@@ -12,9 +13,16 @@ const KIND_LABEL: Record<ProjectKind, string> = {
   ml: "Machine Learning",
   web: "Web",
 };
+const LINK_LABELS: Record<string, string> = {
+  github: "GitHub",
+  live: "Live",
+  twitter: "Twitter",
+};
 
-const STRIP_HEIGHT = 220;
-const MAX_CHIPS = 5;
+const MAX_THUMBS = 5;
+const MAX_TECH = 3;
+
+type Filter = "all" | ProjectKind;
 
 function formatDate(date?: string): string | undefined {
   if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
@@ -23,8 +31,6 @@ function formatDate(date?: string): string | undefined {
     year: "numeric",
   });
 }
-
-type Filter = "all" | ProjectKind;
 
 function FilterTab({
   label,
@@ -54,89 +60,114 @@ function FilterTab({
   );
 }
 
-function ImageStrip({ images }: { images: ProjectImage[] }) {
+/** One row of thumbnails sized by aspect ratio so they share a height and fill the card width. */
+function Thumbnails({ images }: { images: ProjectImage[] }) {
   return (
-    <div className="relative overflow-hidden rounded-lg">
-      <div className="flex gap-2">
-        {images.map((img) => (
-          <div
-            key={img.src}
-            className="shrink-0 overflow-hidden rounded-md border border-gray-200 bg-gray-200"
-          >
-            <Image
-              src={img.src}
-              alt={img.alt}
-              width={img.width}
-              height={img.height}
-              quality={85}
-              sizes={`${Math.round((STRIP_HEIGHT * img.width) / img.height)}px`}
-              className="h-[150px] w-auto max-w-none transition-transform duration-500 ease-out group-hover:scale-[1.04] sm:h-[220px]"
-            />
-          </div>
-        ))}
-      </div>
+    <div className="flex w-full gap-2">
+      {images.map((img) => (
+        <div
+          key={img.src}
+          style={{ flexGrow: img.width / img.height, flexBasis: 0 }}
+          className="min-w-0 rounded-md border border-gray-300 bg-brand-50 p-1"
+        >
+          <Image
+            src={img.src}
+            alt={img.alt}
+            width={img.width}
+            height={img.height}
+            quality={80}
+            sizes="(max-width: 700px) 30vw, 180px"
+            className="h-auto w-full rounded-[3px]"
+          />
+        </div>
+      ))}
     </div>
   );
 }
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const images = project.cover ?? project.images ?? [];
+  const images = (project.images ?? []).slice(0, MAX_THUMBS);
+  const captions = images.map((img) => img.caption).filter(Boolean);
   const tech = project.tech ?? [];
-  const extra = tech.length - MAX_CHIPS;
+  const links = Object.entries(project.links ?? {}).filter(
+    (entry): entry is [string, string] =>
+      typeof entry[1] === "string" && isHttpUrl(entry[1]),
+  );
+  const meta = [
+    formatDate(project.date),
+    ...tech.slice(0, MAX_TECH),
+    tech.length > MAX_TECH ? `+${tech.length - MAX_TECH}` : null,
+  ].filter(Boolean);
 
   return (
     <li className="project-enter" style={{ animationDelay: `${index * 80}ms` }}>
-      <Link
-        href={`/projects/${project.slug}`}
-        className="group flex flex-col gap-4 no-underline"
-      >
-        {images.length > 0 && <ImageStrip images={images} />}
+      <article className="group relative -mx-4 flex flex-col gap-3 rounded-lg px-4 py-6 transition-colors duration-300 ease-out hover:bg-gray-800/[0.03]">
+        <h2 className="font-sans text-xl leading-snug font-bold text-gray-800">
+          <Link
+            href={`/projects/${project.slug}`}
+            className="text-gray-800 no-underline after:absolute after:inset-0 after:content-['']"
+          >
+            {project.title}
+          </Link>
+        </h2>
 
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
-            <h2 className="flex items-center gap-2 font-sans text-xl leading-snug font-bold text-gray-800">
-              {project.title}
-              <span className="text-gray-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100">
-                <ArrowRightIcon />
+        <p className="flex flex-wrap items-center gap-x-2 font-sans text-sm text-gray-500">
+          {project.status === "in-progress" && (
+            <>
+              <span className="flex items-center gap-1.5 text-brand-500">
+                <span
+                  aria-hidden
+                  className="h-1.5 w-1.5 rounded-full bg-brand-500"
+                />
+                in progress
               </span>
-            </h2>
-            <p className="flex items-center gap-2 font-sans text-sm text-gray-500">
-              {project.status === "in-progress" && (
-                <span className="flex items-center gap-1.5 text-brand-500">
-                  <span
-                    aria-hidden
-                    className="h-1.5 w-1.5 rounded-full bg-brand-500"
-                  />
-                  in progress
-                </span>
-              )}
-              {formatDate(project.date)}
-            </p>
-          </div>
-
-          <p className="line-clamp-3 text-base leading-[1.6] text-gray-600">
-            {project.summary}
-          </p>
-
-          {tech.length > 0 && (
-            <ul className="flex flex-wrap gap-1.5 pt-1">
-              {tech.slice(0, MAX_CHIPS).map((t) => (
-                <li
-                  key={t}
-                  className="rounded-full border border-gray-300 px-2.5 py-0.5 font-sans text-xs text-gray-600"
-                >
-                  {t}
-                </li>
-              ))}
-              {extra > 0 && (
-                <li className="px-1 py-0.5 font-sans text-xs text-gray-400">
-                  +{extra}
-                </li>
-              )}
-            </ul>
+              <span aria-hidden>·</span>
+            </>
           )}
+          {meta.map((item, i) => (
+            <Fragment key={`${item}-${i}`}>
+              {i > 0 && <span aria-hidden>·</span>}
+              <span>{item}</span>
+            </Fragment>
+          ))}
+        </p>
+
+        <p className="text-base leading-[1.6] text-gray-600">
+          {project.summary}
+        </p>
+
+        {images.length > 0 && (
+          <>
+            <Thumbnails images={images} />
+            {captions.length > 0 && (
+              <p className="font-sans text-sm text-gray-500">
+                {captions.join(" · ")}
+              </p>
+            )}
+          </>
+        )}
+
+        <div className="relative z-10 flex flex-wrap items-center gap-x-6 gap-y-2 pt-1">
+          <Link
+            href={`/projects/${project.slug}`}
+            className="inline-flex items-center gap-1.5 bg-gray-900 px-3 py-1.5 font-sans text-sm text-brand-50 no-underline transition-colors duration-200 hover:bg-brand-700"
+          >
+            View project
+            <ArrowRightIcon className="size-3.5" />
+          </Link>
+          {links.map(([key, href]) => (
+            <a
+              key={key}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-sans text-sm font-medium text-brand-500 lowercase no-underline hover:text-brand-600 hover:underline"
+            >
+              {LINK_LABELS[key] ?? key}
+            </a>
+          ))}
         </div>
-      </Link>
+      </article>
     </li>
   );
 }
@@ -150,7 +181,7 @@ export function ProjectsBrowser({ projects }: { projects: Project[] }) {
     filter === "all" ? projects : projects.filter((p) => p.kind === filter);
 
   return (
-    <div className="flex w-full flex-col gap-8">
+    <div className="flex w-full flex-col gap-6">
       <div className="flex flex-wrap gap-x-6 gap-y-2">
         <FilterTab
           label="All"
@@ -169,9 +200,12 @@ export function ProjectsBrowser({ projects }: { projects: Project[] }) {
         ))}
       </div>
 
-      <ul key={filter} className="flex w-full flex-col gap-14">
+      <ul key={filter} className="flex w-full flex-col">
         {visible.map((project, i) => (
-          <ProjectCard key={project.slug} project={project} index={i} />
+          <Fragment key={project.slug}>
+            {i > 0 && <hr className="border-gray-300" />}
+            <ProjectCard project={project} index={i} />
+          </Fragment>
         ))}
       </ul>
     </div>
