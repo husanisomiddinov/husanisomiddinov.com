@@ -60,7 +60,7 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
               height={CARD_H}
               rx={8}
               fill={reached ? sample.tint : "#f6f7f4"}
-              stroke={current ? sample.color : reached ? sample.color : "#c9c9c6"}
+              stroke={reached ? sample.color : "#c9c9c6"}
               strokeWidth={current ? 2 : 1}
               style={{ transition: "fill 400ms, stroke 400ms" }}
             />

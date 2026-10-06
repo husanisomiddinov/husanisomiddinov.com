@@ -23,6 +23,13 @@ export function ProjectProgressBar({
 
     const update = () => {
       ticking = false;
+      const atBottom =
+        window.scrollY + window.innerHeight >=
+        document.documentElement.scrollHeight - 2;
+      if (atBottom) {
+        setFills(sections.map(() => 1));
+        return;
+      }
       const y = window.scrollY + 100;
       const top = (id: string) => {
         const el = document.getElementById(id);
