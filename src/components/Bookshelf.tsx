@@ -1,12 +1,18 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import Image from "next/image";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
 import type { ReadingShelfBook } from "@/types";
 import type { ShelfScene } from "./bookshelf/createShelfScene";
 import styles from "./bookshelf/Bookshelf.module.css";
-import { readingStatusLabel } from "@/lib/reading-status";
+import { BookStatus } from "@/components/BookStatus";
 
 interface BookshelfProps {
   books: ReadingShelfBook[];
@@ -22,6 +28,9 @@ export function Bookshelf({ books, currentSlug }: BookshelfProps) {
     />
   );
 }
+
+const arrowClass =
+  "grid size-7 shrink-0 cursor-pointer place-items-center rounded-md border border-gray-300 text-gray-500 transition-colors duration-200 hover:border-brand-500 hover:text-brand-500 disabled:cursor-default disabled:opacity-30 disabled:hover:border-gray-300 disabled:hover:text-gray-500";
 
 function Shelf({ books, currentSlug }: BookshelfProps) {
   const [selected, setSelected] = useState(() =>
@@ -79,6 +88,7 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
   }, [books, select]);
 
   const book = books[selected];
+  const progress = books.length > 1 ? (selected / (books.length - 1)) * 100 : 0;
   if (!book)
     return (
       <section className={styles.empty}>
@@ -108,18 +118,19 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
           </div>
         )}
       </div>
-      <div className={styles.transport}>
+      <div className="my-1 flex items-center gap-3">
         <button
           type="button"
-          className={styles.arrow}
+          className={arrowClass}
           aria-label="Previous book"
           disabled={selected === 0}
           onClick={() => select(selected - 1)}
         >
-          <ChevronLeftIcon />
+          <ChevronLeftIcon className="size-3.5" />
         </button>
         <input
           className={styles.range}
+          style={{ "--progress": `${progress}%` } as CSSProperties}
           type="range"
           min={0}
           max={books.length - 1}
@@ -130,20 +141,24 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
         />
         <button
           type="button"
-          className={styles.arrow}
+          className={arrowClass}
           aria-label="Next book"
           disabled={selected === books.length - 1}
           onClick={() => select(selected + 1)}
         >
-          <ChevronRightIcon />
+          <ChevronRightIcon className="size-3.5" />
         </button>
       </div>
-      <div className={styles.details}>
-        <div aria-live="polite" aria-atomic="true">
-          <p className={styles.meta}>{readingStatusLabel(book)}</p>
-          <h2 className={styles.title}>{book.title}</h2>
-          <p className={styles.author}>{book.author}</p>
-        </div>
+      <div
+        className="flex flex-col items-start gap-2 border-t border-gray-300 pt-3"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <h2 className="text-base leading-snug font-bold text-balance text-gray-800">
+          {book.title}
+        </h2>
+        <p className="font-sans text-base text-gray-500">{book.author}</p>
+        <BookStatus book={book} />
       </div>
     </section>
   );

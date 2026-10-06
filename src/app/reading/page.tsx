@@ -2,10 +2,10 @@ import Link from "next/link";
 import NextImage from "next/image";
 import { getAllBooks } from "@/lib/books";
 import type { ReadingShelfBook } from "@/types";
-import { Bookshelf } from "@/components";
+import { BackLink, Bookshelf } from "@/components";
+import { BookStatus } from "@/components/BookStatus";
 import { ArrowRightIcon } from "@/components/icons";
 import { buildMetadata } from "@/lib/metadata";
-import { isBookRead } from "@/lib/reading-status";
 
 export const metadata = buildMetadata({
   title: "Books | Husan Isomiddinov",
@@ -28,8 +28,6 @@ function buildSummaryExcerpt(summaryContent?: string): string {
 }
 
 function BookCard({ book, index }: { book: ListingBook; index: number }) {
-  const hasCompleted = isBookRead(book);
-
   return (
     <div className="flex flex-col gap-5 scroll-mt-20">
       {index > 0 && <hr className="mb-3 w-full border-gray-300" />}
@@ -59,24 +57,7 @@ function BookCard({ book, index }: { book: ListingBook; index: number }) {
             </span>
           </div>
           <p className="font-sans text-base text-gray-500">{book.author}</p>
-          {hasCompleted ? (
-            <p className="font-sans text-sm text-gray-600">
-              Read: {book.date}
-              {book.rating != null && (
-                <>
-                  {" "}
-                  <span className="text-gray-400">·</span>{" "}
-                  <span className="font-bold text-gray-800">
-                    Rating: {book.rating}/10
-                  </span>
-                </>
-              )}
-            </p>
-          ) : (
-            <p className="font-sans text-sm font-bold text-brand-500">
-              Currently Reading
-            </p>
-          )}
+          <BookStatus book={book} />
           {book.summaryExcerpt && (
             <p className="line-clamp-4 text-sm text-gray-700">
               {book.summaryExcerpt}
@@ -100,12 +81,9 @@ export default function ReadingPage() {
     <div className="flex flex-col gap-5">
       <Bookshelf books={books} />
       <div className="flex justify-center">
-        <Link
-          href="/reading/collection"
-          className="rounded-full border border-gray-300 px-5 py-1.5 font-sans text-sm text-gray-600 no-underline transition-all duration-200 hover:border-brand-500 hover:bg-brand-500 hover:text-brand-50"
-        >
+        <BackLink href="/reading/collection">
           Browse the full collection →
-        </Link>
+        </BackLink>
       </div>
       {books.map((book, index) => (
         <BookCard key={book.slug} book={book} index={index} />
