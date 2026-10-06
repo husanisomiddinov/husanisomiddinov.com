@@ -36,10 +36,10 @@ export const DIAGRAM_PREVIEWS: Record<
   },
   "inference-pipeline": {
     Component: InferencePipelinePreview,
-    aspect: 760 / 290,
+    aspect: 440 / 368,
   },
   "crop-classification": {
     Component: CropClassificationPreview,
-    aspect: 440 / 330,
+    aspect: 440 / 310,
   },
 };

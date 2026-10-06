@@ -10,44 +10,41 @@ import {
 
 const FLOW = "#5b84b8";
 const IDLE = "#c9c9c6";
-const NODE_H = 44;
+const OLIVE = "#5b6529";
 
-interface NodeDef {
+interface StageDef {
   id: string;
   label: string;
   sub?: string;
   x: number;
   y: number;
   w: number;
+  h: number;
 }
 
-const ROW = [46, 140, 234];
-
-const NODES: NodeDef[] = [
-  { id: "camera", label: "capture", sub: "phone / drone", x: 4, y: ROW[0], w: 108 },
-  { id: "nextjs", label: "Next.js 15", sub: "App Router", x: 166, y: ROW[0], w: 126 },
-  { id: "fastapi", label: "FastAPI", sub: "/predict", x: 360, y: ROW[0], w: 126 },
-  { id: "telegram", label: "Telegram", sub: "bot polling", x: 4, y: ROW[1], w: 108 },
-  { id: "preprocess", label: "preprocess", sub: "224×224 · norm", x: 360, y: ROW[1], w: 126 },
-  { id: "resnet", label: "ResNet-18", sub: "ONNX Runtime", x: 544, y: ROW[1], w: 144 },
-  { id: "diagnosis", label: "diagnosis", sub: "38 classes", x: 544, y: ROW[2], w: 144 },
+const STAGES: StageDef[] = [
+  { id: "camera", label: "capture", sub: "phone / drone", x: 20, y: 10, w: 130, h: 36 },
+  { id: "telegram", label: "Telegram", sub: "bot polling", x: 290, y: 10, w: 130, h: 36 },
+  { id: "nextjs", label: "Next.js 15", sub: "App Router", x: 40, y: 76, w: 160, h: 36 },
+  { id: "fastapi", label: "FastAPI", sub: "/predict", x: 125, y: 138, w: 190, h: 36 },
+  { id: "preprocess", label: "preprocess", sub: "224×224 · norm", x: 135, y: 200, w: 170, h: 36 },
+  { id: "resnet", label: "ResNet-18", sub: "ONNX Runtime", x: 95, y: 262, w: 250, h: 40 },
+  { id: "diagnosis", label: "diagnosis", sub: "38 classes", x: 135, y: 322, w: 170, h: 36 },
 ];
 
-interface EdgeDef {
+interface LinkDef {
   from: string;
   to: string;
   label?: string;
-  shift?: number;
-  labelBelow?: boolean;
 }
 
-const EDGES: EdgeDef[] = [
+const LINKS: LinkDef[] = [
   { from: "camera", to: "nextjs" },
   { from: "nextjs", to: "fastapi", label: "upload" },
   { from: "telegram", to: "fastapi", label: "photo" },
-  { from: "fastapi", to: "preprocess", label: "image" },
+  { from: "fastapi", to: "preprocess" },
   { from: "preprocess", to: "resnet", label: "tensor" },
-  { from: "resnet", to: "diagnosis", label: "top-k" },
+  { from: "resnet", to: "diagnosis" },
 ];
 
 interface StepScene {
@@ -57,62 +54,42 @@ interface StepScene {
 
 const SCENES: StepScene[] = [
   { nodes: ["camera", "nextjs"], edges: [0] },
-  { nodes: ["nextjs", "fastapi", "telegram"], edges: [1, 2] },
+  { nodes: ["nextjs", "telegram", "fastapi"], edges: [1, 2] },
   { nodes: ["fastapi", "preprocess", "resnet"], edges: [3, 4] },
   { nodes: ["resnet", "diagnosis"], edges: [5] },
 ];
 
-const byId = new Map(NODES.map((n) => [n.id, n]));
+const stageById = new Map(STAGES.map((s) => [s.id, s]));
 
-function nodeCenter(n: NodeDef) {
-  return { x: n.x + n.w / 2, y: n.y + NODE_H / 2 };
-}
-
-function edgeGeometry(edge: EdgeDef) {
-  const a = byId.get(edge.from)!;
-  const b = byId.get(edge.to)!;
-  const ca = nodeCenter(a);
-  const cb = nodeCenter(b);
-  const dx = cb.x - ca.x;
-  const dy = cb.y - ca.y;
-  const len = Math.hypot(dx, dy);
-  const ux = dx / len;
-  const uy = dy / len;
-  const nx = -uy * (edge.shift ?? 0);
-  const ny = ux * (edge.shift ?? 0);
-
-  const clip = (n: NodeDef, dirX: number, dirY: number) => {
-    const tx = dirX === 0 ? Infinity : n.w / 2 / Math.abs(dirX);
-    const ty = dirY === 0 ? Infinity : NODE_H / 2 / Math.abs(dirY);
-    return Math.min(tx, ty) + 5;
-  };
-
-  const startT = clip(a, ux, uy);
-  const endT = clip(b, -ux, -uy);
+function linkEndpoints(link: LinkDef) {
+  const from = stageById.get(link.from)!;
+  const to = stageById.get(link.to)!;
   return {
-    x1: ca.x + ux * startT + nx,
-    y1: ca.y + uy * startT + ny,
-    x2: cb.x - ux * endT + nx,
-    y2: cb.y - uy * endT + ny,
+    x1: from.x + from.w / 2,
+    y1: from.y + from.h + 3,
+    x2: to.x + to.w / 2,
+    y2: to.y - 3,
   };
 }
 
-function FlowDots({
+function FallingDots({
   x1,
   y1,
   x2,
   y2,
   animate,
+  id,
 }: {
   x1: number;
   y1: number;
   x2: number;
   y2: number;
   animate: boolean;
+  id: string;
 }) {
   const path = `M ${x1} ${y1} L ${x2} ${y2}`;
-  const count = 3;
-  const dur = 1.8;
+  const count = 2;
+  const dur = 1.2;
   return (
     <>
       {Array.from({ length: count }, (_, k) => {
@@ -120,7 +97,7 @@ function FlowDots({
           const t = (k + 0.5) / count;
           return (
             <circle
-              key={k}
+              key={`${id}-${k}`}
               cx={x1 + (x2 - x1) * t}
               cy={y1 + (y2 - y1) * t}
               r={3.5}
@@ -129,7 +106,7 @@ function FlowDots({
           );
         }
         return (
-          <circle key={k} r={3.5} fill={FLOW}>
+          <circle key={`${id}-${k}`} r={3.5} fill={FLOW}>
             <animateMotion
               dur={`${dur}s`}
               begin={`${-(dur / count) * k}s`}
@@ -144,16 +121,14 @@ function FlowDots({
 }
 
 function EdgeLabel({
-  geometry,
+  endpoints,
   label,
-  below,
 }: {
-  geometry: { x1: number; y1: number; x2: number; y2: number };
+  endpoints: { x1: number; y1: number; x2: number; y2: number };
   label: string;
-  below?: boolean;
 }) {
-  const dx = geometry.x2 - geometry.x1;
-  const dy = geometry.y2 - geometry.y1;
+  const dx = endpoints.x2 - endpoints.x1;
+  const dy = endpoints.y2 - endpoints.y1;
   const len = Math.hypot(dx, dy);
   let nx = -dy / len;
   let ny = dx / len;
@@ -161,15 +136,11 @@ function EdgeLabel({
     nx = -nx;
     ny = -ny;
   }
-  if (below) {
-    nx = -nx;
-    ny = -ny;
-  }
   const vertical = Math.abs(ny) <= Math.abs(nx);
   return (
     <text
-      x={(geometry.x1 + geometry.x2) / 2 + nx * 10}
-      y={(geometry.y1 + geometry.y2) / 2 + ny * 10 + (below ? 8 : 3)}
+      x={(endpoints.x1 + endpoints.x2) / 2 + nx * 10}
+      y={(endpoints.y1 + endpoints.y2) / 2 + ny * 10 + 3}
       textAnchor={vertical ? "start" : "middle"}
       fontSize={10.5}
       fill={FLOW}
@@ -184,115 +155,85 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
 
   return (
     <svg
-      viewBox="0 0 760 290"
+      viewBox="0 0 440 368"
       role="img"
-      aria-label="Diagram of the crop classification inference pipeline"
-      className="h-auto w-full font-sans"
+      aria-label="Vertical diagram of the crop inference pipeline"
+      className="mx-auto h-auto w-full max-w-[440px] font-sans"
     >
-      <defs>
-        <marker
-          id="pipe-flow-arrow"
-          viewBox="0 0 10 10"
-          refX="8"
-          refY="5"
-          markerWidth="7"
-          markerHeight="7"
-          orient="auto"
-        >
-          <path d="M 0 0 L 10 5 L 0 10 z" fill={FLOW} />
-        </marker>
-        <marker
-          id="pipe-idle-arrow"
-          viewBox="0 0 10 10"
-          refX="8"
-          refY="5"
-          markerWidth="7"
-          markerHeight="7"
-          orient="auto"
-        >
-          <path d="M 0 0 L 10 5 L 0 10 z" fill={IDLE} />
-        </marker>
-      </defs>
-
       <rect
-        x={152}
-        y={8}
-        width={548}
-        height={276}
+        x={26}
+        y={58}
+        width={388}
+        height={310}
         rx={8}
         fill="none"
         stroke="#bdbdb8"
         strokeDasharray="5 4"
       />
-      <text x={160} y={26} fontSize={10} fill="#8d8d88">
-        Vercel · serverless functions
+      <text x={34} y={72} fontSize={10} fill="#8d8d88">
+        Vercel · serverless
       </text>
 
-      {EDGES.map((edge, i) => {
-        const g = edgeGeometry(edge);
+      {LINKS.map((link, i) => {
+        const ep = linkEndpoints(link);
         const on = scene.edges.includes(i);
         return (
           <g key={i}>
             <line
-              x1={g.x1}
-              y1={g.y1}
-              x2={g.x2}
-              y2={g.y2}
+              x1={ep.x1}
+              y1={ep.y1}
+              x2={ep.x2}
+              y2={ep.y2}
               stroke={on ? FLOW : IDLE}
               strokeWidth={on ? 2 : 1.25}
               strokeDasharray={on ? undefined : "3 4"}
-              markerEnd={`url(#pipe-${on ? "flow" : "idle"}-arrow)`}
               style={{ transition: "stroke 300ms" }}
             />
-            {on && <FlowDots {...g} animate={animate} />}
-            {on && edge.label && (
-              <EdgeLabel
-                geometry={g}
-                label={edge.label}
-                below={edge.labelBelow}
-              />
+            {on && <FallingDots {...ep} animate={animate} id={`link-${i}`} />}
+            {on && link.label && (
+              <EdgeLabel endpoints={ep} label={link.label} />
             )}
           </g>
         );
       })}
 
-      {NODES.map((n) => {
-        const on = scene.nodes.includes(n.id);
+      {STAGES.map((s) => {
+        const on = scene.nodes.includes(s.id);
         return (
           <g
-            key={n.id}
+            key={s.id}
             style={{ opacity: on ? 1 : 0.4, transition: "opacity 300ms" }}
           >
             <rect
-              x={n.x}
-              y={n.y}
-              width={n.w}
-              height={NODE_H}
-              rx={4}
+              x={s.x}
+              y={s.y}
+              width={s.w}
+              height={s.h}
+              rx={8}
               fill={on ? "#e8ebe0" : "#f6f7f4"}
-              stroke={on ? "#5b6529" : "#a9a9a5"}
+              stroke={on ? OLIVE : "#a9a9a5"}
               strokeWidth={on ? 1.5 : 1}
               style={{ transition: "fill 300ms, stroke 300ms" }}
             />
             <text
-              x={n.x + n.w / 2}
-              y={n.y + (n.sub ? 19 : 26)}
+              x={s.x + s.w / 2}
+              y={s.y + (s.sub ? s.h / 2 - 3 : s.h / 2 + 4)}
               textAnchor="middle"
               fontSize={12}
               fontWeight={600}
               fill="#37352f"
             >
-              {n.label}
+              {s.label}
             </text>
-            {n.sub && (
+            {s.sub && (
               <text
-                x={n.x + n.w / 2}
-                y={n.y + 34}
+                x={s.x + s.w / 2}
+                y={s.y + s.h / 2 + 11}
                 textAnchor="middle"
                 fontSize={10.5}
                 fill="#7a7a76"
               >
-                {n.sub}
+                {s.sub}
               </text>
             )}
           </g>

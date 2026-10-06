@@ -46,7 +46,7 @@ const PILLARS = [
   [-1.5, 0],
 ];
 
-const MAX_SECONDS = Math.max(...GOALS.map((g) => g.seconds));
+const TIME_SCALE = 150;
 
 const waypoints = [START, ...GOALS];
 
@@ -215,12 +215,12 @@ const STEPS: DiagramStep[] = GOALS.map((goal, i) => ({
       <InlineCode>{goal.id}</InlineCode> at ({goal.x.toFixed(1)},{" "}
       {goal.y.toFixed(1)}) m: <strong>reached</strong> in {goal.seconds} s with{" "}
       {goal.error.toFixed(2)} m arrival error.
-      <span className="mt-3 flex items-center gap-3 font-sans text-xs text-gray-500">
+      <span className="mt-3 flex items-center gap-2 font-sans text-xs text-gray-500">
         <span className="w-12 shrink-0">time</span>
-        <span className="h-1.5 flex-1 bg-gray-300">
+        <span className="h-2 flex-1 rounded-full bg-gray-300">
           <span
-            className="block h-full bg-brand-500"
-            style={{ width: `${(goal.seconds / MAX_SECONDS) * 100}%` }}
+            className="block h-full rounded-full bg-brand-500"
+            style={{ width: `${Math.min((goal.seconds / TIME_SCALE) * 100, 100)}%` }}
           />
         </span>
         <span className="w-10 shrink-0 text-right">{goal.seconds} s</span>
