@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export interface ProgressSection {
+interface ProgressSection {
   id: string;
   label: string;
   weight: number;

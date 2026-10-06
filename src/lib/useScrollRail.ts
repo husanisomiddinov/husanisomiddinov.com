@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 
-export interface ScrollRail {
+interface ScrollRail {
   /** Attach to the outer container wrapping every item's rail segment. */
   containerRef: RefObject<HTMLDivElement | null>;
   /** Attach to each item's root element via `ref={registerItem(index)}`. */
