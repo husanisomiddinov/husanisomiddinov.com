@@ -271,7 +271,7 @@ export function Experiences({ experiences }: { experiences: Experience[] }) {
     <div ref={containerRef} className="relative mt-6 flex w-full flex-col">
       <div
         aria-hidden
-        className="pointer-events-none absolute top-0 w-px bg-brand-500"
+        className="pointer-events-none absolute top-0 z-[1] w-px bg-brand-500"
         style={{
           left: RAIL_WIDTH / 2,
           height: `${fillPercent}%`,

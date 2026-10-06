@@ -14,7 +14,7 @@ export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
     <div ref={containerRef} className="relative mt-2 flex w-full flex-col">
       <div
         aria-hidden
-        className="pointer-events-none absolute top-0 w-px bg-brand-500"
+        className="pointer-events-none absolute top-0 z-[1] w-px bg-brand-500"
         style={{
           left: RAIL_WIDTH / 2,
           height: `${fillPercent}%`,
