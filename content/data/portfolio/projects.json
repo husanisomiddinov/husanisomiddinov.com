@@ -24,7 +24,13 @@
     "status": "completed",
     "links": {
       "github": "https://github.com/husanisomiddinov/md25010-ros2-slam"
-    }
+    },
+    "images": [
+      { "src": "/images/projects/ros2-slam/screenshot1.png", "alt": "RViz view of the SLAM-generated occupancy map with Nav2 panels, screenshot 1", "width": 3024, "height": 1964 },
+      { "src": "/images/projects/ros2-slam/screenshot2.png", "alt": "RViz view of the SLAM-generated occupancy map with Nav2 panels, screenshot 2", "width": 3024, "height": 1964 },
+      { "src": "/images/projects/ros2-slam/screenshot3.png", "alt": "RViz view of the SLAM-generated occupancy map with Nav2 panels, screenshot 3", "width": 3024, "height": 1964 },
+      { "src": "/images/projects/ros2-slam/screenshot4.png", "alt": "RViz view of the SLAM-generated occupancy map with Nav2 panels, screenshot 4", "width": 3024, "height": 1964 }
+    ]
   },
   {
     "slug": "apollo-ai",

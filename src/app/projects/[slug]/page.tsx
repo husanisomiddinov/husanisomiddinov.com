@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { BackLink } from "@/components";
 import { siteUrl } from "@/config/site";
@@ -172,6 +173,27 @@ export default async function ProjectPage({
           </div>
         )}
       </div>
+
+      {project.images && project.images.length > 0 && (
+        <div className="grid w-full grid-cols-1 gap-2 sm:grid-cols-2">
+          {project.images.map((img) => (
+            <div
+              key={img.src}
+              className="overflow-hidden rounded-lg border border-gray-200"
+            >
+              <Image
+                src={img.src}
+                alt={img.alt}
+                width={img.width}
+                height={img.height}
+                quality={90}
+                sizes="(max-width: 640px) 100vw, 330px"
+                className="h-auto w-full"
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
       {(hasDescription || project.status === "planned") && (
         <>
