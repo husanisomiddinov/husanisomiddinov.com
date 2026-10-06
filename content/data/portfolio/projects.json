@@ -72,23 +72,5 @@
         "notes": "Built a binary classifier from scratch in NumPy with cross-entropy optimization (learning rate 0.1, 1,000 iterations) and compared it against scikit-learn."
       }
     ]
-  },
-  {
-    "slug": "personal-website",
-    "kind": "web",
-    "title": "Personal Website",
-    "summary": "This website you're currently browsing.",
-    "description": "## Context\nThis is my personal digital home and long-term publishing platform. I use it to document projects, ideas, reading notes, writing, and ongoing experiments while keeping full ownership of content and presentation.\n\nThe goal is to make the site feel less like a static resume and more like a living system that evolves with my work.\n\n## Product Structure\nThe website is organized into focused sections so each type of content has its own clear surface.\n\n- Home and About pages for identity and current direction\n- Projects pages with individual deep-dive routes for each build\n- Reading and Writing sections for books and long-form posts\n- Studio pages for curated resources and personal artifacts\n- Additional pages like Arsenal, Facts, Quotes, and Heuristics\n\nThis structure supports both fast skimming and deep exploration.\n\n## Technical Architecture\nThe site is built with Next.js and TypeScript, using static generation patterns for fast load times and predictable deploys.\n\n- Framework: Next.js\n- Language: TypeScript\n- UI system: Chakra UI\n- Content rendering: MDX via `next-mdx-remote`\n- SEO: route-level metadata with `next-seo`\n\nMost pages are data-driven through JSON/MDX content sources, which keeps editorial updates separate from UI logic.\n\n## Content System and Authoring Workflow\nA core design principle is content-first development: write or edit data files, then let reusable page templates handle rendering.\n\n- Portfolio data lives in structured JSON (project metadata, links, artwork)\n- Long-form pages use MDX for readable writing + embedded media support\n- Dynamic routes (for example, project and reading detail pages) are statically generated\n- Shared components ensure a consistent visual language across sections\n\nThis approach makes it easy to expand the site without repeatedly changing page code.\n\n## Design Direction\nThe interface favors clean typography, restrained color usage, and subtle editorial framing. Artwork banners and curated visuals are used intentionally to give each page a distinct mood without sacrificing readability.\n\nNavigation is deliberately minimal so users can quickly move between identity, work, and thought.\n\n## What This Project Demonstrates\nThis project demonstrates end-to-end ownership of product, engineering, and narrative: information architecture, frontend implementation, content strategy, and iterative refinement.\n\nIt is both a portfolio and an operating system for my work, designed to keep growing as new projects and writing are published.",
-    "tech": [
-      "Next.js",
-      "TypeScript",
-      "Chakra UI"
-    ],
-    "date": "2022 June – Present",
-    "status": "in-progress",
-    "links": {
-      "live": "https://husanisomiddinov.com",
-      "github": "https://github.com/husanisomiddinov/personal-website"
-    }
   }
 ]
