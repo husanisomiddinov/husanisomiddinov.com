@@ -19,13 +19,14 @@ const STEPS = [
   },
   { key: "date", prompt: "Pick a day.", custom: "date" as const },
   { key: "time", prompt: "What time works?", placeholder: "e.g. 3pm, 14:00, morning" },
+  { key: "place", prompt: "Where should we meet?", placeholder: "A cafe, a park, or surprise me" },
 ] as const;
 
 type StepKey = (typeof STEPS)[number]["key"];
 type FormData = Record<StepKey, string>;
 type Status = "filling" | "review" | "submitting" | "sent" | "error";
 
-const INITIAL: FormData = { name: "", email: "", telegram: "", about: "", topic: "", date: "", time: "" };
+const INITIAL: FormData = { name: "", email: "", telegram: "", about: "", topic: "", date: "", time: "", place: "" };
 const DAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 const MONTHS = [
   "January", "February", "March", "April", "May", "June",
