@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Prose, SocialIcons, Experiences, BioTimeline } from "@/components";
 import { getHomePage } from "@/lib/pages";
@@ -31,6 +32,22 @@ export default async function Home() {
       </Prose>
       <hr className="mt-8 border-gray-300" />
       <Experiences experiences={experiences} />
+      <section className="mt-12 flex items-center justify-between gap-6 border-t border-gray-300 pt-8">
+        <div className="flex flex-col items-start gap-3">
+          <h2 className="font-sans text-xl font-bold text-gray-800">Talk with me</h2>
+          <p className="max-w-sm text-base text-gray-600">
+            Got a question, a project, or a half-baked theory? Grab a coffee with me in Tashkent.
+          </p>
+          <Link
+            href="/studio/coffee"
+            className="mt-1 rounded-lg bg-brand-500 px-5 py-2.5 font-sans text-sm font-bold text-brand-50 no-underline transition-colors hover:bg-brand-600"
+          >
+            Book a coffee chat
+          </Link>
+        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/images/coffee-cup.png" alt="" className="w-28 shrink-0 sm:w-36" />
+      </section>
       <footer className="mt-12 border-t border-gray-300 pt-4 pb-2 text-center font-sans text-xs text-gray-500">
         &copy; 2026 husan &middot;{" "}
         <a
