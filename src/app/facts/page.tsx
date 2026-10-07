@@ -3,7 +3,7 @@ import { getFacts } from "@/lib/data";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
-  title: "Facts - Husan Isomiddinov",
+  title: "Facts",
   description: "A running list of facts I find worth remembering.",
   path: "/facts",
 });

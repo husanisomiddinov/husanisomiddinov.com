@@ -3,7 +3,7 @@ import { notFoundLinks } from "@/config/nav";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
-  title: "404 - Husan Isomiddinov",
+  title: "404",
   path: "/404",
   noindex: true,
 });

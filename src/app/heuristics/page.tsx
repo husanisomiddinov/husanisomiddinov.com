@@ -3,7 +3,7 @@ import { getHeuristics } from "@/lib/data";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
-  title: "Heuristics - Husan Isomiddinov",
+  title: "Heuristics",
   description: "Rules of thumb and mental models I use to make decisions.",
   path: "/heuristics",
 });

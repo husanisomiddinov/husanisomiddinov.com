@@ -4,7 +4,7 @@ import { Breadcrumbs } from "@/components";
 import { TashkentAccordion } from "@/components/TashkentAccordion";
 
 export const metadata = buildMetadata({
-  title: "Tashkent Dining Recommendations - Husan Isomiddinov",
+  title: "Tashkent Dining Recommendations",
   description: "My personal list of cafes, restaurants, and bakeries in Tashkent.",
   path: "/studio/tashkent",
 });

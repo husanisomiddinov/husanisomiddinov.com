@@ -2,7 +2,7 @@ import { getQuotes } from "@/lib/data";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
-  title: "Quotes - Husan Isomiddinov",
+  title: "Quotes",
   description: "A collection of quotes I keep coming back to.",
   path: "/quotes",
 });

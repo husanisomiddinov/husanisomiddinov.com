@@ -5,7 +5,7 @@ import { buildMetadata } from "@/lib/metadata";
 import { ArrowRightIcon } from "@/components/icons";
 
 export const metadata = buildMetadata({
-  title: "Writing - Husan Isomiddinov",
+  title: "Writing",
   description: "Essays and notes by Husan Isomiddinov.",
   path: "/writing",
 });
