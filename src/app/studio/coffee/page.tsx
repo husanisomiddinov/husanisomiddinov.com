@@ -17,7 +17,19 @@ export default function CoffeePage() {
           { label: "Coffee Chat", href: "/studio/coffee" },
         ]}
       />
-      <CoffeeForm />
+      <div className="flex w-full items-start gap-8">
+        <div className="min-w-0 flex-1">
+          <CoffeeForm />
+        </div>
+        <div className="hidden shrink-0 pt-8 lg:block">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/coffee-cup.png"
+            alt=""
+            className="w-48"
+          />
+        </div>
+      </div>
     </div>
   );
 }
