@@ -36,7 +36,7 @@ export default async function Home() {
         <div className="flex flex-col items-start gap-3">
           <h2 className="font-sans text-xl font-bold text-gray-800">Talk with me</h2>
           <p className="max-w-sm text-base text-gray-600">
-            Got a question, a project, or a half-baked theory? Grab a coffee with me in Tashkent.
+            The most fruitful and natural exercise of our minds is, in my opinion, conversation. Oh, that&apos;s not me. Copied it from Montaigne. Anyways, grab a coffee with me)
           </p>
           <Link
             href="/studio/coffee"
