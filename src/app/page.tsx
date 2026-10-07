@@ -42,7 +42,7 @@ export default async function Home() {
             href="/studio/coffee"
             className="mt-1 rounded-lg bg-brand-500 px-5 py-2.5 font-sans text-sm font-bold text-brand-50 no-underline transition-colors hover:bg-brand-600"
           >
-            Book a coffee chat
+            For a coffee chat
           </Link>
         </div>
         {/* eslint-disable-next-line @next/next/no-img-element */}
