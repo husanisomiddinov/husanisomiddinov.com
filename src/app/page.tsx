@@ -31,6 +31,16 @@ export default async function Home() {
       </Prose>
       <hr className="mt-8 border-gray-300" />
       <Experiences experiences={experiences} />
+      <footer className="mt-12 border-t border-gray-300 pt-4 pb-2 text-center font-sans text-xs text-gray-500">
+        <a
+          href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+          target="_blank"
+          rel="noopener noreferrer license"
+          className="text-gray-500 no-underline hover:text-brand-500"
+        >
+          CC BY-NC-SA 4.0
+        </a>
+      </footer>
     </>
   );
 }
