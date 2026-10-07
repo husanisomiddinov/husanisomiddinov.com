@@ -7,7 +7,6 @@ import type {
   Project,
   Arsenal,
   StudioLink,
-  DiningCategory,
   Experience,
 } from "@/types/data";
 
@@ -67,8 +66,4 @@ export function getArsenal(): Arsenal {
 
 export function getStudioLinks(): StudioLink[] {
   return loadJson<StudioLink[]>("resources", "studio-links");
-}
-
-export function getTashkentDining(): DiningCategory[] {
-  return loadJson<DiningCategory[]>("resources", "tashkent-dining");
 }

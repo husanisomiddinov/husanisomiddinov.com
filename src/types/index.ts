@@ -8,7 +8,6 @@ export type {
   ProjectKind,
   Arsenal,
   StudioLink,
-  DiningCategory,
   Experience,
   ExperienceImage,
 } from "./data";

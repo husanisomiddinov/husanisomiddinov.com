@@ -75,13 +75,3 @@ export interface ExperienceImage {
   width: number;
   height: number;
 }
-
-interface DiningPlace {
-  name: string;
-  description: string;
-}
-
-export interface DiningCategory {
-  category: string;
-  places: DiningPlace[];
-}
