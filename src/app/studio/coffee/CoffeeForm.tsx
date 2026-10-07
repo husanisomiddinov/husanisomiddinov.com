@@ -45,6 +45,13 @@ export function CoffeeForm() {
     const current = STEPS[step];
     if (!form[current.key].trim()) return;
 
+    if (current.key === "telegram") {
+      const handle = form.telegram.trim();
+      if (!handle.startsWith("@")) {
+        setForm((prev) => ({ ...prev, telegram: `@${handle}` }));
+      }
+    }
+
     if (step < STEPS.length - 1) {
       setStep(step + 1);
     } else {
