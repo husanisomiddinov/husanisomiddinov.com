@@ -16,8 +16,8 @@ const STEPS = [
     prompt: "What should we talk about?",
     placeholder: "A question, a project, a half-baked theory",
   },
-  { key: "date", prompt: "Pick a day.", placeholder: "", type: "date" as const },
-  { key: "time", prompt: "What time works?", placeholder: "", type: "time" as const },
+  { key: "date", prompt: "Pick a day.", custom: "date" as const },
+  { key: "time", prompt: "What time works?", custom: "time" as const },
 ] as const;
 
 type StepKey = (typeof STEPS)[number]["key"];
@@ -26,6 +26,134 @@ type FormData = Record<StepKey, string>;
 const INITIAL: FormData = { name: "", telegram: "", about: "", topic: "", date: "", time: "" };
 
 type Status = "filling" | "review" | "submitting" | "sent" | "error";
+
+const DAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+function CalendarPicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const today = new Date();
+  const [viewYear, setViewYear] = useState(today.getFullYear());
+  const [viewMonth, setViewMonth] = useState(today.getMonth());
+
+  const firstDay = new Date(viewYear, viewMonth, 1);
+  const startDow = (firstDay.getDay() + 6) % 7;
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+
+  function toStr(day: number) {
+    return `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  }
+
+  function isPast(day: number) {
+    return toStr(day) < todayStr;
+  }
+
+  function prevMonth() {
+    if (viewMonth === 0) { setViewYear(viewYear - 1); setViewMonth(11); }
+    else setViewMonth(viewMonth - 1);
+  }
+
+  function nextMonth() {
+    if (viewMonth === 11) { setViewYear(viewYear + 1); setViewMonth(0); }
+    else setViewMonth(viewMonth + 1);
+  }
+
+  const cells: (number | null)[] = [];
+  for (let i = 0; i < startDow; i++) cells.push(null);
+  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
+
+  return (
+    <div className="w-full max-w-[320px]">
+      <div className="mb-3 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={prevMonth}
+          className="px-2 py-1 text-sm text-gray-400 transition-colors hover:text-gray-800"
+        >
+          &larr;
+        </button>
+        <span className="text-sm font-bold text-gray-800">
+          {MONTHS[viewMonth]} {viewYear}
+        </span>
+        <button
+          type="button"
+          onClick={nextMonth}
+          className="px-2 py-1 text-sm text-gray-400 transition-colors hover:text-gray-800"
+        >
+          &rarr;
+        </button>
+      </div>
+
+      <div className="grid grid-cols-7 gap-0.5 text-center text-xs">
+        {DAYS.map((d) => (
+          <span key={d} className="py-1.5 text-gray-400">{d}</span>
+        ))}
+        {cells.map((day, i) =>
+          day === null ? (
+            <span key={`e${i}`} />
+          ) : (
+            <button
+              key={day}
+              type="button"
+              disabled={isPast(day)}
+              onClick={() => onChange(toStr(day))}
+              className={`rounded py-1.5 text-sm transition-colors ${
+                toStr(day) === value
+                  ? "bg-brand-500 font-bold text-brand-50"
+                  : toStr(day) === todayStr
+                    ? "font-bold text-gray-800 hover:bg-gray-200"
+                    : isPast(day)
+                      ? "text-gray-300"
+                      : "text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              {day}
+            </button>
+          ),
+        )}
+      </div>
+    </div>
+  );
+}
+
+const TIME_SLOTS = [
+  "9:00", "9:30", "10:00", "10:30", "11:00", "11:30",
+  "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
+  "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
+  "18:00", "18:30", "19:00", "19:30", "20:00", "20:30",
+];
+
+function formatTimeLabel(t: string) {
+  const [h, m] = t.split(":");
+  const hour = parseInt(h, 10);
+  const suffix = hour >= 12 ? "pm" : "am";
+  return `${hour % 12 || 12}:${m} ${suffix}`;
+}
+
+function TimePicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  return (
+    <div className="grid w-full max-w-[320px] grid-cols-4 gap-1.5">
+      {TIME_SLOTS.map((t) => (
+        <button
+          key={t}
+          type="button"
+          onClick={() => onChange(t)}
+          className={`rounded py-2 text-center text-sm transition-colors ${
+            t === value
+              ? "bg-brand-500 font-bold text-brand-50"
+              : "text-gray-600 hover:bg-gray-200"
+          }`}
+        >
+          {formatTimeLabel(t)}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export function CoffeeForm() {
   const [form, setForm] = useState<FormData>(INITIAL);
@@ -61,8 +189,6 @@ export function CoffeeForm() {
 
   function handleKey(e: KeyboardEvent) {
     if (e.key === "Enter" && !e.shiftKey) {
-      const current = STEPS[step];
-      if ("multiline" in current && current.multiline) return;
       e.preventDefault();
       advance();
     }
@@ -102,10 +228,7 @@ export function CoffeeForm() {
 
   function formatTime(v: string) {
     if (!v) return v;
-    const [h, m] = v.split(":");
-    const hour = parseInt(h, 10);
-    const suffix = hour >= 12 ? "pm" : "am";
-    return `${hour % 12 || 12}:${m}${suffix}`;
+    return formatTimeLabel(v);
   }
 
   function formatAnswer(i: number) {
@@ -180,6 +303,11 @@ export function CoffeeForm() {
 
   const current = STEPS[step];
   const isMultiline = "multiline" in current && current.multiline;
+  const isCustom = "custom" in current;
+
+  function handleCustomSelect(value: string) {
+    update(current.key, value);
+  }
 
   return (
     <div className="flex w-full flex-col gap-6">
@@ -199,43 +327,68 @@ export function CoffeeForm() {
 
       <div className="flex flex-col gap-3">
         <p className="text-base text-gray-600">{current.prompt}</p>
-        <div className="flex items-end gap-3">
-          <div className="min-w-0 flex-1">
-            {isMultiline ? (
-              <textarea
-                ref={(el) => { inputRef.current = el; }}
-                rows={3}
-                placeholder={current.placeholder}
-                value={form[current.key]}
-                onChange={(e) => update(current.key, e.target.value)}
-                className="w-full resize-none border-b-2 border-gray-300 bg-transparent pb-2 text-base text-gray-800 outline-none transition-colors placeholder:text-gray-400 focus:border-brand-500"
-              />
-            ) : (
-              <input
-                ref={(el) => { inputRef.current = el; }}
-                type={("type" in current && current.type) || "text"}
-                placeholder={current.placeholder}
-                value={form[current.key]}
-                onChange={(e) => update(current.key, e.target.value)}
-                onKeyDown={handleKey}
-                className="w-full border-b-2 border-gray-300 bg-transparent pb-2 text-base text-gray-800 outline-none transition-colors placeholder:text-gray-400 focus:border-brand-500"
-                style={
-                  "type" in current && (current.type === "date" || current.type === "time")
-                    ? { colorScheme: "light" }
-                    : undefined
-                }
-              />
+
+        {isCustom && "custom" in current && current.custom === "date" ? (
+          <div className="flex flex-col gap-3">
+            <CalendarPicker value={form.date} onChange={handleCustomSelect} />
+            {form.date && (
+              <button
+                type="button"
+                onClick={advance}
+                className="self-start text-sm text-gray-400 transition-colors hover:text-gray-800"
+              >
+                {formatDate(form.date)} &rarr;
+              </button>
             )}
           </div>
-          <button
-            type="button"
-            onClick={advance}
-            disabled={!form[current.key].trim()}
-            className="shrink-0 pb-2 text-sm text-gray-400 transition-colors hover:text-gray-800 disabled:opacity-30"
-          >
-            {step < STEPS.length - 1 ? "next" : "review"} &rarr;
-          </button>
-        </div>
+        ) : isCustom && "custom" in current && current.custom === "time" ? (
+          <div className="flex flex-col gap-3">
+            <TimePicker value={form.time} onChange={handleCustomSelect} />
+            {form.time && (
+              <button
+                type="button"
+                onClick={advance}
+                className="self-start text-sm text-gray-400 transition-colors hover:text-gray-800"
+              >
+                {formatTime(form.time)} &rarr;
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="flex items-end gap-3">
+            <div className="min-w-0 flex-1">
+              {isMultiline ? (
+                <textarea
+                  ref={(el) => { inputRef.current = el; }}
+                  rows={3}
+                  placeholder={current.placeholder}
+                  value={form[current.key]}
+                  onChange={(e) => update(current.key, e.target.value)}
+                  onKeyDown={handleKey}
+                  className="w-full resize-none border-b-2 border-gray-300 bg-transparent pb-2 text-base text-gray-800 outline-none transition-colors placeholder:text-gray-400 focus:border-brand-500"
+                />
+              ) : (
+                <input
+                  ref={(el) => { inputRef.current = el; }}
+                  type="text"
+                  placeholder={"placeholder" in current ? current.placeholder : ""}
+                  value={form[current.key]}
+                  onChange={(e) => update(current.key, e.target.value)}
+                  onKeyDown={handleKey}
+                  className="w-full border-b-2 border-gray-300 bg-transparent pb-2 text-base text-gray-800 outline-none transition-colors placeholder:text-gray-400 focus:border-brand-500"
+                />
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={advance}
+              disabled={!form[current.key].trim()}
+              className="shrink-0 pb-2 text-sm text-gray-400 transition-colors hover:text-gray-800 disabled:opacity-30"
+            >
+              {step < STEPS.length - 1 ? "next" : "review"} &rarr;
+            </button>
+          </div>
+        )}
       </div>
 
       <p className="text-xs text-gray-400">{step + 1} / {STEPS.length}</p>
