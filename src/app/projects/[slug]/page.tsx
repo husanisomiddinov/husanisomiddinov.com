@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 import { notFound } from "next/navigation";
-import { BackLink } from "@/components";
+import { Breadcrumbs } from "@/components";
 import { ProjectProgressBar } from "@/components/ProjectProgressBar";
 import { DIAGRAMS } from "@/components/diagrams";
 import { siteUrl } from "@/config/site";
@@ -232,7 +232,12 @@ export default async function ProjectPage({
       )}
 
       <header className="flex w-full flex-col items-center gap-4 pt-2 text-center">
-        <BackLink href="/projects">← back to projects</BackLink>
+        <Breadcrumbs
+          crumbs={[
+            { label: "Projects", href: "/projects" },
+            { label: project.title, href: `/projects/${project.slug}` },
+          ]}
+        />
         <h1 className="mt-4 font-sans text-3xl leading-tight font-bold text-balance text-gray-800">
           {project.title}
         </h1>

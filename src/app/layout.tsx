@@ -3,8 +3,10 @@ import { Suspense } from "react";
 import { Geist_Mono } from "next/font/google";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
 import { defaultMetadata } from "@/config/seo";
+import { siteUrl } from "@/config/site";
 import { DesktopNav } from "@/components/DesktopNav";
 import { MobileNav } from "@/components/MobileNav";
+import { JsonLd } from "@/components/JsonLd";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { PostHogAnalytics } from "@/components/PostHogAnalytics";
 import "./globals.css";
@@ -35,6 +37,30 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <GoogleAnalytics />
       </head>
       <body>
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "WebSite",
+                "@id": `${siteUrl}/#website`,
+                url: siteUrl,
+                name: "Husan Isomiddinov",
+                inLanguage: "en",
+              },
+              {
+                "@type": "Person",
+                "@id": `${siteUrl}/#person`,
+                name: "Husan Isomiddinov",
+                url: siteUrl,
+                sameAs: [
+                  "https://x.com/HusanIsamiddin",
+                  "https://hida115.substack.com/",
+                ],
+              },
+            ],
+          }}
+        />
         <div
           className="relative mx-auto w-full max-w-content px-4 pt-4 pb-8 mt-12 lg:mt-20 lg:px-0 lg:pt-6 md:pb-40"
         >

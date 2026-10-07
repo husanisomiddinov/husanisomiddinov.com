@@ -4,7 +4,8 @@ import sizeOf from "image-size";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { BackLink, PageTitle, Prose } from "@/components";
+import { Breadcrumbs, PageTitle, Prose } from "@/components";
+import { JsonLd } from "@/components/JsonLd";
 import {
   getAllWritingMetadata,
   getAllWritingSlugs,
@@ -12,6 +13,7 @@ import {
   type WritingPreview,
 } from "@/lib/posts";
 import { buildMetadata } from "@/lib/metadata";
+import { siteUrl } from "@/config/site";
 
 interface CoverDimensions {
   width: number;
@@ -63,8 +65,11 @@ export async function generateMetadata({
   const post = await getWritingBySlug(slug);
   if (!post) return {};
 
+  const preview = getAllWritingMetadata().find((p) => p.slug === slug);
+
   return buildMetadata({
     title: `${post.title} | Husan Isomiddinov`,
+    description: preview?.excerpt,
     path: `/writing/${slug}`,
   });
 }
@@ -82,11 +87,31 @@ export default async function WritingPostPage({
 
   const coverDimensions = getCoverDimensions(post.cover);
   const { newer, older, readingTime } = getNav(slug);
+  const preview = getAllWritingMetadata().find((p) => p.slug === slug);
+  const pageUrl = `${siteUrl}/writing/${slug}`;
 
   return (
     <div className="flex w-full flex-col items-start gap-4">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: post.title,
+          datePublished: post.date,
+          author: { "@id": `${siteUrl}/#person` },
+          publisher: { "@id": `${siteUrl}/#person` },
+          url: pageUrl,
+          ...(preview?.excerpt && { description: preview.excerpt }),
+          ...(post.cover && { image: `${siteUrl}${post.cover}` }),
+        }}
+      />
       <div className="w-full">
-        <BackLink href="/writing">← Essays</BackLink>
+        <Breadcrumbs
+          crumbs={[
+            { label: "Essays", href: "/writing" },
+            { label: post.title, href: `/writing/${slug}` },
+          ]}
+        />
         <PageTitle className="mt-3 mb-2">{post.title}</PageTitle>
         <p className="font-sans text-sm text-gray-500">
           {post.date}

@@ -5,5 +5,6 @@ export { Prose } from "./Prose";
 export { Bookshelf } from "./Bookshelf";
 export { PageTitle } from "./PageTitle";
 export { BackLink } from "./BackLink";
+export { Breadcrumbs } from "./Breadcrumbs";
 export { Experiences } from "./Experiences";
 export { BioTimeline } from "./BioTimeline";

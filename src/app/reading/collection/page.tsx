@@ -1,6 +1,6 @@
 import { getAllBooks } from "@/lib/books";
 import { CollectionBrowser, type CollectionBook } from "@/components/CollectionBrowser";
-import { BackLink, PageTitle } from "@/components";
+import { Breadcrumbs, PageTitle } from "@/components";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
@@ -25,7 +25,12 @@ export default function CollectionPage() {
   return (
     <div className="flex w-full flex-col items-stretch gap-6">
       <div>
-        <BackLink href="/reading">← Back to the shelf</BackLink>
+        <Breadcrumbs
+          crumbs={[
+            { label: "Books", href: "/reading" },
+            { label: "Collection", href: "/reading/collection" },
+          ]}
+        />
         <PageTitle className="mt-3">The collection</PageTitle>
         <p className="mt-1 text-base text-gray-600">
           Every book on the shelf. Search the shelf, filter by status, and switch between

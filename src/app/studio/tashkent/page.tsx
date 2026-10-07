@@ -1,9 +1,11 @@
 import { getTashkentDining } from "@/lib/data";
 import { buildMetadata } from "@/lib/metadata";
+import { Breadcrumbs } from "@/components";
 import { TashkentAccordion } from "@/components/TashkentAccordion";
 
 export const metadata = buildMetadata({
   title: "Tashkent Dining Recommendations | Studio | Husan Isomiddinov",
+  description: "My personal list of cafes, restaurants, and bakeries in Tashkent.",
   path: "/studio/tashkent",
 });
 
@@ -12,6 +14,12 @@ export default function TashkentPage() {
 
   return (
     <div className="flex w-full flex-col items-start gap-4">
+      <Breadcrumbs
+        crumbs={[
+          { label: "Studio", href: "/studio" },
+          { label: "Tashkent Dining", href: "/studio/tashkent" },
+        ]}
+      />
       <p className="text-base leading-[1.6] text-gray-600">
         Home devours me. Eats me alive. I can&apos;t be productive at all when my
         bed is a glimpse away. Naturally, I go out a lot. To cafes (mostly),
