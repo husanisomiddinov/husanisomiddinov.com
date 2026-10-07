@@ -10,19 +10,13 @@ export const metadata = buildMetadata({
 
 export default function CoffeePage() {
   return (
-    <div className="flex w-full flex-col items-start gap-6">
-      <div>
-        <Breadcrumbs
-          crumbs={[
-            { label: "idk", href: "/studio" },
-            { label: "Coffee Chat", href: "/studio/coffee" },
-          ]}
-        />
-        <p className="mt-4 text-base leading-[1.6] text-gray-600">
-          Want to grab a coffee and talk about something interesting? Send me a
-          request below. I&apos;ll get back to you on Telegram if I&apos;m in.
-        </p>
-      </div>
+    <div className="flex w-full flex-col items-start gap-4">
+      <Breadcrumbs
+        crumbs={[
+          { label: "idk", href: "/studio" },
+          { label: "Coffee Chat", href: "/studio/coffee" },
+        ]}
+      />
       <CoffeeForm />
     </div>
   );

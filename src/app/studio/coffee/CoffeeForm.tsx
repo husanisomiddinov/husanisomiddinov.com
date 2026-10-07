@@ -22,26 +22,32 @@ const INITIAL: FormData = {
 
 type Status = "idle" | "submitting" | "sent" | "error";
 
-const inputClass =
-  "w-full rounded-lg border border-gray-300 bg-page-bg px-3 py-2.5 font-sans text-sm text-gray-800 outline-none transition-colors placeholder:text-gray-400 focus:border-brand-400 focus:ring-1 focus:ring-brand-400";
+const inlineInput =
+  "border-b border-dashed border-gray-400 bg-transparent px-0.5 pb-0.5 font-sans text-gray-800 outline-none transition-colors placeholder:text-gray-400 focus:border-brand-500";
 
-const labelClass = "block font-sans text-sm font-bold text-gray-800";
-
-function Field({
-  label,
-  hint,
-  children,
+function InlineInput({
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+  width,
 }: {
-  label: string;
-  hint?: string;
-  children: React.ReactNode;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder: string;
+  type?: string;
+  width?: string;
 }) {
   return (
-    <label className="flex flex-col gap-1.5">
-      <span className={labelClass}>{label}</span>
-      {hint && <span className="text-xs text-gray-500">{hint}</span>}
-      {children}
-    </label>
+    <input
+      type={type}
+      required
+      placeholder={placeholder}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className={`${inlineInput} ${width ?? "w-40"}`}
+      style={type === "date" || type === "time" ? { colorScheme: "light" } : undefined}
+    />
   );
 }
 
@@ -74,99 +80,88 @@ export function CoffeeForm() {
 
   if (status === "sent") {
     return (
-      <div className="w-full rounded-lg border border-brand-300 bg-brand-50 px-6 py-8 text-center">
-        <p className="font-sans text-base font-bold text-gray-800">
-          Request sent
-        </p>
-        <p className="mt-2 text-sm text-gray-600">
-          I&apos;ll reach out on Telegram if I&apos;m free. Talk soon.
+      <div className="w-full py-8">
+        <p className="text-base leading-[1.6] text-gray-800">
+          Request sent. I&apos;ll ping you on Telegram if I&apos;m around.
         </p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mt-4 rounded-lg border border-gray-300 px-4 py-2 font-sans text-sm text-gray-600 transition-colors hover:border-gray-400 hover:text-gray-800"
+          className="mt-4 border-b border-dashed border-gray-400 font-sans text-sm text-gray-500 transition-colors hover:border-brand-500 hover:text-gray-800"
         >
-          Send another
+          Send another request
         </button>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full flex-col gap-5">
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <Field label="Name">
-          <input
-            type="text"
-            required
-            placeholder="Your name"
+    <form onSubmit={handleSubmit} className="w-full">
+      <div className="flex flex-col gap-6 text-base leading-[2.2] text-gray-600">
+        <p>
+          Hey, I&apos;m{" "}
+          <InlineInput
             value={form.name}
-            onChange={(e) => update("name", e.target.value)}
-            className={inputClass}
+            onChange={(v) => update("name", v)}
+            placeholder="your name"
+            width="w-36 sm:w-44"
           />
-        </Field>
-
-        <Field label="Telegram" hint="So I can reach you">
-          <input
-            type="text"
-            required
-            placeholder="@username"
+          . You can find me on Telegram at{" "}
+          <InlineInput
             value={form.telegram}
-            onChange={(e) => update("telegram", e.target.value)}
-            className={inputClass}
+            onChange={(v) => update("telegram", v)}
+            placeholder="@handle"
+            width="w-28 sm:w-36"
           />
-        </Field>
-      </div>
+          .
+        </p>
 
-      <Field
-        label="About you"
-        hint="What do you work on? What are you into? Help me know you're interesting."
-      >
-        <textarea
-          required
-          rows={3}
-          placeholder="A few sentences about yourself"
-          value={form.about}
-          onChange={(e) => update("about", e.target.value)}
-          className={`${inputClass} resize-none`}
-        />
-      </Field>
-
-      <Field label="What should we talk about?" hint="A topic, a question, or just vibes">
-        <input
-          type="text"
-          required
-          placeholder="e.g. AI agents, startups, Tashkent food scene"
-          value={form.topic}
-          onChange={(e) => update("topic", e.target.value)}
-          className={inputClass}
-        />
-      </Field>
-
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <Field label="Suggested date">
-          <input
-            type="date"
+        <div>
+          <p className="mb-2">A bit about me:</p>
+          <textarea
             required
+            rows={3}
+            placeholder="What you work on, what you're into, what makes you tick"
+            value={form.about}
+            onChange={(e) => update("about", e.target.value)}
+            className="w-full resize-none border-b border-dashed border-gray-400 bg-transparent pb-1 font-sans text-sm leading-relaxed text-gray-800 outline-none transition-colors placeholder:text-gray-400 focus:border-brand-500"
+          />
+        </div>
+
+        <p>
+          I&apos;d love to talk about{" "}
+          <InlineInput
+            value={form.topic}
+            onChange={(v) => update("topic", v)}
+            placeholder="a topic or question"
+            width="w-44 sm:w-56"
+          />
+          .
+        </p>
+
+        <p>
+          How about{" "}
+          <InlineInput
             value={form.date}
-            onChange={(e) => update("date", e.target.value)}
-            className={inputClass}
-          />
-        </Field>
-
-        <Field label="Suggested time">
-          <input
-            type="time"
-            required
+            onChange={(v) => update("date", v)}
+            placeholder="pick a day"
+            type="date"
+            width="w-36 sm:w-40"
+          />{" "}
+          at{" "}
+          <InlineInput
             value={form.time}
-            onChange={(e) => update("time", e.target.value)}
-            className={inputClass}
+            onChange={(v) => update("time", v)}
+            placeholder="time"
+            type="time"
+            width="w-28 sm:w-32"
           />
-        </Field>
+          ?
+        </p>
       </div>
 
       {status === "error" && (
-        <p className="text-sm text-red-600">
+        <p className="mt-4 text-sm text-red-600">
           Something went wrong. Try again.
         </p>
       )}
@@ -174,9 +169,9 @@ export function CoffeeForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="mt-1 w-full rounded-lg bg-brand-500 px-4 py-2.5 font-sans text-sm font-bold text-brand-50 transition-colors hover:bg-brand-600 disabled:opacity-50 sm:w-auto sm:self-start"
+        className="mt-8 rounded-lg bg-brand-500 px-5 py-2.5 font-sans text-sm font-bold text-brand-50 transition-colors hover:bg-brand-600 disabled:opacity-50"
       >
-        {status === "submitting" ? "Sending..." : "Request a chat"}
+        {status === "submitting" ? "Sending..." : "Send request"}
       </button>
     </form>
   );
