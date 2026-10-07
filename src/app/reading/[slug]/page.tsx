@@ -8,7 +8,8 @@ import {
 } from "@/lib/books";
 import { buildMetadata } from "@/lib/metadata";
 import { defaultOpenGraphImages } from "@/config/seo";
-import { isBookRead, readingStatusLabel } from "@/lib/reading-status";
+import { readingStatusLabel } from "@/lib/reading-status";
+import { BookStatus } from "@/components/BookStatus";
 
 export function generateStaticParams() {
   return getAllBookSlugs().map((slug) => ({ slug }));
@@ -47,7 +48,6 @@ export default async function BookPage({
 
   const books = toReadingShelfBooks(getAllBooks());
   const { metadata } = book;
-  const hasCompleted = isBookRead(metadata);
 
   return (
     <div className="flex flex-col gap-5">
@@ -57,33 +57,7 @@ export default async function BookPage({
           <PageTitle>{metadata.title}</PageTitle>
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-sans text-base text-gray-600">
             <span>By: {metadata.author}</span>
-            {hasCompleted ? (
-              <>
-                <span className="text-gray-400">·</span>
-                <span>Read: {metadata.date}</span>
-                {metadata.rating != null && (
-                  <>
-                    <span className="text-gray-400">·</span>
-                    <span className="font-bold text-gray-800">
-                      Rating: {metadata.rating}/10
-                    </span>
-                  </>
-                )}
-              </>
-            ) : (
-              <>
-                <span className="text-gray-400">·</span>
-                <span className="font-bold text-brand-500">
-                  Currently Reading
-                </span>
-                {metadata.started && (
-                  <>
-                    <span className="text-gray-400">·</span>
-                    <span>Started: {metadata.started}</span>
-                  </>
-                )}
-              </>
-            )}
+            <BookStatus book={metadata} variant="inline" />
           </div>
         </div>
         <Prose>{book.content}</Prose>
