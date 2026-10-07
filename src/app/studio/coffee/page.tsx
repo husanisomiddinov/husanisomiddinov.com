@@ -1,6 +1,6 @@
+import Image from "next/image";
 import { Breadcrumbs } from "@/components";
 import { buildMetadata } from "@/lib/metadata";
-import { CoffeeArt } from "./CoffeeArt";
 import { CoffeeForm } from "./CoffeeForm";
 
 export const metadata = buildMetadata({
@@ -22,8 +22,15 @@ export default function CoffeePage() {
         <div className="min-w-0 flex-1">
           <CoffeeForm />
         </div>
-        <div className="hidden pt-8 lg:block">
-          <CoffeeArt />
+        <div className="hidden w-56 shrink-0 pt-4 lg:block">
+          <Image
+            src="/images/coffee-art.png"
+            alt=""
+            width={400}
+            height={700}
+            className="w-full rounded-lg opacity-80"
+            priority
+          />
         </div>
       </div>
     </div>
