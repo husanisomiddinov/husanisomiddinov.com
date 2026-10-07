@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Breadcrumbs } from "@/components";
 import { buildMetadata } from "@/lib/metadata";
 import { CoffeeForm } from "./CoffeeForm";
@@ -22,14 +21,12 @@ export default function CoffeePage() {
         <div className="min-w-0 flex-1">
           <CoffeeForm />
         </div>
-        <div className="hidden w-56 shrink-0 pt-4 lg:block">
-          <Image
+        <div className="hidden w-64 shrink-0 pt-4 lg:block">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src="/images/coffee-art.png"
             alt=""
-            width={400}
-            height={700}
-            className="w-full rounded-lg opacity-80"
-            priority
+            className="w-full"
           />
         </div>
       </div>
