@@ -2,7 +2,7 @@ import { getArsenal } from "@/lib/data";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
-  title: "Arsenal | Husan Isomiddinov",
+  title: "Arsenal - Husan Isomiddinov",
   description: "The software and hardware I rely on day to day.",
   path: "/arsenal",
 });

@@ -2,7 +2,7 @@ import { buildMetadata } from "@/lib/metadata";
 import { CoffeeForm } from "./CoffeeForm";
 
 export const metadata = buildMetadata({
-  title: "Coffee Chat | idk | Husan Isomiddinov",
+  title: "Coffee Chat - Husan Isomiddinov",
   description: "Request a coffee chat with Husan in Tashkent.",
   path: "/studio/coffee",
 });

@@ -8,7 +8,7 @@ import { ArrowRightIcon } from "@/components/icons";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
-  title: "Books | Husan Isomiddinov",
+  title: "Books - Husan Isomiddinov",
   description: "Books I'm reading and have read, with notes and ratings.",
   path: "/reading",
 });

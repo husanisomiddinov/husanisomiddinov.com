@@ -182,7 +182,7 @@ export async function generateMetadata({
   const pageUrl = `${siteUrl}/projects/${project.slug}`;
 
   return buildMetadata({
-    title: `${project.title} | Projects | Husan Isomiddinov`,
+    title: `${project.title} - Husan Isomiddinov`,
     description: project.summary,
     path: `/projects/${project.slug}`,
     openGraph: {

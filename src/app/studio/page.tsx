@@ -6,7 +6,7 @@ import type { StudioLink } from "@/types";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
-  title: "idk | Husan Isomiddinov",
+  title: "idk - Husan Isomiddinov",
   description: "A workshop of collections I keep, people I read, and places I love.",
   path: "/studio",
 });

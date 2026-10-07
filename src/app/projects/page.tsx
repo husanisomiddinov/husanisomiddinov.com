@@ -4,7 +4,7 @@ import { getProjects } from "@/lib/data";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
-  title: "Projects | Husan Isomiddinov",
+  title: "Projects - Husan Isomiddinov",
   description:
     "Things I've built and AI experiments — papers, notes, and progress over 100 days.",
   path: "/projects",

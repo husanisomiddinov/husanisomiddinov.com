@@ -4,7 +4,7 @@ import { Breadcrumbs, PageTitle } from "@/components";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
-  title: "Collection | Books | Husan Isomiddinov",
+  title: "Collection - Husan Isomiddinov",
   description: "Search the full shelf, filter by status, and switch between cover and list views.",
   path: "/reading/collection",
 });

@@ -68,7 +68,7 @@ export async function generateMetadata({
   const preview = getAllWritingMetadata().find((p) => p.slug === slug);
 
   return buildMetadata({
-    title: `${post.title} | Husan Isomiddinov`,
+    title: `${post.title} - Husan Isomiddinov`,
     description: preview?.excerpt,
     path: `/writing/${slug}`,
   });
