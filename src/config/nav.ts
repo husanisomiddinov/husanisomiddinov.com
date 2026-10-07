@@ -3,7 +3,7 @@ export const navLinks = [
   { href: "/reading", label: "books" },
   { href: "/writing", label: "essays" },
   { href: "/projects", label: "projects" },
-  { href: "/studio", label: "studio" },
+  { href: "/studio", label: "idk" },
 ] as const;
 
 /** Links shown on the 404 page — home plus the primary nav. */

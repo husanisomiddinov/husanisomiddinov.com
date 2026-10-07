@@ -6,7 +6,7 @@ import type { StudioLink } from "@/types";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
-  title: "Studio | Husan Isomiddinov",
+  title: "idk | Husan Isomiddinov",
   description: "A workshop of collections I keep, people I read, and places I love.",
   path: "/studio",
 });
@@ -50,7 +50,7 @@ export default function StudioPage() {
   return (
     <div className="flex w-full flex-col items-stretch gap-6">
       <div>
-        <PageTitle>Studio</PageTitle>
+        <PageTitle>idk</PageTitle>
         <p className="mt-1 text-base text-gray-600">A workshop side of things.</p>
       </div>
       <div className="flex flex-col">

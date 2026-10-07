@@ -4,7 +4,7 @@ import { Breadcrumbs } from "@/components";
 import { TashkentAccordion } from "@/components/TashkentAccordion";
 
 export const metadata = buildMetadata({
-  title: "Tashkent Dining Recommendations | Studio | Husan Isomiddinov",
+  title: "Tashkent Dining Recommendations | idk | Husan Isomiddinov",
   description: "My personal list of cafes, restaurants, and bakeries in Tashkent.",
   path: "/studio/tashkent",
 });
@@ -16,7 +16,7 @@ export default function TashkentPage() {
     <div className="flex w-full flex-col items-start gap-4">
       <Breadcrumbs
         crumbs={[
-          { label: "Studio", href: "/studio" },
+          { label: "idk", href: "/studio" },
           { label: "Tashkent Dining", href: "/studio/tashkent" },
         ]}
       />
