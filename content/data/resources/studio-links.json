@@ -18,5 +18,10 @@
     "name": "Tashkent Dining Recommendations",
     "description": "Dining recommendations for Tashkent",
     "url": "/studio/tashkent"
+  },
+  {
+    "name": "Coffee Chat",
+    "description": "Request a coffee meetup with me",
+    "url": "/studio/coffee"
   }
 ]

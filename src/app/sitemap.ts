@@ -12,6 +12,7 @@ const STATIC_PAGES = [
   "/heuristics",
   "/studio",
   "/studio/tashkent",
+  "/studio/coffee",
   "/projects",
   "/arsenal",
   "/facts",
