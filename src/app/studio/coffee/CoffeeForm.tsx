@@ -215,9 +215,7 @@ export function CoffeeForm() {
       <div className="w-full">
         <div className="flex flex-col gap-1">
           <p className="text-sm text-gray-500">husan</p>
-          <p className="text-base text-gray-800">
-            Got it, {form.name}. I&apos;ll message you on Telegram.
-          </p>
+          <p className="text-base text-gray-800">Thank you, {form.name}!</p>
         </div>
         <button type="button" onClick={reset} className="mt-6 text-sm text-gray-400 transition-colors hover:text-gray-600">
           Start over
