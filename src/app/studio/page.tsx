@@ -51,7 +51,7 @@ export default function StudioPage() {
     <div className="flex w-full flex-col items-stretch gap-6">
       <div>
         <PageTitle>idk</PageTitle>
-        <p className="mt-1 text-base text-gray-600">A workshop side of things.</p>
+        <p className="mt-1 text-base text-gray-600">The messy side of things.</p>
       </div>
       <div className="flex flex-col">
         {links.map((item, i) => (
