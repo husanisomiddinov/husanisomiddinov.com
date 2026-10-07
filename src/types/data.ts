@@ -66,7 +66,7 @@ export interface Experience {
   /** Optional photo gallery: first image is the large one on the
    * left, the rest stack in a column on the right. Width/height are
    * each photo's real pixel dimensions, used to size both columns so
-   * every photo renders at its true aspect ratio — nothing cropped. */
+   * every photo renders at its true aspect ratio - nothing cropped. */
   images?: ExperienceImage[];
 }
 

@@ -7,7 +7,7 @@ const socialLinks = [
 ];
 
 /** Renders as plain <p>/<a> so it inherits the site's `.prose` link
- * style — meant to be nested inside <Prose>, not used standalone. */
+ * style - meant to be nested inside <Prose>, not used standalone. */
 export default function SocialIcons() {
   return (
     <p className="text-center">

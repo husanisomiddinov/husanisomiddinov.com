@@ -1,3 +1,4 @@
+import { cache } from "react";
 import path from "path";
 import fs from "fs";
 import matter from "gray-matter";
@@ -59,7 +60,7 @@ export interface WritingPreview {
   readingTime: number;
 }
 
-export function getAllWritingMetadata(): WritingPreview[] {
+export const getAllWritingMetadata = cache((): WritingPreview[] => {
   const files = fs.readdirSync(WRITING_DIR).filter((f) => f.endsWith(".mdx"));
 
   const posts = files.map((file): WritingPreview => {
@@ -80,7 +81,7 @@ export function getAllWritingMetadata(): WritingPreview[] {
   return posts.sort(
     (a, b) => toTimestamp(b.date, b.slug) - toTimestamp(a.date, a.slug)
   );
-}
+});
 
 export function getAllWritingSlugs(): string[] {
   return fs
@@ -89,7 +90,7 @@ export function getAllWritingSlugs(): string[] {
     .map((f) => f.replace(/\.mdx$/, ""));
 }
 
-export async function getWritingBySlug(slug: string) {
+export const getWritingBySlug = cache(async (slug: string) => {
   const content = await getMdxContent<Post>(["writing", `${slug}.mdx`], { img: MDXImage });
   if (!content) return null;
   return {
@@ -97,4 +98,4 @@ export async function getWritingBySlug(slug: string) {
     slug,
     content: content.content,
   };
-}
+});

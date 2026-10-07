@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useScrollRail } from "@/lib/useScrollRail";
 import type { Experience, ExperienceImage } from "@/types";
 
-/** Rail column width in px — keep in sync with the grid-cols value below. */
+/** Rail column width in px - keep in sync with the grid-cols value below. */
 const RAIL_WIDTH = 12;
 
 function ExperienceRow({
@@ -157,7 +157,7 @@ function ExperienceGallery({
   if (side.length <= 2) {
     // The gap-1 (4px) seams between stacked side photos are fixed
     // pixel amounts while the columns are percentage-based, so the
-    // solve is only exact at one reference width — use the page's
+    // solve is only exact at one reference width - use the page's
     // content width (--max-width-content, 660px), since that's what
     // this row renders at on any viewport wide enough to show the
     // full-size gallery.
@@ -212,7 +212,7 @@ function ExperienceGallery({
   // With three or more side photos, stacking them all in one
   // exact-fit column (above) squeezes each one down to a sliver to
   // match the main photo's height. Past two, switch to a proper
-  // 2-column square thumbnail grid instead — a light, expected crop
+  // 2-column square thumbnail grid instead - a light, expected crop
   // for small previews, in exchange for each one actually being
   // legible. The main photo still keeps its full aspect ratio.
   const mainWidthPct = 56;

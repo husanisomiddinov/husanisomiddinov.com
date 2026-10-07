@@ -33,6 +33,13 @@ const MONTHS = [
   "July", "August", "September", "October", "November", "December",
 ];
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function isValid(key: StepKey, value: string) {
+  const v = value.trim();
+  return key === "email" ? EMAIL_PATTERN.test(v) : v.length > 0;
+}
+
 function formatDate(v: string) {
   if (!v) return v;
   const d = new Date(`${v}T00:00:00`);
@@ -164,7 +171,7 @@ export function CoffeeForm() {
 
   function advance() {
     const current = STEPS[step];
-    if (!form[current.key].trim()) return;
+    if (!isValid(current.key, form[current.key])) return;
 
     if (current.key === "telegram") {
       const handle = form.telegram.trim();
@@ -297,7 +304,7 @@ export function CoffeeForm() {
             <button
               type="button"
               onClick={advance}
-              disabled={!form[current.key].trim()}
+              disabled={!isValid(current.key, form[current.key])}
               className="shrink-0 pb-2 text-sm text-gray-400 transition-colors hover:text-gray-800 disabled:opacity-30"
             >
               {step < STEPS.length - 1 ? "next" : "review"} &rarr;

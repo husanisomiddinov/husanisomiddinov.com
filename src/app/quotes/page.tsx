@@ -19,7 +19,7 @@ export default function QuotesPage() {
               &ldquo;{item.quote}&rdquo;
             </p>
             <p className="font-sans text-base font-medium text-brand-500">
-              — {item.author}
+              - {item.author}
             </p>
           </div>
           {i < quotes.length - 1 && <hr className="mt-4 w-full border-gray-300" />}

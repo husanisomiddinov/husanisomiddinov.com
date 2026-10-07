@@ -1,4 +1,16 @@
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type RefObject } from "react";
+
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+function subscribeReducedMotion(onChange: () => void) {
+  const media = window.matchMedia(REDUCED_MOTION_QUERY);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+}
+
+function getReducedMotion() {
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+}
 
 interface ScrollRail {
   /** Attach to the outer container wrapping every item's rail segment. */
@@ -23,18 +35,11 @@ export function useScrollRail(itemCount: number): ScrollRail {
   const itemRefs = useRef<(HTMLElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [fillPercent, setFillPercent] = useState(0);
-  const [reducedMotion, setReducedMotion] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  const reducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotion,
+    () => false,
   );
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const onChange = () => setReducedMotion(media.matches);
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
-  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

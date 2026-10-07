@@ -10,18 +10,7 @@ export interface MdxContent<TMetadata> {
   content: React.ReactElement;
 }
 
-/**
- * Reads and compiles an MDX file from `content/`, returning the rendered
- * element and its parsed frontmatter. Real YAML frontmatter parsing (via
- * next-mdx-remote's `parseFrontmatter`, backed by vfile-matter/gray-matter)
- * and footnote-heading stripping happen on the AST, not on compiled output —
- * there is no client/server serialization boundary to cross with RSC, so
- * callers render `content` directly.
- *
- * `components` (e.g. `{ img: MDXImage }`) is baked in at compile time here —
- * RSC's `compileMDX` has no separate render-time step to pass overrides into,
- * unlike the old client-side `<MDXRemote components={...} />` call site.
- */
+/** Reads and compiles an MDX file from `content/`, returning the rendered element and its parsed frontmatter. */
 export async function getMdxContent<TMetadata>(
   paths: string[],
   components?: MDXComponents

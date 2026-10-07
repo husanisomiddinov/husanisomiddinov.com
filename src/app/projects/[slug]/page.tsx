@@ -48,7 +48,7 @@ function renderInline(text: string): ReactNode[] {
         return (
           <code
             key={i}
-            className="rounded border border-gray-200 bg-brand-50 px-1 py-0.5 text-[0.85em] text-[#b5384e]"
+            className="rounded border border-gray-200 bg-brand-50 px-1 py-0.5 text-[0.85em] text-code"
           >
             {part.slice(1, -1)}
           </code>

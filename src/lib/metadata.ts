@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 interface PageMetadataInput {
   title: string;
   description?: string;
-  /** Route path, e.g. "/about" — used for the canonical URL. */
+  /** Route path, e.g. "/about" - used for the canonical URL. */
   path: string;
   noindex?: boolean;
   openGraph?: Metadata["openGraph"];

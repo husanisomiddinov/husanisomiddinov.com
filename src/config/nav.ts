@@ -6,7 +6,7 @@ export const navLinks = [
   { href: "/studio", label: "idk" },
 ] as const;
 
-/** Links shown on the 404 page — home plus the primary nav. */
+/** Links shown on the 404 page - home plus the primary nav. */
 export const notFoundLinks = [
   { href: "/", label: "Home" },
   ...navLinks.map((link) => ({

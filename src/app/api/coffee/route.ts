@@ -2,6 +2,28 @@ import { NextResponse } from "next/server";
 
 const FIELDS = ["name", "email", "telegram", "about", "topic", "date", "time", "place"] as const;
 
+type Fields = Record<(typeof FIELDS)[number], string>;
+
+const MAX_LENGTH = { about: 1000, topic: 500 } as const;
+const DEFAULT_MAX_LENGTH = 200;
+const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function parseFields(body: unknown): Fields | null {
+  if (typeof body !== "object" || body === null) return null;
+  const fields = {} as Fields;
+  for (const key of FIELDS) {
+    const value = (body as Record<string, unknown>)[key];
+    if (typeof value !== "string") return null;
+    const trimmed = value.trim();
+    const max = key === "about" || key === "topic" ? MAX_LENGTH[key] : DEFAULT_MAX_LENGTH;
+    if (!trimmed || trimmed.length > max) return null;
+    fields[key] = trimmed;
+  }
+  const validDate = DATE_PATTERN.test(fields.date) && !Number.isNaN(new Date(fields.date).getTime());
+  return validDate && EMAIL_PATTERN.test(fields.email) ? fields : null;
+}
+
 function parseHour(raw: string): number {
   const match = raw.toLowerCase().trim().match(/^(\d{1,2})(?::\d{2})?\s*(am|pm)?$/);
   if (!match) return 15;
@@ -9,7 +31,7 @@ function parseHour(raw: string): number {
   return match[2] === "pm" || (!match[2] && parseInt(match[1], 10) >= 12) ? h + 12 : h;
 }
 
-function calendarUrl(f: Record<(typeof FIELDS)[number], string>) {
+function calendarUrl(f: Fields) {
   const day = f.date.replace(/-/g, "");
   const hour = parseHour(f.time);
   const at = (h: number) => `${day}T${String(h).padStart(2, "0")}0000`;
@@ -27,10 +49,10 @@ function calendarUrl(f: Record<(typeof FIELDS)[number], string>) {
 }
 
 export async function POST(request: Request) {
-  const body = await request.json();
+  const f = parseFields(await request.json().catch(() => null));
 
-  if (FIELDS.some((k) => !body[k])) {
-    return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+  if (!f) {
+    return NextResponse.json({ error: "Invalid or missing fields" }, { status: 400 });
   }
 
   const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -41,7 +63,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
   }
 
-  const f = body as Record<(typeof FIELDS)[number], string>;
   const date = new Date(`${f.date}T00:00:00`).toLocaleDateString("en-GB", {
     weekday: "long",
     day: "numeric",

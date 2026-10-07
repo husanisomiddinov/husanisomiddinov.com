@@ -8,11 +8,11 @@ const SITE_DESCRIPTION =
 export const defaultOpenGraphImages = [
   {
     url: `${siteUrl}/ascii-art.png`,
-    alt: "Husan Isomiddinov — site preview",
+    alt: "Husan Isomiddinov - site preview",
   },
 ];
 
-/** Root-layout metadata — the equivalent of the old `<DefaultSeo>` config. */
+/** Root-layout metadata defaults; pages override via buildMetadata. */
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: SITE_TITLE,

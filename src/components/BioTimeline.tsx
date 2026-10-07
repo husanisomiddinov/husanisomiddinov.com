@@ -3,7 +3,7 @@
 import { useScrollRail } from "@/lib/useScrollRail";
 import type { BioMilestone } from "../../content/data/personal/bio-timeline";
 
-/** Rail column width in px — keep in sync with the grid-cols value below. */
+/** Rail column width in px - keep in sync with the grid-cols value below. */
 const RAIL_WIDTH = 28;
 
 export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {

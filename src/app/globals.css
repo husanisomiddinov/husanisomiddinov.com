@@ -15,11 +15,13 @@
   --color-brand-800: #31381a;
   --color-brand-900: #232913;
 
+  --color-code: #b5384e;
+
   /* gray-600 is masonjwang.com's actual body text color (his
      `body { color }` is oklch(0.5348 0 0 / 0.85), composited here
      against our own page background: #80807e), darkened slightly
      from that exact value for readability (~3.9:1 contrast here,
-     still shy of WCAG AA's 4.5:1 for body text — a deliberate
+     still shy of WCAG AA's 4.5:1 for body text - a deliberate
      tradeoff for the visual match, not an oversight). */
   --color-gray-50: #f8f8f7;
   --color-gray-100: #f4f0e8;
@@ -37,7 +39,7 @@
 
   /* Regular body copy stays at Geist Mono's true regular (400). Titles get
      real bold (700) *and* switch to the dark-ink gray below instead of the
-     olive accent — the actual "boldness" on mono-heavy sites like
+     olive accent - the actual "boldness" on mono-heavy sites like
      masonjwang.com comes from near-black-on-muted-gray contrast, not raw
      weight alone, so both move together. */
   --font-weight-semibold: 700;
@@ -77,10 +79,7 @@ i {
   font-style: normal;
 }
 
-/* Hand-authored prose styles — a direct port of the old theme's withProse()
-   config. Written by hand rather than routed through @tailwindcss/typography
-   so the rendered MDX matches the old site exactly, without fighting that
-   plugin's own opinionated defaults (max-width, code blocks, etc). */
+/* Hand-authored prose styles, kept out of @tailwindcss/typography to avoid its opinionated defaults (max-width, code blocks, etc). */
 .prose h1 {
   margin-top: 2.5rem;
   margin-bottom: 0.75rem;
@@ -149,7 +148,7 @@ i {
 
 .prose a {
   /* A touch more vivid than brand-500, so it doesn't blend into the
-     lighter gray body text — a 30% step toward brand-400, plus a
+     lighter gray body text - a 30% step toward brand-400, plus a
      bit of extra weight for emphasis without going full bold. */
   color: #6a7637;
   font-weight: 600;
