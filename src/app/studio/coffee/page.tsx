@@ -1,5 +1,6 @@
 import { Breadcrumbs } from "@/components";
 import { buildMetadata } from "@/lib/metadata";
+import { CoffeeArt } from "./CoffeeArt";
 import { CoffeeForm } from "./CoffeeForm";
 
 export const metadata = buildMetadata({
@@ -17,7 +18,14 @@ export default function CoffeePage() {
           { label: "Coffee Chat", href: "/studio/coffee" },
         ]}
       />
-      <CoffeeForm />
+      <div className="flex w-full items-start gap-8">
+        <div className="min-w-0 flex-1">
+          <CoffeeForm />
+        </div>
+        <div className="hidden pt-8 lg:block">
+          <CoffeeArt />
+        </div>
+      </div>
     </div>
   );
 }
