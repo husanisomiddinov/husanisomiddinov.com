@@ -274,7 +274,7 @@ export function CoffeeForm() {
         ) : (
           <div className="flex items-end gap-3">
             <div className="min-w-0 flex-1">
-              {"multiline" in current && current.multiline ? (
+              {"multiline" in current ? (
                 <textarea
                   ref={(el) => { inputRef.current = el; }}
                   rows={3}
@@ -287,7 +287,7 @@ export function CoffeeForm() {
               ) : (
                 <input
                   ref={(el) => { inputRef.current = el; }}
-                  type="text"
+                  type={current.key === "email" ? "email" : "text"}
                   placeholder={current.placeholder}
                   value={form[current.key]}
                   onChange={(e) => update(current.key, e.target.value)}

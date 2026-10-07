@@ -5,7 +5,7 @@ function buildCalendarUrl(name: string, email: string, topic: string, date: stri
 
   const hour = parseTime(time);
   const startH = String(hour).padStart(2, "0");
-  const endH = String(hour + 1).padStart(2, "0");
+  const endH = String(Math.min(hour + 1, 23)).padStart(2, "0");
   const start = `${dateClean}T${startH}0000`;
   const end = `${dateClean}T${endH}0000`;
 
@@ -72,7 +72,6 @@ export async function POST(request: Request) {
     body: JSON.stringify({
       chat_id: chatId,
       text,
-      parse_mode: "HTML",
       reply_markup: {
         inline_keyboard: [[
           { text: "📅 Create Calendar Event", url: calendarUrl },
