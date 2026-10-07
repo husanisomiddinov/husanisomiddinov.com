@@ -231,16 +231,7 @@ export function CoffeeForm() {
         </div>
       </div>
 
-      <div className="flex gap-1">
-        {STEPS.map((_, i) => (
-          <div
-            key={i}
-            className={`h-0.5 flex-1 rounded-full transition-colors ${
-              i <= step ? "bg-brand-500" : "bg-gray-300"
-            }`}
-          />
-        ))}
-      </div>
+      <p className="text-xs text-gray-400">{step + 1} / {STEPS.length}</p>
     </div>
   );
 }
