@@ -22,21 +22,46 @@ const STEPS = [
 
 type StepKey = (typeof STEPS)[number]["key"];
 type FormData = Record<StepKey, string>;
-
-const INITIAL: FormData = { name: "", telegram: "", about: "", topic: "", date: "", time: "" };
-
 type Status = "filling" | "review" | "submitting" | "sent" | "error";
 
+const INITIAL: FormData = { name: "", telegram: "", about: "", topic: "", date: "", time: "" };
 const DAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 const MONTHS = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December",
 ];
 
+function formatDate(v: string) {
+  if (!v) return v;
+  const d = new Date(`${v}T00:00:00`);
+  return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+}
+
+function AnswerList({ steps, form, onEdit }: { steps: readonly (typeof STEPS)[number][]; form: FormData; onEdit: (i: number) => void }) {
+  return (
+    <>
+      {steps.map((s, i) => (
+        <button
+          key={s.key}
+          type="button"
+          onClick={() => onEdit(i)}
+          className="group flex flex-col gap-1 text-left"
+        >
+          <p className="text-sm text-gray-400">{s.prompt}</p>
+          <p className="text-base text-gray-800 transition-colors group-hover:text-brand-500">
+            {s.key === "date" ? formatDate(form[s.key]) : form[s.key]}
+          </p>
+        </button>
+      ))}
+    </>
+  );
+}
+
 function CalendarPicker({ value, onChange, onConfirm }: { value: string; onChange: (v: string) => void; onConfirm: () => void }) {
   const today = new Date();
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [viewMonth, setViewMonth] = useState(today.getMonth());
+
   useEffect(() => {
     function handleKeyDown(e: globalThis.KeyboardEvent) {
       if (e.key === "Enter" && value) {
@@ -51,7 +76,6 @@ function CalendarPicker({ value, onChange, onConfirm }: { value: string; onChang
   const firstDay = new Date(viewYear, viewMonth, 1);
   const startDow = (firstDay.getDay() + 6) % 7;
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-
   const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
 
   function toStr(day: number) {
@@ -79,21 +103,13 @@ function CalendarPicker({ value, onChange, onConfirm }: { value: string; onChang
   return (
     <div className="w-full max-w-[320px]">
       <div className="mb-3 flex items-center justify-between">
-        <button
-          type="button"
-          onClick={prevMonth}
-          className="px-2 py-1 text-sm text-gray-400 transition-colors hover:text-gray-800"
-        >
+        <button type="button" onClick={prevMonth} className="px-2 py-1 text-sm text-gray-400 transition-colors hover:text-gray-800">
           &larr;
         </button>
         <span className="text-sm font-bold text-gray-800">
           {MONTHS[viewMonth]} {viewYear}
         </span>
-        <button
-          type="button"
-          onClick={nextMonth}
-          className="px-2 py-1 text-sm text-gray-400 transition-colors hover:text-gray-800"
-        >
+        <button type="button" onClick={nextMonth} className="px-2 py-1 text-sm text-gray-400 transition-colors hover:text-gray-800">
           &rarr;
         </button>
       </div>
@@ -130,7 +146,6 @@ function CalendarPicker({ value, onChange, onConfirm }: { value: string; onChang
   );
 }
 
-
 export function CoffeeForm() {
   const [form, setForm] = useState<FormData>(INITIAL);
   const [step, setStep] = useState(0);
@@ -156,11 +171,8 @@ export function CoffeeForm() {
       }
     }
 
-    if (step < STEPS.length - 1) {
-      setStep(step + 1);
-    } else {
-      setStatus("review");
-    }
+    if (step < STEPS.length - 1) setStep(step + 1);
+    else setStatus("review");
   }
 
   function handleKey(e: KeyboardEvent) {
@@ -196,19 +208,6 @@ export function CoffeeForm() {
     setStatus("filling");
   }
 
-  function formatDate(v: string) {
-    if (!v) return v;
-    const d = new Date(`${v}T00:00:00`);
-    return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
-  }
-
-  function formatAnswer(i: number) {
-    const s = STEPS[i];
-    const v = form[s.key];
-    if (s.key === "date") return formatDate(v);
-    return v;
-  }
-
   if (status === "sent") {
     return (
       <div className="w-full">
@@ -218,11 +217,7 @@ export function CoffeeForm() {
             Got it, {form.name}. I&apos;ll message you on Telegram.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={reset}
-          className="mt-6 text-sm text-gray-400 transition-colors hover:text-gray-600"
-        >
+        <button type="button" onClick={reset} className="mt-6 text-sm text-gray-400 transition-colors hover:text-gray-600">
           Start over
         </button>
       </div>
@@ -232,19 +227,7 @@ export function CoffeeForm() {
   if (status === "review" || status === "submitting" || status === "error") {
     return (
       <div className="flex w-full flex-col gap-4">
-        {STEPS.map((s, i) => (
-          <button
-            key={s.key}
-            type="button"
-            onClick={() => editStep(i)}
-            className="group flex flex-col gap-1 text-left"
-          >
-            <p className="text-sm text-gray-400">{s.prompt}</p>
-            <p className="text-base text-gray-800 group-hover:text-brand-500 transition-colors">
-              {formatAnswer(i)}
-            </p>
-          </button>
-        ))}
+        <AnswerList steps={STEPS} form={form} onEdit={editStep} />
 
         {status === "error" && (
           <p className="text-sm text-red-600">Something went wrong. Try again.</p>
@@ -259,11 +242,7 @@ export function CoffeeForm() {
           >
             {status === "submitting" ? "Sending..." : "Looks good, send it"}
           </button>
-          <button
-            type="button"
-            onClick={() => editStep(0)}
-            className="text-sm text-gray-400 transition-colors hover:text-gray-600"
-          >
+          <button type="button" onClick={() => editStep(0)} className="text-sm text-gray-400 transition-colors hover:text-gray-600">
             Edit
           </button>
         </div>
@@ -272,41 +251,20 @@ export function CoffeeForm() {
   }
 
   const current = STEPS[step];
-  const isMultiline = "multiline" in current && current.multiline;
-  const isCustom = "custom" in current;
-
-  function handleCustomSelect(value: string) {
-    update(current.key, value);
-  }
+  const isDate = "custom" in current;
 
   return (
     <div className="flex w-full flex-col gap-6">
-      {STEPS.slice(0, step).map((s, i) => (
-        <button
-          key={s.key}
-          type="button"
-          onClick={() => editStep(i)}
-          className="group flex flex-col gap-1 text-left"
-        >
-          <p className="text-sm text-gray-400">{s.prompt}</p>
-          <p className="text-base text-gray-800 group-hover:text-brand-500 transition-colors">
-            {formatAnswer(i)}
-          </p>
-        </button>
-      ))}
+      <AnswerList steps={STEPS.slice(0, step)} form={form} onEdit={editStep} />
 
       <div className="flex flex-col gap-3">
         <p className="text-base text-gray-600">{current.prompt}</p>
 
-        {isCustom && "custom" in current && current.custom === "date" ? (
+        {isDate ? (
           <div className="flex flex-col gap-3">
-            <CalendarPicker value={form.date} onChange={handleCustomSelect} onConfirm={advance} />
+            <CalendarPicker value={form.date} onChange={(v) => update("date", v)} onConfirm={advance} />
             {form.date && (
-              <button
-                type="button"
-                onClick={advance}
-                className="self-start text-sm text-gray-400 transition-colors hover:text-gray-800"
-              >
+              <button type="button" onClick={advance} className="self-start text-sm text-gray-400 transition-colors hover:text-gray-800">
                 {formatDate(form.date)} &rarr;
               </button>
             )}
@@ -314,7 +272,7 @@ export function CoffeeForm() {
         ) : (
           <div className="flex items-end gap-3">
             <div className="min-w-0 flex-1">
-              {isMultiline ? (
+              {"multiline" in current && current.multiline ? (
                 <textarea
                   ref={(el) => { inputRef.current = el; }}
                   rows={3}
@@ -328,7 +286,7 @@ export function CoffeeForm() {
                 <input
                   ref={(el) => { inputRef.current = el; }}
                   type="text"
-                  placeholder={"placeholder" in current ? current.placeholder : ""}
+                  placeholder={current.placeholder}
                   value={form[current.key]}
                   onChange={(e) => update(current.key, e.target.value)}
                   onKeyDown={handleKey}
