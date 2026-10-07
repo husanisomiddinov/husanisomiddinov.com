@@ -17,7 +17,7 @@ const STEPS = [
     placeholder: "A question, a project, a half-baked theory",
   },
   { key: "date", prompt: "Pick a day.", custom: "date" as const },
-  { key: "time", prompt: "What time works?", custom: "time" as const },
+  { key: "time", prompt: "What time works?", placeholder: "e.g. 3pm, 14:00, morning" },
 ] as const;
 
 type StepKey = (typeof STEPS)[number]["key"];
@@ -33,10 +33,20 @@ const MONTHS = [
   "July", "August", "September", "October", "November", "December",
 ];
 
-function CalendarPicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+function CalendarPicker({ value, onChange, onConfirm }: { value: string; onChange: (v: string) => void; onConfirm: () => void }) {
   const today = new Date();
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [viewMonth, setViewMonth] = useState(today.getMonth());
+  useEffect(() => {
+    function handleKeyDown(e: globalThis.KeyboardEvent) {
+      if (e.key === "Enter" && value) {
+        e.preventDefault();
+        onConfirm();
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [value, onConfirm]);
 
   const firstDay = new Date(viewYear, viewMonth, 1);
   const startDow = (firstDay.getDay() + 6) % 7;
@@ -120,40 +130,6 @@ function CalendarPicker({ value, onChange }: { value: string; onChange: (v: stri
   );
 }
 
-const TIME_SLOTS = [
-  "9:00", "9:30", "10:00", "10:30", "11:00", "11:30",
-  "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-  "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
-  "18:00", "18:30", "19:00", "19:30", "20:00", "20:30",
-];
-
-function formatTimeLabel(t: string) {
-  const [h, m] = t.split(":");
-  const hour = parseInt(h, 10);
-  const suffix = hour >= 12 ? "pm" : "am";
-  return `${hour % 12 || 12}:${m} ${suffix}`;
-}
-
-function TimePicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  return (
-    <div className="grid w-full max-w-[320px] grid-cols-4 gap-1.5">
-      {TIME_SLOTS.map((t) => (
-        <button
-          key={t}
-          type="button"
-          onClick={() => onChange(t)}
-          className={`rounded py-2 text-center text-sm transition-colors ${
-            t === value
-              ? "bg-brand-500 font-bold text-brand-50"
-              : "text-gray-600 hover:bg-gray-200"
-          }`}
-        >
-          {formatTimeLabel(t)}
-        </button>
-      ))}
-    </div>
-  );
-}
 
 export function CoffeeForm() {
   const [form, setForm] = useState<FormData>(INITIAL);
@@ -226,16 +202,10 @@ export function CoffeeForm() {
     return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
   }
 
-  function formatTime(v: string) {
-    if (!v) return v;
-    return formatTimeLabel(v);
-  }
-
   function formatAnswer(i: number) {
     const s = STEPS[i];
     const v = form[s.key];
     if (s.key === "date") return formatDate(v);
-    if (s.key === "time") return formatTime(v);
     return v;
   }
 
@@ -330,7 +300,7 @@ export function CoffeeForm() {
 
         {isCustom && "custom" in current && current.custom === "date" ? (
           <div className="flex flex-col gap-3">
-            <CalendarPicker value={form.date} onChange={handleCustomSelect} />
+            <CalendarPicker value={form.date} onChange={handleCustomSelect} onConfirm={advance} />
             {form.date && (
               <button
                 type="button"
@@ -338,19 +308,6 @@ export function CoffeeForm() {
                 className="self-start text-sm text-gray-400 transition-colors hover:text-gray-800"
               >
                 {formatDate(form.date)} &rarr;
-              </button>
-            )}
-          </div>
-        ) : isCustom && "custom" in current && current.custom === "time" ? (
-          <div className="flex flex-col gap-3">
-            <TimePicker value={form.time} onChange={handleCustomSelect} />
-            {form.time && (
-              <button
-                type="button"
-                onClick={advance}
-                className="self-start text-sm text-gray-400 transition-colors hover:text-gray-800"
-              >
-                {formatTime(form.time)} &rarr;
               </button>
             )}
           </div>
