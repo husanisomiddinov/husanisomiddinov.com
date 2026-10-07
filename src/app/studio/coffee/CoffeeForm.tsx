@@ -4,6 +4,7 @@ import { useRef, useState, useEffect, type KeyboardEvent } from "react";
 
 const STEPS = [
   { key: "name", prompt: "What's your name?", placeholder: "First name is fine" },
+  { key: "email", prompt: "What's your email?", placeholder: "you@example.com" },
   { key: "telegram", prompt: "How do I reach you?", placeholder: "@telegram_handle" },
   {
     key: "about",
@@ -24,7 +25,7 @@ type StepKey = (typeof STEPS)[number]["key"];
 type FormData = Record<StepKey, string>;
 type Status = "filling" | "review" | "submitting" | "sent" | "error";
 
-const INITIAL: FormData = { name: "", telegram: "", about: "", topic: "", date: "", time: "" };
+const INITIAL: FormData = { name: "", email: "", telegram: "", about: "", topic: "", date: "", time: "" };
 const DAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 const MONTHS = [
   "January", "February", "March", "April", "May", "June",
