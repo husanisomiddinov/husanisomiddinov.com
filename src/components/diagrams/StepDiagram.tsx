@@ -69,7 +69,7 @@ export function StepDiagram({
 
   return (
     <figure className="my-4 w-full rounded-md bg-brand-50 p-3 sm:p-6">
-      <div className="mx-auto w-full">{children({ active, animate })}</div>
+      <div className="mx-auto w-full overflow-x-auto">{children({ active, animate })}</div>
 
       <div role="tablist" aria-label="Steps" className="mt-4 flex w-full">
         {steps.map((step, i) => (

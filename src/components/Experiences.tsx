@@ -91,7 +91,7 @@ function ExperienceRow({
         )}
       </div>
       <div className="flex min-w-0 flex-col gap-1">
-        <div className="flex w-full items-baseline justify-between gap-3">
+        <div className="flex w-full flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-3">
           <h3 className="font-sans text-base font-bold text-gray-800">
             {role}
           </h3>

@@ -169,6 +169,11 @@ i {
   box-shadow: none !important;
 }
 
+.prose pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .prose hr {
   margin-top: 1rem;
   margin-bottom: 1rem;

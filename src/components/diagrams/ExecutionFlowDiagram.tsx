@@ -234,7 +234,7 @@ function EdgeLabel({
   );
 }
 
-function Scene({ active, animate }: { active: number; animate: boolean }) {
+function Scene({ active, animate, className }: { active: number; animate: boolean; className?: string }) {
   const scene = SCENES[active];
 
   return (
@@ -242,7 +242,7 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
       viewBox="0 0 760 290"
       role="img"
       aria-label="Diagram of the ROS2 SLAM and navigation pipeline"
-      className="h-auto w-full font-sans"
+      className={`h-auto w-full font-sans ${className ?? ""}`}
     >
       <defs>
         <marker
@@ -416,7 +416,7 @@ export function ExecutionFlowDiagram() {
         </>
       }
     >
-      {({ active, animate }) => <Scene active={active} animate={animate} />}
+      {({ active, animate }) => <Scene active={active} animate={animate} className="min-w-[520px]" />}
     </StepDiagram>
   );
 }
