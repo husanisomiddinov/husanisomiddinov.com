@@ -1,7 +1,7 @@
 /** Primary navigation links shown in the site header. */
 export const navLinks = [
-  { href: "/reading", label: "books" },
-  { href: "/writing", label: "essays" },
+  { href: "/reading", label: "reading" },
+  { href: "/writing", label: "writing" },
   { href: "/projects", label: "projects" },
   { href: "/studio", label: "idk" },
 ] as const;
