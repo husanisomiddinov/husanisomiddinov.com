@@ -48,33 +48,5 @@
       "inference-pipeline",
       "crop-classification"
     ]
-  },
-  {
-    "slug": "sentiment-analysis",
-    "kind": "ml",
-    "title": "Sentiment Analysis Web App",
-    "summary": "A Flask web app that classifies IMDB movie reviews with a NumPy logistic regression model and compares results against scikit-learn.",
-    "description": "## Context\nThis is the first project in my Vibecoding Ascent challenge and was designed as a full sentiment analysis pipeline for movie reviews, from preprocessing to model training to browser-based inference.\n\nInstead of relying only on framework abstractions, I built the core model logic myself to understand the mechanics of text classification at a first-principles level.\n\n## Problem and Objective\nThe goal was to classify IMDB reviews as positive or negative while comparing a custom implementation against a standard library baseline.\n\nI wanted to answer two questions:\n- Can a NumPy-only logistic regression implementation reach competitive performance?\n- Which parts of the text pipeline matter most for practical sentiment quality?\n\n## Modeling Approach\nThe primary model is logistic regression implemented from scratch in NumPy and optimized with gradient descent.\n\n- Loss function: binary cross-entropy\n- Training iterations: 1,000\n- Learning rate: 0.1\n- Output: binary sentiment prediction\n\nBuilding the optimizer manually made it easier to inspect training behavior and understand how parameter updates respond to sparse features.\n\n## Feature Engineering Pipeline\nReview text is transformed into TF-IDF vectors with both unigrams and bigrams, capped at 5,000 features.\n\n- Unigrams capture broad sentiment-bearing words\n- Bigrams capture short phrase context that can flip polarity\n- Preprocessing/cleaning modules keep train-time and inference-time transformations consistent\n\nThis setup balances representation quality with computational efficiency.\n\n## Benchmarking and Performance\nTo validate the custom implementation, I trained a parallel scikit-learn baseline on the same data setup and compared outcomes directly.\n\n- Dataset: IMDB movie reviews (50,000 total)\n- Custom NumPy logistic regression: approximately 85-88% validation accuracy\n- scikit-learn comparison model: similar accuracy range\n\nThe comparison showed that the custom model remains competitive while being fully transparent and inspectable.\n\n## Productization and Tooling\nThe project is wrapped in a Flask web app so users can input any review and receive an immediate sentiment prediction.\n\nSupporting scripts handle the full workflow:\n- Model training\n- Feature extraction and visualization generation\n- Prediction testing\n\nThis made experimentation repeatable and reduced friction between model iteration and UI-facing inference.\n\n## What This Project Demonstrates\nThis project demonstrates practical ML engineering across data preprocessing, feature design, optimization, benchmarking, and deployment integration.\n\nMore importantly, it built strong intuition for linear models and NLP feature spaces, which provides a grounded foundation for later work with larger frameworks and deep learning systems.",
-    "tech": [
-      "Python",
-      "Flask",
-      "NumPy",
-      "TF-IDF"
-    ],
-    "date": "2025-03-01",
-    "status": "completed",
-    "links": {
-      "github": "https://github.com/husanisomiddinov/sentiment-analysis-webapp"
-    },
-    "papers": [
-      {
-        "title": "TF-IDF Feature Engineering for Text Classification",
-        "notes": "Used TF-IDF vectorization with unigrams and bigrams to represent IMDB reviews as sparse numeric features, capped at 5,000 dimensions."
-      },
-      {
-        "title": "Logistic Regression via Gradient Descent",
-        "notes": "Built a binary classifier from scratch in NumPy with cross-entropy optimization (learning rate 0.1, 1,000 iterations) and compared it against scikit-learn."
-      }
-    ]
   }
 ]
