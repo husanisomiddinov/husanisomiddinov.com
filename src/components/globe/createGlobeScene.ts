@@ -2,11 +2,9 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import {
   buildGlobeTexture,
-  loadStateBorders,
   loadWorld,
   makeTexture,
   paintWorld,
-  type Path,
   type View,
   type World,
 } from "./globeTexture";
@@ -42,7 +40,6 @@ export interface GlobeScene {
 
 const MAP_URL = "/data/countries-50m.json";
 const DETAIL_MAP_URL = "/data/countries-10m.json";
-const STATES_URL = "/data/us-states-10m.json";
 /** Under this camera distance a crisp, re-painted patch of the visible region sits over the base map. */
 const PATCH_DISTANCE = 2.3;
 /** Under this distance the patch switches to the finer 1:10m coastlines. */
@@ -54,7 +51,7 @@ const MAX_DISTANCE = 7;
 const DOT_COLOR = 0x5b6529;
 const CLICK_SLOP_PX = 5;
 
-export function latLngToVector(lat: number, lng: number, radius = 1): THREE.Vector3 {
+function latLngToVector(lat: number, lng: number, radius = 1): THREE.Vector3 {
   const phi = THREE.MathUtils.degToRad(lat);
   const theta = THREE.MathUtils.degToRad(lng);
   return new THREE.Vector3(
@@ -294,7 +291,6 @@ export function createGlobeScene(
   const patchSize = window.innerWidth < 768 ? 2048 : 4096;
   let baseWorld: World | null = null;
   let detailWorld: World | null = null;
-  let stateBorders: Path[] = [];
   let detailRequested = false;
   let painted: { view: View; span: number; detail: boolean } | null = null;
   const lastPosition = camera.position.clone();
@@ -348,7 +344,7 @@ export function createGlobeScene(
     const wantsDetail = distance < DETAIL_DISTANCE;
     if (wantsDetail && !detailRequested) {
       detailRequested = true;
-      loadWorld(DETAIL_MAP_URL, stateBorders)
+      loadWorld(DETAIL_MAP_URL)
         .then((world) => {
           if (disposed) return;
           detailWorld = world;
@@ -380,7 +376,7 @@ export function createGlobeScene(
     const canvas = document.createElement("canvas");
     canvas.width = Math.max(64, Math.round(lngSpan * scale));
     canvas.height = Math.max(64, Math.round(latSpan * scale));
-    paintWorld(canvas, world, view, { graticule: 1.6, border: 2.2, stateBorder: 1.6, coast: 3.4 });
+    paintWorld(canvas, world, view, { graticule: 1.6, border: 2.2, coast: 3.4 });
     const next = makeTexture(canvas, renderer.capabilities.getMaxAnisotropy());
 
     const deg = THREE.MathUtils.degToRad;
@@ -487,11 +483,7 @@ export function createGlobeScene(
     renderer.capabilities.maxTextureSize,
     window.innerWidth < 768 ? 4096 : 8192,
   );
-  loadStateBorders(STATES_URL)
-    .then((states) => {
-      stateBorders = states;
-      return loadWorld(MAP_URL, states);
-    })
+  loadWorld(MAP_URL)
     .then((world) => {
       if (disposed) return;
       baseWorld = world;

@@ -95,6 +95,8 @@ export interface Place {
   lng: number;
   /** Home base: the card says so instead of listing visits. */
   home?: boolean;
+  /** For the home base: how long I've lived there, shown where visit dates go ("19 years"). */
+  lived?: string;
   /** One entry per visit. */
   visits: PlaceVisit[];
 }

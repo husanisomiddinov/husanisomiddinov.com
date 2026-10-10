@@ -49,25 +49,6 @@ export function ChevronRightIcon({ className, ...props }: SVGProps<SVGSVGElement
   );
 }
 
-export function ChevronDownIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={mergeClassName("size-4", className)}
-      {...props}
-    >
-      <path
-        d="M6 9l6 6 6-6"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 export function MenuIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg

@@ -12,6 +12,7 @@ interface PlaceCardProps {
 export function PlaceCard({ place, pinned, onClose }: PlaceCardProps) {
   const photo = place.visits.find((visit) => visit.photo);
   const count = place.visits.length;
+  const dated = place.visits.filter((visit) => visit.date);
 
   return (
     <div className="rounded-lg border border-gray-300 bg-page-bg p-3 shadow-[0_10px_30px_-12px_rgba(35,41,19,0.35)]">
@@ -50,13 +51,15 @@ export function PlaceCard({ place, pinned, onClose }: PlaceCardProps) {
         </div>
       </figure>
 
-      {!place.home && (
+      {place.home && place.lived && (
+        <p className="mt-3 text-xs font-bold text-gray-800">Lived here {place.lived}</p>
+      )}
+
+      {!place.home && dated.length > 0 && (
         <ol className={`mt-3 flex flex-col gap-2 ${pinned ? "max-h-40 overflow-y-auto pr-1" : ""}`}>
-          {place.visits.map((visit, i) => (
+          {dated.map((visit, i) => (
             <li key={i}>
-              <p className="text-xs font-bold text-gray-800">
-                {visit.date ? formatVisitDate(visit.date) : `Visit ${i + 1}`}
-              </p>
+              <p className="text-xs font-bold text-gray-800">{formatVisitDate(visit.date!)}</p>
               {visit.note && <p className="text-sm leading-snug text-gray-600">{visit.note}</p>}
             </li>
           ))}

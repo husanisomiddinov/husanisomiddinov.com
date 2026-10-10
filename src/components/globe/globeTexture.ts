@@ -6,7 +6,6 @@ const OCEAN = "#d3dac2";
 const LAND = "#f7f7f2";
 const GRATICULE = "rgba(91,101,41,0.10)";
 const BORDER = "rgba(91,101,41,0.30)";
-const STATE_BORDER = "rgba(91,101,41,0.20)";
 const COAST = "rgba(77,86,40,0.75)";
 
 /** A polyline with longitudes unwrapped to be continuous, plus its bounds for culling. */
@@ -21,8 +20,6 @@ export interface Path {
 export interface World {
   land: Path[];
   borders: Path[];
-  /** Interior US state lines only; kept apart so they can be drawn lighter than country borders. */
-  stateBorders: Path[];
   coast: Path[];
 }
 
@@ -34,12 +31,11 @@ export interface View {
   latMax: number;
 }
 
-export const FULL_VIEW: View = { lngMin: -180, lngMax: 180, latMin: -90, latMax: 90 };
+const FULL_VIEW: View = { lngMin: -180, lngMax: 180, latMin: -90, latMax: 90 };
 
 export interface LineWidths {
   graticule: number;
   border: number;
-  stateBorder: number;
   coast: number;
 }
 
@@ -70,16 +66,22 @@ function toPath(line: number[][]): Path {
   return { pts, minLng, maxLng, minLat, maxLat };
 }
 
-/** Interior borders between US states (the outer edge is already a country border/coast). */
-export async function loadStateBorders(url: string): Promise<Path[]> {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`Globe: ${url} responded ${response.status}`);
-  const topology = (await response.json()) as Topology;
-  const states = topology.objects.states as GeometryCollection;
-  return mesh(topology, states, (a, b) => a !== b).coordinates.map(toPath);
+/**
+ * A ring that circles a pole (Antarctica) ends 360 degrees from where it starts once unwrapped, so a flat
+ * fill would leave the polar cap empty. Close it along the pole's edge of the map instead.
+ */
+function closeOverPole(path: Path): Path {
+  const first = path.pts[0];
+  const last = path.pts[path.pts.length - 1];
+  if (Math.abs(last[0] - first[0]) < 180 || path.maxLat - path.minLat < 1) return path;
+  const pole = path.minLat + path.maxLat < 0 ? -90 : 90;
+  path.pts.push([last[0], pole], [first[0], pole]);
+  if (pole < 0) path.minLat = pole;
+  else path.maxLat = pole;
+  return path;
 }
 
-export async function loadWorld(url: string, stateBorders: Path[]): Promise<World> {
+export async function loadWorld(url: string): Promise<World> {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Globe: ${url} responded ${response.status}`);
   const topology = (await response.json()) as Topology;
@@ -90,12 +92,11 @@ export async function loadWorld(url: string, stateBorders: Path[]): Promise<Worl
     const g = country.geometry;
     if (!g) continue;
     const polygons = g.type === "Polygon" ? [g.coordinates] : g.type === "MultiPolygon" ? g.coordinates : [];
-    for (const polygon of polygons) for (const ring of polygon) land.push(toPath(ring));
+    for (const polygon of polygons) for (const ring of polygon) land.push(closeOverPole(toPath(ring)));
   }
   return {
     land,
     borders: mesh(topology, countries, (a, b) => a !== b).coordinates.map(toPath),
-    stateBorders,
     coast: mesh(topology, countries, (a, b) => a === b).coordinates.map(toPath),
   };
 }
@@ -164,12 +165,6 @@ export function paintWorld(canvas: HTMLCanvasElement, world: World, view: View, 
   tracePaths(ctx, world.borders, view, sx, sy);
   ctx.stroke();
 
-  ctx.strokeStyle = STATE_BORDER;
-  ctx.lineWidth = widths.stateBorder;
-  ctx.beginPath();
-  tracePaths(ctx, world.stateBorders, view, sx, sy);
-  ctx.stroke();
-
   ctx.strokeStyle = COAST;
   ctx.lineWidth = widths.coast;
   ctx.beginPath();
@@ -191,7 +186,7 @@ export function buildGlobeTexture(world: World, width: number, maxAnisotropy: nu
   canvas.width = width;
   canvas.height = width / 2;
   const px = width / 8192;
-  paintWorld(canvas, world, FULL_VIEW, { graticule: 1.5 * px, border: 1.6 * px, stateBorder: 1.2 * px, coast: 2.4 * px });
+  paintWorld(canvas, world, FULL_VIEW, { graticule: 1.5 * px, border: 1.6 * px, coast: 2.4 * px });
   const texture = makeTexture(canvas, maxAnisotropy);
   texture.wrapS = THREE.RepeatWrapping;
   return texture;
