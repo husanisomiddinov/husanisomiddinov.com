@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { BackLink, PageTitle } from "@/components";
 import type { Place } from "@/types";
 import { createGlobeScene, type GlobeScene, type ProjectedPlace } from "./createGlobeScene";
 import { PlaceCard } from "./PlaceCard";
@@ -20,6 +21,7 @@ export function VisitGlobe({ places }: { places: Place[] }) {
   const [status, setStatus] = useState<Status>("loading");
   const [hovered, setHovered] = useState<string | null>(null);
   const [pinned, setPinned] = useState<string | null>(null);
+  const [listOpen, setListOpen] = useState(false);
   const host = useRef<HTMLDivElement>(null);
   const card = useRef<HTMLDivElement>(null);
   const labels = useRef(new Map<string, HTMLSpanElement>());
@@ -108,78 +110,97 @@ export function VisitGlobe({ places }: { places: Place[] }) {
   const choose = (slug: string) => {
     setPinned(slug);
     scene.current?.flyTo(slug);
-    host.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    setListOpen(false);
   };
 
   const totalVisits = places.reduce((sum, place) => sum + place.visits.length, 0);
 
   return (
-    <div className="flex flex-col gap-6">
-      <div
-        className="relative left-1/2 w-[min(calc(100vw-2rem),60rem)] -translate-x-1/2"
-        role="group"
-        aria-label="Interactive globe of places I have visited"
-      >
-        <div ref={host} className="relative h-[min(72vh,640px)] min-h-[420px] w-full select-none overflow-hidden">
-          {status === "loading" && (
-            <p className="absolute inset-0 grid place-items-center text-sm text-gray-500">Drawing the earth…</p>
-          )}
-          {status === "unavailable" && (
-            <p className="absolute inset-0 grid place-items-center px-6 text-center text-sm text-gray-500">
-              The globe needs WebGL, which isn&apos;t available here. The list below has everything.
-            </p>
-          )}
+    <div
+      className="fixed inset-0 z-[300] bg-page-bg"
+      role="group"
+      aria-label="Interactive globe of places I have visited"
+    >
+      <div ref={host} className="absolute inset-0 select-none overflow-hidden">
+        {status === "loading" && (
+          <p className="absolute inset-0 grid place-items-center text-sm text-gray-500">Drawing the earth…</p>
+        )}
+        {status === "unavailable" && (
+          <p className="absolute inset-0 grid place-items-center px-6 text-center text-sm text-gray-500">
+            The globe needs WebGL, which isn&apos;t available here. Open the list for everything.
+          </p>
+        )}
 
-          {places.map((place) => (
-            <span
-              key={place.slug}
-              ref={(node) => {
-                if (node) labels.current.set(place.slug, node);
-                else labels.current.delete(place.slug);
-              }}
-              aria-hidden
-              className="pointer-events-none absolute top-0 left-0 whitespace-nowrap text-xs font-bold text-gray-800 opacity-0 transition-opacity duration-200 [text-shadow:0_0_3px_var(--color-page-bg),0_0_6px_var(--color-page-bg)]"
-            >
-              {place.name}
-            </span>
-          ))}
-
-          <div
-            ref={card}
-            style={{ width: CARD_WIDTH }}
-            className={`absolute top-0 left-0 z-10 ${pinned ? "" : "pointer-events-none"} ${active ? "" : "invisible"}`}
+        {places.map((place) => (
+          <span
+            key={place.slug}
+            ref={(node) => {
+              if (node) labels.current.set(place.slug, node);
+              else labels.current.delete(place.slug);
+            }}
+            aria-hidden
+            className="pointer-events-none absolute top-0 left-0 whitespace-nowrap text-xs font-bold text-gray-800 opacity-0 transition-opacity duration-200 [text-shadow:0_0_3px_var(--color-page-bg),0_0_6px_var(--color-page-bg)]"
           >
-            {active && <PlaceCard place={active} pinned={pinned === active.slug} onClose={() => setPinned(null)} />}
-          </div>
+            {place.name}
+          </span>
+        ))}
+
+        <div
+          ref={card}
+          style={{ width: CARD_WIDTH }}
+          className={`absolute top-0 left-0 z-10 ${pinned ? "" : "pointer-events-none"} ${active ? "" : "invisible"}`}
+        >
+          {active && <PlaceCard place={active} pinned={pinned === active.slug} onClose={() => setPinned(null)} />}
         </div>
       </div>
 
-      <p className="text-sm text-gray-500">
-        {places.length} {places.length === 1 ? "place" : "places"}, {totalVisits}{" "}
-        {totalVisits === 1 ? "visit" : "visits"}. Bigger dot, more visits. Drag to spin, scroll to zoom, hover or tap a dot.
-      </p>
+      <div className="pointer-events-none absolute top-5 left-5 z-20 flex flex-col gap-3 sm:top-6 sm:left-6">
+        <BackLink href="/studio">← idk</BackLink>
+        <div>
+          <PageTitle>Places</PageTitle>
+          <p className="mt-1 text-sm text-gray-600">
+            {places.length} {places.length === 1 ? "place" : "places"}, {totalVisits}{" "}
+            {totalVisits === 1 ? "visit" : "visits"}. Bigger dot, more visits.
+          </p>
+        </div>
+      </div>
 
-      <ul className="flex flex-col">
-        {places.map((place, i) => (
-          <li key={place.slug}>
-            <button
-              type="button"
-              onClick={() => choose(place.slug)}
-              className="group -mx-4 flex w-[calc(100%+2rem)] cursor-pointer items-baseline justify-between gap-4 rounded-lg px-4 py-3 text-left transition-colors duration-300 ease-out hover:bg-gray-800/[0.04]"
-            >
-              <span className="min-w-0">
-                <span className="block font-sans text-base font-bold text-gray-800">{place.name}</span>
-                <span className="block text-sm text-gray-600">{place.country}</span>
-              </span>
-              <span className="shrink-0 text-right text-xs text-gray-500">
-                {place.visits.length} {place.visits.length === 1 ? "visit" : "visits"}
-                <span className="block">last {formatVisitDate(place.visits[0].date)}</span>
-              </span>
-            </button>
-            {i < places.length - 1 && <hr className="border-gray-300" />}
-          </li>
-        ))}
-      </ul>
+      <div className="absolute bottom-5 left-5 z-20 flex max-h-[60vh] flex-col items-start gap-2 sm:bottom-6 sm:left-6">
+        {listOpen && (
+          <ul className="flex w-72 max-w-[calc(100vw-2.5rem)] flex-col overflow-y-auto rounded-lg border border-gray-300 bg-page-bg p-1 shadow-[0_10px_30px_-12px_rgba(35,41,19,0.35)]">
+            {places.map((place) => (
+              <li key={place.slug}>
+                <button
+                  type="button"
+                  onClick={() => choose(place.slug)}
+                  className="flex w-full cursor-pointer items-baseline justify-between gap-3 rounded-md px-3 py-2 text-left transition-colors duration-200 hover:bg-gray-800/[0.04]"
+                >
+                  <span className="min-w-0">
+                    <span className="block font-sans text-sm font-bold text-gray-800">{place.name}</span>
+                    <span className="block text-xs text-gray-600">{place.country}</span>
+                  </span>
+                  <span className="shrink-0 text-right text-xs text-gray-500">
+                    {place.visits.length}x
+                    <span className="block">{formatVisitDate(place.visits[0].date)}</span>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+        <button
+          type="button"
+          onClick={() => setListOpen((open) => !open)}
+          aria-expanded={listOpen}
+          className="cursor-pointer rounded-md border border-gray-300 bg-page-bg px-3 py-1.5 text-sm text-gray-600 transition-colors duration-200 hover:border-brand-500 hover:text-brand-500"
+        >
+          {listOpen ? "Hide list" : "All places"}
+        </button>
+      </div>
+
+      <p className="pointer-events-none absolute right-5 bottom-5 z-20 hidden text-xs text-gray-500 sm:block">
+        Drag to spin, scroll to zoom
+      </p>
     </div>
   );
 }

@@ -33,9 +33,9 @@ export interface GlobeScene {
 }
 
 const MAP_URL = "/data/countries-50m.json";
-const DEFAULT_DISTANCE = 3.6;
+const DEFAULT_DISTANCE = 4.4;
 const MIN_DISTANCE = 1.04;
-const MAX_DISTANCE = 6;
+const MAX_DISTANCE = 7;
 const DOT_COLOR = 0x5b6529;
 const CLICK_SLOP_PX = 5;
 
@@ -63,21 +63,6 @@ interface Marker {
   hover: number;
   projected: ProjectedPlace;
 }
-
-const ATMOSPHERE_VERTEX = /* glsl */ `
-  varying vec3 vNormal;
-  void main() {
-    vNormal = normalize(normalMatrix * normal);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-const ATMOSPHERE_FRAGMENT = /* glsl */ `
-  varying vec3 vNormal;
-  void main() {
-    float glow = pow(max(0.0, 0.66 - dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.0);
-    gl_FragColor = vec4(0.553, 0.616, 0.345, clamp(glow * 1.6, 0.0, 0.85));
-  }
-`;
 
 /** Owns only GPU resources and pointer input. React owns the hovered/pinned place and the overlays. */
 export function createGlobeScene(
@@ -112,16 +97,6 @@ export function createGlobeScene(
   const globeMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
   const globe = new THREE.Mesh(globeGeometry, globeMaterial);
   scene.add(globe);
-
-  const atmosphereMaterial = new THREE.ShaderMaterial({
-    vertexShader: ATMOSPHERE_VERTEX,
-    fragmentShader: ATMOSPHERE_FRAGMENT,
-    side: THREE.BackSide,
-    transparent: true,
-    depthWrite: false,
-  });
-  const atmosphere = new THREE.Mesh(new THREE.SphereGeometry(1.07, 64, 48), atmosphereMaterial);
-  scene.add(atmosphere);
 
   const discGeometry = new THREE.CircleGeometry(1, 40);
   const haloMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, depthWrite: false });
@@ -389,8 +364,8 @@ export function createGlobeScene(
       el.removeEventListener("pointerup", onPointerUp);
       controls.dispose();
       texture?.dispose();
-      for (const geometry of [globeGeometry, atmosphere.geometry, discGeometry]) geometry.dispose();
-      for (const material of [globeMaterial, atmosphereMaterial, haloMaterial, dotMaterial, hitMaterial]) {
+      for (const geometry of [globeGeometry, discGeometry]) geometry.dispose();
+      for (const material of [globeMaterial, haloMaterial, dotMaterial, hitMaterial]) {
         material.dispose();
       }
       renderer.dispose();
