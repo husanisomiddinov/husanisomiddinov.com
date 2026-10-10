@@ -42,6 +42,8 @@ export function PlaceCard({ place, pinned, onClose }: PlaceCardProps) {
               alt={photo.date ? `${place.name}, ${formatVisitDate(photo.date)}` : place.name}
               fill
               sizes="220px"
+              // Serve the original file: the optimizer's small, recompressed variants look soft on retina.
+              unoptimized
               className="object-cover"
             />
           )}
