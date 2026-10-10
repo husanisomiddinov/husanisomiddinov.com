@@ -51,6 +51,8 @@ export interface StudioLink {
   name: string;
   description?: string;
   url: string;
+  /** Hidden outside local development. */
+  devOnly?: boolean;
 }
 
 export interface Experience {

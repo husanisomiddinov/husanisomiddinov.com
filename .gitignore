@@ -3,6 +3,9 @@
 # generated content (rebuilt by `yarn generate`)
 **/index.json
 
+# private, local-only data (the Places globe)
+/content/data/personal/places.json
+
 # dependencies
 /node_modules
 /.pnp

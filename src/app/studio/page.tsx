@@ -4,6 +4,7 @@ import { PageTitle } from "@/components";
 import { getStudioLinks } from "@/lib/data";
 import type { StudioLink } from "@/types";
 import { buildMetadata } from "@/lib/metadata";
+import { isDevOnlyAvailable } from "@/lib/dev-only";
 
 export const metadata = buildMetadata({
   title: "idk",
@@ -45,7 +46,7 @@ function StudioRow({ item, isLast }: { item: StudioLink; isLast: boolean }) {
 }
 
 export default function StudioPage() {
-  const links = getStudioLinks();
+  const links = getStudioLinks().filter((link) => isDevOnlyAvailable || !link.devOnly);
 
   return (
     <div className="flex w-full flex-col items-stretch gap-6">
