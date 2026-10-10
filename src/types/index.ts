@@ -8,6 +8,8 @@ export type {
   ProjectKind,
   Arsenal,
   StudioLink,
+  Place,
+  PlaceVisit,
   Experience,
   ExperienceImage,
 } from "./data";

@@ -75,3 +75,22 @@ export interface ExperienceImage {
   width: number;
   height: number;
 }
+
+export interface PlaceVisit {
+  /** "YYYY", "YYYY-MM" or "YYYY-MM-DD". */
+  date: string;
+  /** What I did there. */
+  note: string;
+  /** Optional photo path under /public, shown as a polaroid. */
+  photo?: string;
+}
+
+export interface Place {
+  slug: string;
+  name: string;
+  country: string;
+  lat: number;
+  lng: number;
+  /** One entry per visit; the dot grows with the count. */
+  visits: PlaceVisit[];
+}

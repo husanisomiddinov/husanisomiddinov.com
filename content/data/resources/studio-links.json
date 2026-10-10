@@ -15,6 +15,11 @@
     "url": "/quotes"
   },
   {
+    "name": "Places",
+    "description": "A globe of everywhere I've been",
+    "url": "/studio/places"
+  },
+  {
     "name": "Coffee Chat",
     "description": "Request a coffee meetup with me",
     "url": "/studio/coffee"

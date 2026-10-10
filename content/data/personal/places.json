@@ -1,0 +1,41 @@
+[
+  {
+    "slug": "tashkent",
+    "name": "Tashkent",
+    "country": "Uzbekistan",
+    "lat": 41.2995,
+    "lng": 69.2401,
+    "visits": [
+      { "date": "2025-03", "note": "Placeholder - replace with what you actually did here." },
+      { "date": "2024-08", "note": "Placeholder visit." },
+      { "date": "2023-12", "note": "Placeholder visit." }
+    ]
+  },
+  {
+    "slug": "samarkand",
+    "name": "Samarkand",
+    "country": "Uzbekistan",
+    "lat": 39.627,
+    "lng": 66.975,
+    "visits": [
+      { "date": "2024-05", "note": "Placeholder - replace with your own story." },
+      { "date": "2022-10", "note": "Placeholder visit." }
+    ]
+  },
+  {
+    "slug": "istanbul",
+    "name": "Istanbul",
+    "country": "Turkey",
+    "lat": 41.0082,
+    "lng": 28.9784,
+    "visits": [{ "date": "2023-06-14", "note": "Placeholder - replace with your own story." }]
+  },
+  {
+    "slug": "san-francisco",
+    "name": "San Francisco",
+    "country": "United States",
+    "lat": 37.7749,
+    "lng": -122.4194,
+    "visits": [{ "date": "2025-01", "note": "Placeholder - replace with your own story." }]
+  }
+]

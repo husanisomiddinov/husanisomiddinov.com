@@ -8,6 +8,7 @@ import type {
   Arsenal,
   StudioLink,
   Experience,
+  Place,
 } from "@/types/data";
 
 const dataDir = path.join(process.cwd(), "content", "data");
@@ -66,4 +67,30 @@ export function getArsenal(): Arsenal {
 
 export function getStudioLinks(): StudioLink[] {
   return loadJson<StudioLink[]>("resources", "studio-links");
+}
+
+const VISIT_DATE = /^\d{4}(-\d{2}(-\d{2})?)?$/;
+
+/** Places I've been, newest visit first within each place. Fails loudly on bad data. */
+export function getPlaces(): Place[] {
+  const places = loadJson<Place[]>("personal", "places");
+  const seen = new Set<string>();
+  return places.map((place) => {
+    const where = `places.json "${place.slug ?? place.name}"`;
+    if (seen.has(place.slug)) throw new Error(`${where}: duplicate slug`);
+    seen.add(place.slug);
+    if (!(place.lat >= -90 && place.lat <= 90) || !(place.lng >= -180 && place.lng <= 180)) {
+      throw new Error(`${where}: lat/lng out of range`);
+    }
+    if (!place.visits?.length) throw new Error(`${where}: needs at least one visit`);
+    for (const visit of place.visits) {
+      if (!VISIT_DATE.test(visit.date)) {
+        throw new Error(`${where}: bad date "${visit.date}" (use YYYY, YYYY-MM or YYYY-MM-DD)`);
+      }
+    }
+    return {
+      ...place,
+      visits: [...place.visits].sort((a, b) => b.date.localeCompare(a.date)),
+    };
+  });
 }
