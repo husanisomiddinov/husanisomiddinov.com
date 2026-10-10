@@ -19,7 +19,7 @@ export function PlaceCard({ place, pinned, onClose }: PlaceCardProps) {
         <div className="min-w-0">
           <p className="font-sans text-sm font-bold text-gray-800">{place.name}</p>
           <p className="text-xs text-gray-500">
-            {place.country} · {count} {count === 1 ? "visit" : "visits"}
+            {place.country} · {place.home ? "home base" : `${count} ${count === 1 ? "visit" : "visits"}`}
           </p>
         </div>
         {pinned && (
@@ -39,7 +39,7 @@ export function PlaceCard({ place, pinned, onClose }: PlaceCardProps) {
           {photo?.photo && (
             <Image
               src={photo.photo}
-              alt={`${place.name}, ${formatVisitDate(photo.date)}`}
+              alt={photo.date ? `${place.name}, ${formatVisitDate(photo.date)}` : place.name}
               fill
               sizes="220px"
               className="object-cover"
@@ -48,14 +48,18 @@ export function PlaceCard({ place, pinned, onClose }: PlaceCardProps) {
         </div>
       </figure>
 
-      <ol className={`mt-3 flex flex-col gap-2 ${pinned ? "max-h-40 overflow-y-auto pr-1" : ""}`}>
-        {place.visits.map((visit) => (
-          <li key={`${visit.date}-${visit.note}`}>
-            <p className="text-xs font-bold text-gray-800">{formatVisitDate(visit.date)}</p>
-            <p className="text-sm leading-snug text-gray-600">{visit.note}</p>
-          </li>
-        ))}
-      </ol>
+      {!place.home && (
+        <ol className={`mt-3 flex flex-col gap-2 ${pinned ? "max-h-40 overflow-y-auto pr-1" : ""}`}>
+          {place.visits.map((visit, i) => (
+            <li key={i}>
+              <p className="text-xs font-bold text-gray-800">
+                {visit.date ? formatVisitDate(visit.date) : `Visit ${i + 1}`}
+              </p>
+              {visit.note && <p className="text-sm leading-snug text-gray-600">{visit.note}</p>}
+            </li>
+          ))}
+        </ol>
+      )}
     </div>
   );
 }

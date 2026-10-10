@@ -5,10 +5,9 @@
     "country": "Uzbekistan",
     "lat": 41.2995,
     "lng": 69.2401,
+    "home": true,
     "visits": [
-      { "date": "2025-03", "note": "Placeholder - replace with what you actually did here." },
-      { "date": "2024-08", "note": "Placeholder visit." },
-      { "date": "2023-12", "note": "Placeholder visit." }
+      {}
     ]
   },
   {
@@ -18,24 +17,91 @@
     "lat": 39.627,
     "lng": 66.975,
     "visits": [
-      { "date": "2024-05", "note": "Placeholder - replace with your own story." },
-      { "date": "2022-10", "note": "Placeholder visit." }
+      {},
+      {},
+      {}
     ]
   },
   {
-    "slug": "istanbul",
-    "name": "Istanbul",
-    "country": "Turkey",
-    "lat": 41.0082,
-    "lng": 28.9784,
-    "visits": [{ "date": "2023-06-14", "note": "Placeholder - replace with your own story." }]
+    "slug": "bukhara",
+    "name": "Bukhara",
+    "country": "Uzbekistan",
+    "lat": 39.7747,
+    "lng": 64.4286,
+    "visits": [
+      {},
+      {}
+    ]
   },
   {
-    "slug": "san-francisco",
-    "name": "San Francisco",
-    "country": "United States",
-    "lat": 37.7749,
-    "lng": -122.4194,
-    "visits": [{ "date": "2025-01", "note": "Placeholder - replace with your own story." }]
+    "slug": "nukus",
+    "name": "Nukus",
+    "country": "Uzbekistan",
+    "lat": 42.4602,
+    "lng": 59.6166,
+    "visits": [
+      {}
+    ]
+  },
+  {
+    "slug": "baku",
+    "name": "Baku",
+    "country": "Azerbaijan",
+    "lat": 40.4093,
+    "lng": 49.8671,
+    "visits": [
+      {}
+    ]
+  },
+  {
+    "slug": "bishkek",
+    "name": "Bishkek",
+    "country": "Kyrgyzstan",
+    "lat": 42.8746,
+    "lng": 74.5698,
+    "visits": [
+      {}
+    ]
+  },
+  {
+    "slug": "osh",
+    "name": "Osh",
+    "country": "Kyrgyzstan",
+    "lat": 40.5283,
+    "lng": 72.7985,
+    "visits": [
+      {}
+    ]
+  },
+  {
+    "slug": "karakol",
+    "name": "Karakol",
+    "country": "Kyrgyzstan",
+    "lat": 42.4907,
+    "lng": 78.3936,
+    "visits": [
+      {}
+    ]
+  },
+  {
+    "slug": "astana",
+    "name": "Astana",
+    "country": "Kazakhstan",
+    "lat": 51.1694,
+    "lng": 71.4491,
+    "visits": [
+      {}
+    ]
+  },
+  {
+    "slug": "almaty",
+    "name": "Almaty",
+    "country": "Kazakhstan",
+    "lat": 43.2389,
+    "lng": 76.8897,
+    "visits": [
+      {},
+      {}
+    ]
   }
 ]

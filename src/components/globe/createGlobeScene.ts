@@ -1,6 +1,13 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { buildGlobeTexture } from "./globeTexture";
+import {
+  buildGlobeTexture,
+  loadWorld,
+  makeTexture,
+  paintWorld,
+  type View,
+  type World,
+} from "./globeTexture";
 
 export interface GlobePlace {
   slug: string;
@@ -33,6 +40,12 @@ export interface GlobeScene {
 }
 
 const MAP_URL = "/data/countries-50m.json";
+const DETAIL_MAP_URL = "/data/countries-10m.json";
+/** Under this camera distance a crisp, re-painted patch of the visible region sits over the base map. */
+const PATCH_DISTANCE = 2.3;
+/** Under this distance the patch switches to the finer 1:10m coastlines. */
+const DETAIL_DISTANCE = 1.7;
+const PATCH_SETTLE_MS = 180;
 const DEFAULT_DISTANCE = 4.4;
 const MIN_DISTANCE = 1.04;
 const MAX_DISTANCE = 7;
@@ -71,6 +84,7 @@ export function createGlobeScene(
   handlers: GlobeHandlers,
   initialSlug: string | undefined,
 ): GlobeScene {
+  let disposed = false;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -268,6 +282,146 @@ export function createGlobeScene(
 
   const tmp = new THREE.Vector3();
 
+  // High-detail patch: once the camera settles while zoomed in, repaint just the visible region from
+  // vector data at high resolution and lay it over the base texture, so zooming never goes blurry.
+  const patchMaterial = new THREE.MeshLambertMaterial({
+    color: 0xffffff,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -2,
+  });
+  const patchMesh = new THREE.Mesh(new THREE.BufferGeometry(), patchMaterial);
+  patchMesh.visible = false;
+  scene.add(patchMesh);
+  const patchSize = window.innerWidth < 768 ? 2048 : 4096;
+  let baseWorld: World | null = null;
+  let detailWorld: World | null = null;
+  let detailRequested = false;
+  let painted: { view: View; span: number; detail: boolean } | null = null;
+  const lastPosition = camera.position.clone();
+  let lastMovedAt = 0;
+  const sphere = new THREE.Sphere(new THREE.Vector3(), 1);
+  const rayPoint = new THREE.Vector3();
+
+  /** Lat/lng bounds of the globe region currently on screen, padded; null if the globe is off-screen. */
+  const visibleView = (): View | null => {
+    let latMin = 90;
+    let latMax = -90;
+    const dir = camera.position.clone().normalize();
+    const centerLat = THREE.MathUtils.radToDeg(Math.asin(dir.y));
+    const centerLng = THREE.MathUtils.radToDeg(Math.atan2(-dir.z, dir.x));
+    let relMin = Infinity;
+    let relMax = -Infinity;
+    let hits = 0;
+    for (let ix = -1; ix <= 1; ix += 0.5) {
+      for (let iy = -1; iy <= 1; iy += 0.5) {
+        raycaster.setFromCamera(new THREE.Vector2(ix, iy), camera);
+        if (!raycaster.ray.intersectSphere(sphere, rayPoint)) continue;
+        hits++;
+        const lat = THREE.MathUtils.radToDeg(Math.asin(THREE.MathUtils.clamp(rayPoint.y, -1, 1)));
+        let rel = THREE.MathUtils.radToDeg(Math.atan2(-rayPoint.z, rayPoint.x)) - centerLng;
+        rel = ((((rel + 180) % 360) + 360) % 360) - 180;
+        latMin = Math.min(latMin, lat);
+        latMax = Math.max(latMax, lat);
+        relMin = Math.min(relMin, rel);
+        relMax = Math.max(relMax, rel);
+      }
+    }
+    if (!hits) return null;
+    const padLat = (latMax - latMin) * 0.3 + 0.01;
+    const padLng = (relMax - relMin) * 0.3 + 0.01;
+    const nearPole = Math.abs(centerLat) > 70 || latMax > 80 || latMin < -80;
+    return {
+      latMin: Math.max(-90, latMin - padLat),
+      latMax: Math.min(90, latMax + padLat),
+      lngMin: nearPole ? -180 : Math.max(-180, centerLng + relMin - padLng),
+      lngMax: nearPole ? 180 : Math.min(180, centerLng + relMax + padLng),
+    };
+  };
+
+  const within = (inner: View, outer: View) =>
+    inner.lngMin >= outer.lngMin &&
+    inner.lngMax <= outer.lngMax &&
+    inner.latMin >= outer.latMin &&
+    inner.latMax <= outer.latMax;
+
+  const repaintPatch = (distance: number) => {
+    const wantsDetail = distance < DETAIL_DISTANCE;
+    if (wantsDetail && !detailRequested) {
+      detailRequested = true;
+      loadWorld(DETAIL_MAP_URL)
+        .then((world) => {
+          if (disposed) return;
+          detailWorld = world;
+          painted = null;
+        })
+        .catch((error) => console.error("Globe: detail map unavailable", error));
+    }
+    const useDetail = wantsDetail && detailWorld !== null;
+    const world = useDetail ? detailWorld : baseWorld;
+    if (!world) return;
+
+    const view = visibleView();
+    if (!view) return;
+    const span = Math.max(view.lngMax - view.lngMin, view.latMax - view.latMin);
+    const current = painted;
+    if (
+      current &&
+      current.detail === useDetail &&
+      within(view, current.view) &&
+      span >= current.span * 0.5
+    ) {
+      patchMesh.visible = true;
+      return;
+    }
+
+    const lngSpan = view.lngMax - view.lngMin;
+    const latSpan = view.latMax - view.latMin;
+    const scale = patchSize / Math.max(lngSpan, latSpan);
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(64, Math.round(lngSpan * scale));
+    canvas.height = Math.max(64, Math.round(latSpan * scale));
+    paintWorld(canvas, world, view, { graticule: 1.6, border: 2.2, coast: 3.4 });
+    const next = makeTexture(canvas, renderer.capabilities.getMaxAnisotropy());
+
+    const deg = THREE.MathUtils.degToRad;
+    const geometry = new THREE.SphereGeometry(
+      1.0006,
+      THREE.MathUtils.clamp(Math.ceil(lngSpan / 1.5), 8, 128),
+      THREE.MathUtils.clamp(Math.ceil(latSpan / 1.5), 8, 128),
+      deg(view.lngMin + 180),
+      deg(lngSpan),
+      deg(90 - view.latMax),
+      deg(latSpan),
+    );
+    patchMesh.geometry.dispose();
+    patchMesh.geometry = geometry;
+    patchMaterial.map?.dispose();
+    patchMaterial.map = next;
+    patchMaterial.needsUpdate = true;
+    patchMesh.visible = true;
+    painted = { view, span, detail: useDetail };
+  };
+
+  const updatePatch = (now: number, distance: number) => {
+    if (camera.position.distanceToSquared(lastPosition) > 1e-8) {
+      lastPosition.copy(camera.position);
+      lastMovedAt = now;
+    }
+    if (!baseWorld || distance > PATCH_DISTANCE) {
+      patchMesh.visible = false;
+      return;
+    }
+    if (now - lastMovedAt < PATCH_SETTLE_MS) return;
+    try {
+      repaintPatch(distance);
+    } catch (error) {
+      console.error("Globe: detail patch failed", error);
+      baseWorld = null;
+      patchMesh.visible = false;
+    }
+  };
+
   const frame = (now: number) => {
     stepFly(now);
     controls.update();
@@ -303,6 +457,7 @@ export function createGlobeScene(
       marker.projected.facing = marker.normal.dot(camera.position) > 1.03;
     }
     handlers.onProject(projected, distance);
+    updatePatch(now, distance);
 
     renderer.render(scene, camera);
   };
@@ -328,20 +483,17 @@ export function createGlobeScene(
   intersection.observe(host);
   document.addEventListener("visibilitychange", syncRunning);
 
-  let disposed = false;
   let texture: THREE.Texture | null = null;
   const width = Math.min(
     renderer.capabilities.maxTextureSize,
     window.innerWidth < 768 ? 4096 : 8192,
   );
-  buildGlobeTexture(MAP_URL, width, renderer.capabilities.getMaxAnisotropy())
-    .then((built) => {
-      if (disposed) {
-        built.dispose();
-        return;
-      }
-      texture = built;
-      globeMaterial.map = built;
+  loadWorld(MAP_URL)
+    .then((world) => {
+      if (disposed) return;
+      baseWorld = world;
+      texture = buildGlobeTexture(world, width, renderer.capabilities.getMaxAnisotropy());
+      globeMaterial.map = texture;
       globeMaterial.needsUpdate = true;
       handlers.onReady();
       syncRunning();
@@ -364,6 +516,9 @@ export function createGlobeScene(
       el.removeEventListener("pointerup", onPointerUp);
       controls.dispose();
       texture?.dispose();
+      patchMaterial.map?.dispose();
+      patchMesh.geometry.dispose();
+      patchMaterial.dispose();
       for (const geometry of [globeGeometry, discGeometry]) geometry.dispose();
       for (const material of [globeMaterial, haloMaterial, dotMaterial, hitMaterial]) {
         material.dispose();

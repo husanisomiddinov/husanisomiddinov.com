@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { BackLink, PageTitle } from "@/components";
+import { BackLink } from "@/components";
 import type { Place } from "@/types";
 import { createGlobeScene, type GlobeScene, type ProjectedPlace } from "./createGlobeScene";
 import { PlaceCard } from "./PlaceCard";
@@ -14,6 +14,8 @@ const EDGE = 8;
 const DOCK_BELOW = 560;
 /** Camera distance under which every visited place gets a name label. */
 const LABEL_DISTANCE = 2.7;
+/** Home base draws as if visited this often, which lands on the largest dot. */
+const HOME_VISITS = 16;
 
 type Status = "loading" | "ready" | "unavailable";
 
@@ -70,11 +72,16 @@ export function VisitGlobe({ places }: { places: Place[] }) {
   useEffect(() => {
     const stage = host.current;
     if (!stage || places.length === 0) return;
-    const latest = [...places].sort((a, b) => b.visits[0].date.localeCompare(a.visits[0].date))[0];
+    const latest = [...places].sort((a, b) => (b.visits[0].date ?? "").localeCompare(a.visits[0].date ?? ""))[0];
     try {
       scene.current = createGlobeScene(
         stage,
-        places.map(({ slug, lat, lng, visits }) => ({ slug, lat, lng, visits: visits.length })),
+        places.map(({ slug, lat, lng, visits, home }) => ({
+          slug,
+          lat,
+          lng,
+          visits: home ? HOME_VISITS : visits.length,
+        })),
         {
           onHover: setHovered,
           onPick: setPinned,
@@ -112,8 +119,6 @@ export function VisitGlobe({ places }: { places: Place[] }) {
     scene.current?.flyTo(slug);
     setListOpen(false);
   };
-
-  const totalVisits = places.reduce((sum, place) => sum + place.visits.length, 0);
 
   return (
     <div
@@ -154,15 +159,8 @@ export function VisitGlobe({ places }: { places: Place[] }) {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute top-5 left-5 z-20 flex flex-col gap-3 sm:top-6 sm:left-6">
+      <div className="absolute top-5 left-5 z-20 sm:top-6 sm:left-6">
         <BackLink href="/studio">← idk</BackLink>
-        <div>
-          <PageTitle>Places</PageTitle>
-          <p className="mt-1 text-sm text-gray-600">
-            {places.length} {places.length === 1 ? "place" : "places"}, {totalVisits}{" "}
-            {totalVisits === 1 ? "visit" : "visits"}. Bigger dot, more visits.
-          </p>
-        </div>
       </div>
 
       <div className="absolute bottom-5 left-5 z-20 flex max-h-[60vh] flex-col items-start gap-2 sm:bottom-6 sm:left-6">
@@ -180,8 +178,10 @@ export function VisitGlobe({ places }: { places: Place[] }) {
                     <span className="block text-xs text-gray-600">{place.country}</span>
                   </span>
                   <span className="shrink-0 text-right text-xs text-gray-500">
-                    {place.visits.length}x
-                    <span className="block">{formatVisitDate(place.visits[0].date)}</span>
+                    {place.home ? "home" : `${place.visits.length}x`}
+                    {!place.home && place.visits[0].date && (
+                      <span className="block">{formatVisitDate(place.visits[0].date)}</span>
+                    )}
                   </span>
                 </button>
               </li>

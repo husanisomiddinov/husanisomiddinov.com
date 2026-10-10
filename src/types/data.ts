@@ -77,10 +77,10 @@ export interface ExperienceImage {
 }
 
 export interface PlaceVisit {
-  /** "YYYY", "YYYY-MM" or "YYYY-MM-DD". */
-  date: string;
+  /** "YYYY", "YYYY-MM" or "YYYY-MM-DD". Leave out until known. */
+  date?: string;
   /** What I did there. */
-  note: string;
+  note?: string;
   /** Optional photo path under /public, shown as a polaroid. */
   photo?: string;
 }
@@ -91,6 +91,8 @@ export interface Place {
   country: string;
   lat: number;
   lng: number;
+  /** Home base: drawn as the largest dot, with no visit count. */
+  home?: boolean;
   /** One entry per visit; the dot grows with the count. */
   visits: PlaceVisit[];
 }

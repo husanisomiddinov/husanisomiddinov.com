@@ -84,13 +84,14 @@ export function getPlaces(): Place[] {
     }
     if (!place.visits?.length) throw new Error(`${where}: needs at least one visit`);
     for (const visit of place.visits) {
-      if (!VISIT_DATE.test(visit.date)) {
+      if (visit.date !== undefined && !VISIT_DATE.test(visit.date)) {
         throw new Error(`${where}: bad date "${visit.date}" (use YYYY, YYYY-MM or YYYY-MM-DD)`);
       }
     }
     return {
       ...place,
-      visits: [...place.visits].sort((a, b) => b.date.localeCompare(a.date)),
+      // Newest first; visits without a date go last, in their given order.
+      visits: [...place.visits].sort((a, b) => (b.date ?? "").localeCompare(a.date ?? "")),
     };
   });
 }
