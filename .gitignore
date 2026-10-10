@@ -5,6 +5,7 @@
 
 # private, local-only data (the Places globe)
 /content/data/personal/places.json
+/public/images/places/
 
 # dependencies
 /node_modules
