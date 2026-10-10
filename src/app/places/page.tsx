@@ -7,7 +7,7 @@ import { buildMetadata } from "@/lib/metadata";
 export const metadata = buildMetadata({
   title: "Places",
   description: "A globe of everywhere I've been.",
-  path: "/studio/places",
+  path: "/places",
 });
 
 export default function PlacesPage() {
