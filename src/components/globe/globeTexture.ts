@@ -6,10 +6,11 @@ const OCEAN = "#d3dac2";
 const LAND = "#f7f7f2";
 const GRATICULE = "rgba(91,101,41,0.10)";
 const BORDER = "rgba(91,101,41,0.30)";
+const STATE_BORDER = "rgba(91,101,41,0.20)";
 const COAST = "rgba(77,86,40,0.75)";
 
 /** A polyline with longitudes unwrapped to be continuous, plus its bounds for culling. */
-interface Path {
+export interface Path {
   pts: number[][];
   minLng: number;
   maxLng: number;
@@ -20,6 +21,8 @@ interface Path {
 export interface World {
   land: Path[];
   borders: Path[];
+  /** Interior US state lines only; kept apart so they can be drawn lighter than country borders. */
+  stateBorders: Path[];
   coast: Path[];
 }
 
@@ -36,6 +39,7 @@ export const FULL_VIEW: View = { lngMin: -180, lngMax: 180, latMin: -90, latMax:
 export interface LineWidths {
   graticule: number;
   border: number;
+  stateBorder: number;
   coast: number;
 }
 
@@ -66,7 +70,16 @@ function toPath(line: number[][]): Path {
   return { pts, minLng, maxLng, minLat, maxLat };
 }
 
-export async function loadWorld(url: string): Promise<World> {
+/** Interior borders between US states (the outer edge is already a country border/coast). */
+export async function loadStateBorders(url: string): Promise<Path[]> {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Globe: ${url} responded ${response.status}`);
+  const topology = (await response.json()) as Topology;
+  const states = topology.objects.states as GeometryCollection;
+  return mesh(topology, states, (a, b) => a !== b).coordinates.map(toPath);
+}
+
+export async function loadWorld(url: string, stateBorders: Path[]): Promise<World> {
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Globe: ${url} responded ${response.status}`);
   const topology = (await response.json()) as Topology;
@@ -82,6 +95,7 @@ export async function loadWorld(url: string): Promise<World> {
   return {
     land,
     borders: mesh(topology, countries, (a, b) => a !== b).coordinates.map(toPath),
+    stateBorders,
     coast: mesh(topology, countries, (a, b) => a === b).coordinates.map(toPath),
   };
 }
@@ -150,6 +164,12 @@ export function paintWorld(canvas: HTMLCanvasElement, world: World, view: View, 
   tracePaths(ctx, world.borders, view, sx, sy);
   ctx.stroke();
 
+  ctx.strokeStyle = STATE_BORDER;
+  ctx.lineWidth = widths.stateBorder;
+  ctx.beginPath();
+  tracePaths(ctx, world.stateBorders, view, sx, sy);
+  ctx.stroke();
+
   ctx.strokeStyle = COAST;
   ctx.lineWidth = widths.coast;
   ctx.beginPath();
@@ -171,7 +191,7 @@ export function buildGlobeTexture(world: World, width: number, maxAnisotropy: nu
   canvas.width = width;
   canvas.height = width / 2;
   const px = width / 8192;
-  paintWorld(canvas, world, FULL_VIEW, { graticule: 1.5 * px, border: 1.6 * px, coast: 2.4 * px });
+  paintWorld(canvas, world, FULL_VIEW, { graticule: 1.5 * px, border: 1.6 * px, stateBorder: 1.2 * px, coast: 2.4 * px });
   const texture = makeTexture(canvas, maxAnisotropy);
   texture.wrapS = THREE.RepeatWrapping;
   return texture;

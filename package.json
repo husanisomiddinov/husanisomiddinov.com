@@ -40,6 +40,7 @@
     "tailwindcss": "^4",
     "topojson-client": "^3.1.0",
     "typescript": "^5",
+    "us-atlas": "^3.0.1",
     "world-atlas": "^2.0.2"
   },
   "packageManager": "yarn@1.22.22"
