@@ -14,8 +14,6 @@ const EDGE = 8;
 const DOCK_BELOW = 560;
 /** Camera distance under which every visited place gets a name label. */
 const LABEL_DISTANCE = 2.7;
-/** Home base draws as if visited this often, which lands on the largest dot. */
-const HOME_VISITS = 16;
 
 type Status = "loading" | "ready" | "unavailable";
 
@@ -76,12 +74,7 @@ export function VisitGlobe({ places }: { places: Place[] }) {
     try {
       scene.current = createGlobeScene(
         stage,
-        places.map(({ slug, lat, lng, visits, home }) => ({
-          slug,
-          lat,
-          lng,
-          visits: home ? HOME_VISITS : visits.length,
-        })),
+        places.map(({ slug, lat, lng }) => ({ slug, lat, lng })),
         {
           onHover: setHovered,
           onPick: setPinned,

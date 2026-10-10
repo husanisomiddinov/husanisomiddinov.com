@@ -91,8 +91,8 @@ export interface Place {
   country: string;
   lat: number;
   lng: number;
-  /** Home base: drawn as the largest dot, with no visit count. */
+  /** Home base: the card says so instead of listing visits. */
   home?: boolean;
-  /** One entry per visit; the dot grows with the count. */
+  /** One entry per visit. */
   visits: PlaceVisit[];
 }

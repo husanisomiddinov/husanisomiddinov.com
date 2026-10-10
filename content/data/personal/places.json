@@ -103,5 +103,15 @@
       {},
       {}
     ]
+  },
+  {
+    "slug": "istanbul",
+    "name": "Istanbul",
+    "country": "Turkey",
+    "lat": 41.0082,
+    "lng": 28.9784,
+    "visits": [
+      {}
+    ]
   }
 ]

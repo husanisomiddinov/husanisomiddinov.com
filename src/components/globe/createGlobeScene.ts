@@ -13,7 +13,6 @@ export interface GlobePlace {
   slug: string;
   lat: number;
   lng: number;
-  visits: number;
 }
 
 /** Where a place currently sits in the host's pixel space. `facing` is false on the far side. */
@@ -62,17 +61,14 @@ export function latLngToVector(lat: number, lng: number, radius = 1): THREE.Vect
   );
 }
 
-/** Dot radius on the unit globe: one visit is small, each doubling adds a fixed step. */
-function dotRadius(visits: number): number {
-  return Math.min(0.045, 0.016 * (1 + 0.6 * Math.log2(visits)));
-}
+/** Every place gets the same dot, on the unit globe. */
+const DOT_RADIUS = 0.016;
 
 interface Marker {
   place: GlobePlace;
   normal: THREE.Vector3;
   group: THREE.Group;
   hit: THREE.Mesh;
-  baseRadius: number;
   hover: number;
   projected: ProjectedPlace;
 }
@@ -140,7 +136,6 @@ export function createGlobeScene(
       normal,
       group,
       hit,
-      baseRadius: dotRadius(place.visits),
       hover: 0,
       projected: { slug: place.slug, x: 0, y: 0, facing: false },
     };
@@ -432,8 +427,8 @@ export function createGlobeScene(
     camera.updateProjectionMatrix();
     // Rotation and zoom slow down as the surface gets closer.
     const closeness = THREE.MathUtils.clamp((distance - 1) / (DEFAULT_DISTANCE - 1), 0.04, 1);
-    controls.rotateSpeed = 0.15 + 0.85 * closeness;
-    controls.zoomSpeed = 0.5 + 0.6 * closeness;
+    controls.rotateSpeed = 0.06 + 0.3 * closeness;
+    controls.zoomSpeed = 0.4 + 0.4 * closeness;
 
     if (pointerInside && pointerDirty && !downAt) {
       pointerDirty = false;
@@ -446,7 +441,7 @@ export function createGlobeScene(
     for (const marker of markers) {
       const target = marker === hovered ? 1 : 0;
       marker.hover += (target - marker.hover) * 0.2;
-      const radius = marker.baseRadius * zoomScale * (1 + 0.3 * marker.hover);
+      const radius = DOT_RADIUS * zoomScale * (1 + 0.3 * marker.hover);
       marker.group.scale.setScalar(radius);
       marker.hit.scale.setScalar(Math.max(1.7, 0.012 / radius));
 
