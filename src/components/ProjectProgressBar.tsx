@@ -23,7 +23,12 @@ export function ProjectProgressBar({
 
     const update = () => {
       ticking = false;
-      const y = window.scrollY + 100;
+      // The reading line sits 100px below the top of the viewport, then slides to the bottom edge as
+      // you reach the end of the page. Without that it could never get past the last screenful, and the bar
+      // would stop short even at the very bottom.
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const along = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+      const y = window.scrollY + 100 + (window.innerHeight - 100) * along ** 4;
       const top = (id: string) => {
         const el = document.getElementById(id);
         return el ? el.getBoundingClientRect().top + window.scrollY : 0;
