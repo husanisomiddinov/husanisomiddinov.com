@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import {
   InlineCode,
   StepDiagram,
@@ -11,6 +11,7 @@ import {
 
 const FLOW = "#5b84b8";
 const OLIVE = "#5b6529";
+const SCAN = "#2f9e8f";
 const SCALE = 75;
 const CX = 220;
 const CY = 165;
@@ -49,7 +50,7 @@ const TIME_SCALE = 150;
 
 const ROOM = 2.1;
 const PILLAR_R = 11;
-const RAY_COUNT = 72;
+const RAY_COUNT = 120;
 /** The TurtleBot3 laser reaches 3.5 m. */
 const LIDAR_RANGE = 3.5 * SCALE;
 /** Drive speed in px/s: cruise on the straights, slow down into each goal. */
@@ -120,7 +121,8 @@ function castRay(ox: number, oy: number, angle: number) {
     const hit = -b - Math.sqrt(disc);
     if (hit > 0 && hit < t) t = hit;
   }
-  return { x: ox + dx * t, y: oy + dy * t };
+  // Rounded: sin/cos can differ in the last digit between server and browser, which breaks hydration.
+  return { x: Math.round((ox + dx * t) * 10) / 10, y: Math.round((oy + dy * t) * 10) / 10 };
 }
 
 function angleDelta(from: number, to: number) {
@@ -175,10 +177,11 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
   const { s, heading } = useRobot(CUMULATIVE[active + 1], animate);
   const robot = positionAt(s);
 
-  const scan = Array.from({ length: RAY_COUNT }, (_, i) => {
-    const hit = castRay(robot.x, robot.y, heading + (i / RAY_COUNT) * Math.PI * 2);
-    return `${hit.x.toFixed(1)},${hit.y.toFixed(1)}`;
-  }).join(" ");
+  const gradientId = useId();
+  const hits = Array.from({ length: RAY_COUNT }, (_, i) =>
+    castRay(robot.x, robot.y, heading + (i / RAY_COUNT) * Math.PI * 2),
+  );
+  const scan = hits.map((hit) => `${hit.x},${hit.y}`).join(" ");
 
   const driven = [
     ...ROUTE.filter((_, i) => CUMULATIVE[i] < s),
@@ -212,7 +215,18 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
         </g>
       ))}
 
-      <polygon points={scan} fill={FLOW} fillOpacity={0.1} stroke={FLOW} strokeOpacity={0.45} strokeWidth={1} />
+      <defs>
+        {/* Strongest at the robot, fading out toward the laser's range, like a beam. */}
+        <radialGradient id={gradientId} gradientUnits="userSpaceOnUse" cx={robot.x} cy={robot.y} r={LIDAR_RANGE}>
+          <stop offset="0" stopColor={SCAN} stopOpacity={0.4} />
+          <stop offset="1" stopColor={SCAN} stopOpacity={0.04} />
+        </radialGradient>
+      </defs>
+      <polygon points={scan} fill={`url(#${gradientId})`} />
+      {/* The points where the laser actually touched something. */}
+      {hits.map((hit, i) =>
+        i % 2 === 0 ? <circle key={i} cx={hit.x} cy={hit.y} r={1.3} fill={SCAN} fillOpacity={0.85} /> : null,
+      )}
 
       {PILLARS.map(([x, y]) => (
         <circle
@@ -312,6 +326,62 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
   );
 }
 
+function LegendItem({ icon, children }: { icon: ReactNode; children: ReactNode }) {
+  return (
+    <li className="flex items-start gap-2.5">
+      <svg viewBox="-16 -16 32 32" aria-hidden className="mt-px size-6 shrink-0">
+        {icon}
+      </svg>
+      <span>{children}</span>
+    </li>
+  );
+}
+
+function Legend() {
+  return (
+    <ul className="mx-auto mt-4 grid max-w-[440px] grid-cols-1 gap-x-6 gap-y-2.5 font-sans text-xs leading-snug text-gray-600 sm:grid-cols-2">
+      <LegendItem icon={<Robot x={0} y={0} heading={0} />}>
+        <strong className="text-gray-800">Robot.</strong> A TurtleBot3; the blue wedge is its front.
+      </LegendItem>
+      <LegendItem
+        icon={
+          <>
+            <path d="M -14 0 L 12 -13 A 14 14 0 0 1 12 13 z" fill={SCAN} fillOpacity={0.3} />
+            <circle cx={12} cy={-8} r={1.6} fill={SCAN} />
+            <circle cx={14} cy={0} r={1.6} fill={SCAN} />
+            <circle cx={12} cy={8} r={1.6} fill={SCAN} />
+          </>
+        }
+      >
+        <strong className="text-gray-800">Laser scan.</strong> What the robot can see right now; obstacles block it and leave shadows.
+      </LegendItem>
+      <LegendItem icon={<circle r={9} fill="#c9cbc3" stroke="#37352f" strokeWidth={2} />}>
+        <strong className="text-gray-800">Obstacle.</strong> A pillar the robot has to drive around.
+      </LegendItem>
+      <LegendItem
+        icon={
+          <>
+            <circle r={9} fill={OLIVE} stroke={OLIVE} strokeWidth={1.5} />
+            <text textAnchor="middle" y={3.5} fontSize={10} fontWeight={600} fill="#f6f7f4">
+              1
+            </text>
+          </>
+        }
+      >
+        <strong className="text-gray-800">Goal.</strong> A target to reach; it turns green once the robot arrives.
+      </LegendItem>
+      <LegendItem icon={<line x1={-13} y1={0} x2={13} y2={0} stroke={FLOW} strokeWidth={2.5} strokeLinecap="round" />}>
+        <strong className="text-gray-800">Path.</strong> The route driven so far.
+      </LegendItem>
+      <LegendItem
+        icon={<rect x={-7} y={-7} width={14} height={14} rx={2} fill="none" stroke="#8d8d88" strokeDasharray="3 2" />}
+      >
+        <strong className="text-gray-800">Start.</strong> Where the run begins and ends (goal 5).
+      </LegendItem>
+    </ul>
+  );
+}
+
 const STEPS: DiagramStep[] = GOALS.map((goal, i) => ({
   label: i === GOALS.length - 1 ? "goal 5" : `goal ${i + 1}`,
   body: (
@@ -339,13 +409,17 @@ export function NavigationResultsDiagram() {
       steps={STEPS}
       caption={
         <>
-          The five-goal run: <strong>5/5 reached</strong>. The blue fan is the
-          robot&apos;s laser scan. Room layout is a schematic; coordinates,
+          The five-goal run: <strong>5/5 reached</strong>. Room layout is a schematic; coordinates,
           times and errors are from the real run.
         </>
       }
     >
-      {({ active, animate }) => <Scene active={active} animate={animate} />}
+      {({ active, animate }) => (
+        <>
+          <Scene active={active} animate={animate} />
+          <Legend />
+        </>
+      )}
     </StepDiagram>
   );
 }
