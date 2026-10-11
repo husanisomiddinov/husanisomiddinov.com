@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   InlineCode,
   StepDiagram,
+  startMotion,
   useAnimationsEnabled,
+  useBeats,
+  useTick,
   type DiagramStep,
 } from "./StepDiagram";
 
@@ -198,16 +200,12 @@ function StaticDots({ x1, y1, x2, y2 }: { x1: number; y1: number; x2: number; y2
   );
 }
 
-// Stable identity, so a re-render doesn't restart a packet mid-trip.
-const startPacket = (el: SVGElement | null) => (el as SVGAnimationElement | null)?.beginElement();
-
 /** One packet making a single trip along an edge; mount it with a fresh key to send another. */
 function Packet({ x1, y1, x2, y2 }: { x1: number; y1: number; x2: number; y2: number }) {
   return (
     <circle r={4.5} fill={FLOW}>
-      {/* begin="0s" counts from page load, so a late-mounted packet would already be finished. Start it by hand. */}
       <animateMotion
-        ref={startPacket}
+        ref={startMotion}
         begin="indefinite"
         dur={`${PACKET_S}s`}
         fill="freeze"
@@ -442,40 +440,10 @@ const STEPS: DiagramStep[] = [
   },
 ];
 
-/** Counts up on a timer; stays at 0 when animation is off. */
-function useTick(enabled: boolean, ms: number): number {
-  const [tick, setTick] = useState(0);
-  useEffect(() => {
-    if (!enabled) return;
-    const id = setInterval(() => setTick((t) => t + 1), ms);
-    return () => clearInterval(id);
-  }, [enabled, ms]);
-  return tick;
-}
-
 /** Plays the active step's beats from the start, and starts over whenever the step changes. */
 function LiveScene({ active, animate, className }: { active: number; animate: boolean; className?: string }) {
-  const [run, setRun] = useState({ active, tick: 0 });
-  useEffect(() => {
-    if (!animate) return;
-    const id = setInterval(
-      () => setRun((r) => ({ active, tick: (r.active === active ? r.tick : 0) + 1 })),
-      BEAT_MS,
-    );
-    return () => clearInterval(id);
-  }, [active, animate]);
-
-  // A stale run belongs to the previous step: show this step's first beat until the first tick.
-  const tick = run.active === active ? run.tick : 0;
-  return (
-    <Scene
-      active={active}
-      beat={tick % SCENES[active].beats.length}
-      tick={tick}
-      animate={animate}
-      className={className}
-    />
-  );
+  const { beat, tick } = useBeats(active, SCENES[active].beats.length, BEAT_MS, animate);
+  return <Scene active={active} beat={beat} tick={tick} animate={animate} className={className} />;
 }
 
 export function ExecutionFlowDiagram() {

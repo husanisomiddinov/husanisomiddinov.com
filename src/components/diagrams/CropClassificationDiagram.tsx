@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   StepDiagram,
+  startMotion,
   useAnimationsEnabled,
   useCycle,
   type DiagramStep,
@@ -9,6 +11,8 @@ import {
 
 const CARD_W = 120;
 const CARD_H = 110;
+/** How long the scan sweeps the leaf before the model's answer appears. */
+const SCAN_MS = 1200;
 
 interface Sample {
   id: string;
@@ -36,18 +40,41 @@ const CARD_POSITIONS = [
   { x: 228, y: 166 },
 ];
 
+/** Lesion spots on the leaf, as offsets from its centre. Healthy leaves have none. */
+const SPOTS = [
+  [-4, -4, 2.2],
+  [4, 2, 1.8],
+  [-2, 8, 1.5],
+];
+
+/** False while the current sample is still being scanned, true once the model has answered. */
+function useAnswered(active: number, animate: boolean): boolean {
+  const [answered, setAnswered] = useState({ active, done: false });
+  useEffect(() => {
+    if (!animate) return;
+    const id = setTimeout(() => setAnswered({ active, done: true }), SCAN_MS);
+    return () => clearTimeout(id);
+  }, [active, animate]);
+  return !animate || (answered.active === active && answered.done);
+}
+
 function Scene({ active, animate }: { active: number; animate: boolean }) {
+  const answered = useAnswered(active, animate);
+  const shown = SAMPLES[active];
+  const finished = active >= SAMPLES.length - 1 && answered;
+
   return (
     <svg
-      viewBox="0 0 440 310"
+      viewBox="0 0 440 352"
       role="img"
       aria-label="Five crop leaf cards being classified by the model"
       className="mx-auto h-auto w-full max-w-[440px] font-sans"
     >
       {SAMPLES.map((sample, i) => {
         const pos = CARD_POSITIONS[i];
-        const reached = i <= active;
         const current = i === active;
+        // A card is "done" once it's been classified; the current one waits for its scan to finish.
+        const reached = i < active || (current && answered);
         const cx = pos.x + CARD_W / 2;
         const leafCy = pos.y + 38;
 
@@ -65,8 +92,9 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
               style={{ transition: "fill 400ms, stroke 400ms" }}
             />
 
-            {current && animate && (
+            {current && animate && !answered && (
               <rect
+                key={`scan-${active}`}
                 x={pos.x + 10}
                 y={pos.y + 8}
                 width={CARD_W - 20}
@@ -74,17 +102,14 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
                 rx={1}
                 fill={sample.color}
               >
+                {/* One sweep, started by hand so it lines up with the moment the card becomes current. */}
                 <animate
+                  ref={startMotion}
+                  begin="indefinite"
                   attributeName="y"
                   values={`${pos.y + 8};${pos.y + CARD_H - 10}`}
-                  dur="1.2s"
-                  repeatCount="indefinite"
-                />
-                <animate
-                  attributeName="opacity"
-                  values="0.6;0.12;0.6"
-                  dur="1.2s"
-                  repeatCount="indefinite"
+                  dur={`${SCAN_MS}ms`}
+                  fill="freeze"
                 />
               </rect>
             )}
@@ -97,6 +122,10 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
                 strokeWidth={1.5}
                 style={{ transition: "fill 400ms, stroke 400ms" }}
               />
+              {sample.condition !== "Healthy" && reached &&
+                SPOTS.map(([dx, dy, r]) => (
+                  <circle key={`${dx},${dy}`} cx={dx} cy={dy} r={r} fill="#37352f" fillOpacity={0.45} />
+                ))}
               <line
                 x1={0}
                 y1={16}
@@ -134,16 +163,33 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
         );
       })}
 
-      <text
-        x={220}
-        y={298}
-        textAnchor="middle"
-        fontSize={10}
-        fill="#8d8d88"
-      >
-        {active >= SAMPLES.length - 1
-          ? `${SAMPLES.length}/${SAMPLES.length} classified · avg ${(SAMPLES.reduce((s, x) => s + x.confidence, 0) / SAMPLES.length).toFixed(1)}%`
-          : `${active + 1}/${SAMPLES.length} classifying...`}
+      {/* The model's answer for the current sample: top class and how sure it is. */}
+      <g style={{ transition: "opacity 300ms" }} opacity={answered ? 1 : 0.5}>
+        <text x={28} y={300} fontSize={11} fontWeight={600} fill="#37352f">
+          {answered ? `${shown.crop} · ${shown.condition}` : "classifying..."}
+        </text>
+        <rect x={28} y={310} width={384} height={8} rx={4} fill="#dcdcd8" />
+        <rect
+          x={28}
+          y={310}
+          height={8}
+          rx={4}
+          fill={shown.color}
+          // CSS width, not the attribute, so it can transition.
+          style={{
+            width: answered ? (384 * shown.confidence) / 100 : 0,
+            transition: animate ? "width 700ms ease-out, fill 300ms" : "none",
+          }}
+        />
+        <text x={28} y={334} fontSize={9.5} fill="#7a7a76">
+          {answered ? `${shown.confidence}% confident · ${shown.ms} ms · the rest is spread over 37 other classes` : "\u00a0"}
+        </text>
+      </g>
+
+      <text x={412} y={300} textAnchor="end" fontSize={10} fill="#8d8d88">
+        {finished
+          ? `${SAMPLES.length}/${SAMPLES.length} done · avg ${(SAMPLES.reduce((sum, x) => sum + x.confidence, 0) / SAMPLES.length).toFixed(1)}%`
+          : `${active + 1}/${SAMPLES.length}`}
       </text>
     </svg>
   );
@@ -191,6 +237,6 @@ export function CropClassificationDiagram() {
 
 export function CropClassificationPreview() {
   const animate = useAnimationsEnabled();
-  const active = useCycle(SAMPLES.length, 1800, animate);
+  const active = useCycle(SAMPLES.length, 2800, animate);
   return <Scene active={active} animate={animate} />;
 }

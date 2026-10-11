@@ -45,6 +45,43 @@ export function useCycle(length: number, ms: number, enabled: boolean): number {
 }
 
 /** Click-through diagram: a scene that reacts to the active step, tabs to pick a step, and a text panel. */
+/** Counts up on a timer; stays at 0 when animation is off. */
+export function useTick(enabled: boolean, ms: number): number {
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    if (!enabled) return;
+    const id = setInterval(() => setTick((t) => t + 1), ms);
+    return () => clearInterval(id);
+  }, [enabled, ms]);
+  return tick;
+}
+
+/**
+ * Plays a scene's beats one after another, and starts over from the first beat whenever the scene
+ * changes. `tick` keeps counting across repeats so a repeated beat can still send a fresh packet.
+ */
+export function useBeats(scene: number, count: number, ms: number, enabled: boolean) {
+  const [run, setRun] = useState({ scene, tick: 0 });
+  useEffect(() => {
+    if (!enabled) return;
+    const id = setInterval(
+      () => setRun((r) => ({ scene, tick: (r.scene === scene ? r.tick : 0) + 1 })),
+      ms,
+    );
+    return () => clearInterval(id);
+  }, [scene, enabled, ms]);
+
+  // A run left over from the previous scene shows this scene's first beat until its first tick.
+  const tick = run.scene === scene ? run.tick : 0;
+  return { beat: tick % count, tick };
+}
+
+/**
+ * Ref for an <animateMotion begin="indefinite">: starts it by hand. begin="0s" counts from page load,
+ * so a packet mounted later would already be finished. Stable identity, so a re-render doesn't restart it.
+ */
+export const startMotion = (el: SVGElement | null) => (el as SVGAnimationElement | null)?.beginElement();
+
 export function StepDiagram({
   steps,
   caption,

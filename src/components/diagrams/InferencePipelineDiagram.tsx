@@ -3,14 +3,19 @@
 import {
   InlineCode,
   StepDiagram,
+  startMotion,
   useAnimationsEnabled,
-  useCycle,
+  useBeats,
+  useTick,
   type DiagramStep,
 } from "./StepDiagram";
 
 const FLOW = "#5b84b8";
 const IDLE = "#c9c9c6";
 const OLIVE = "#5b6529";
+const BEAT_MS = 1400;
+/** A packet crosses its link in a bit less than a beat, so each hop lands before the next starts. */
+const PACKET_S = 1.05;
 
 interface StageDef {
   id: string;
@@ -32,31 +37,38 @@ const STAGES: StageDef[] = [
   { id: "diagnosis", label: "diagnosis", sub: "38 classes", x: 135, y: 322, w: 170, h: 36 },
 ];
 
+/** What travels along a link: the photo, then the tensor made from it, then the class scores. */
+type Payload = "photo" | "tensor" | "scores";
+
 interface LinkDef {
   from: string;
   to: string;
   label?: string;
+  payload: Payload;
 }
 
 const LINKS: LinkDef[] = [
-  { from: "camera", to: "nextjs" },
-  { from: "nextjs", to: "fastapi", label: "upload" },
-  { from: "telegram", to: "fastapi", label: "photo" },
-  { from: "fastapi", to: "preprocess" },
-  { from: "preprocess", to: "resnet", label: "tensor" },
-  { from: "resnet", to: "diagnosis" },
+  { from: "camera", to: "nextjs", payload: "photo" },
+  { from: "nextjs", to: "fastapi", label: "upload", payload: "photo" },
+  { from: "telegram", to: "fastapi", label: "photo", payload: "photo" },
+  { from: "fastapi", to: "preprocess", payload: "photo" },
+  { from: "preprocess", to: "resnet", label: "tensor", payload: "tensor" },
+  { from: "resnet", to: "diagnosis", label: "scores", payload: "scores" },
 ];
 
 interface StepScene {
   nodes: string[];
+  /** Every link in the step; the beat picks which one carries a packet right now. */
   edges: number[];
+  beats: number[][];
 }
 
 const SCENES: StepScene[] = [
-  { nodes: ["camera", "nextjs"], edges: [0] },
-  { nodes: ["nextjs", "telegram", "fastapi"], edges: [1, 2] },
-  { nodes: ["fastapi", "preprocess", "resnet"], edges: [3, 4] },
-  { nodes: ["resnet", "diagnosis"], edges: [5] },
+  { nodes: ["camera", "nextjs"], edges: [0], beats: [[0]] },
+  // The web upload and the Telegram bot are two ways in, so they take turns.
+  { nodes: ["nextjs", "telegram", "fastapi"], edges: [1, 2], beats: [[1], [2]] },
+  { nodes: ["fastapi", "preprocess", "resnet"], edges: [3, 4], beats: [[3], [4]] },
+  { nodes: ["resnet", "diagnosis"], edges: [5], beats: [[5]] },
 ];
 
 const stageById = new Map(STAGES.map((s) => [s.id, s]));
@@ -72,60 +84,83 @@ function linkEndpoints(link: LinkDef) {
   };
 }
 
-function FallingDots({
+/** Resting state for reduced motion: dots spread along the link. */
+function StaticDots({ x1, y1, x2, y2 }: { x1: number; y1: number; x2: number; y2: number }) {
+  return (
+    <>
+      {[0.33, 0.67].map((t) => (
+        <circle key={t} cx={x1 + (x2 - x1) * t} cy={y1 + (y2 - y1) * t} r={3.5} fill={FLOW} />
+      ))}
+    </>
+  );
+}
+
+/** The little picture of what is being sent, centred on (0, 0). */
+function PayloadGlyph({ payload }: { payload: Payload }) {
+  if (payload === "photo") {
+    return (
+      <>
+        <rect x={-8} y={-6} width={16} height={12} rx={2} fill="#fbfbf9" stroke={FLOW} strokeWidth={1.5} />
+        <circle cx={-2.5} cy={-1.5} r={1.8} fill={FLOW} />
+        <path d="M -8 6 L -3 0 L 1 4 L 4 1 L 8 6 z" fill={FLOW} fillOpacity={0.55} />
+      </>
+    );
+  }
+  if (payload === "tensor") {
+    return (
+      <>
+        {[-6, 0, 6].flatMap((x) => [-6, 0, 6].map((y) => (
+          <rect key={`${x},${y}`} x={x - 2.5} y={y - 2.5} width={5} height={5} rx={1} fill={FLOW} fillOpacity={0.35 + ((x + y + 12) % 7) / 12} />
+        )))}
+      </>
+    );
+  }
+  return (
+    <>
+      <rect x={-8} y={-8} width={16} height={16} rx={2} fill="#fbfbf9" stroke={FLOW} strokeWidth={1.5} />
+      {[-4.5, -0.5, 3.5].map((y, i) => (
+        <rect key={y} x={-5.5} y={y - 1} width={[10, 5, 2.5][i]} height={2.4} rx={1} fill={FLOW} />
+      ))}
+    </>
+  );
+}
+
+/** One packet making a single trip along a link; mount it with a fresh key to send another. */
+function Packet({
   x1,
   y1,
   x2,
   y2,
-  animate,
-  id,
+  payload,
 }: {
   x1: number;
   y1: number;
   x2: number;
   y2: number;
-  animate: boolean;
-  id: string;
+  payload: Payload;
 }) {
-  const path = `M ${x1} ${y1} L ${x2} ${y2}`;
-  const count = 2;
-  const dur = 1.2;
   return (
-    <>
-      {Array.from({ length: count }, (_, k) => {
-        if (!animate) {
-          const t = (k + 0.5) / count;
-          return (
-            <circle
-              key={`${id}-${k}`}
-              cx={x1 + (x2 - x1) * t}
-              cy={y1 + (y2 - y1) * t}
-              r={3.5}
-              fill={FLOW}
-            />
-          );
-        }
-        return (
-          <circle key={`${id}-${k}`} r={3.5} fill={FLOW}>
-            <animateMotion
-              dur={`${dur}s`}
-              begin={`${-(dur / count) * k}s`}
-              repeatCount="indefinite"
-              path={path}
-            />
-          </circle>
-        );
-      })}
-    </>
+    <g>
+      <PayloadGlyph payload={payload} />
+      <animateMotion
+        ref={startMotion}
+        begin="indefinite"
+        dur={`${PACKET_S}s`}
+        fill="freeze"
+        path={`M ${x1} ${y1} L ${x2} ${y2}`}
+      />
+    </g>
   );
 }
 
 function EdgeLabel({
   endpoints,
   label,
+  dim,
 }: {
   endpoints: { x1: number; y1: number; x2: number; y2: number };
   label: string;
+  dim?: boolean;
 }) {
   const dx = endpoints.x2 - endpoints.x1;
   const dy = endpoints.y2 - endpoints.y1;
@@ -144,14 +179,28 @@ function EdgeLabel({
       textAnchor={vertical ? "start" : "middle"}
       fontSize={10.5}
       fill={FLOW}
+      style={{ opacity: dim ? 0.45 : 1, transition: "opacity 300ms" }}
     >
       {label}
     </text>
   );
 }
 
-function Scene({ active, animate }: { active: number; animate: boolean }) {
+function Scene({
+  active,
+  beat,
+  tick,
+  animate,
+}: {
+  active: number;
+  beat: number;
+  /** Counts every beat since the scene started, so a repeated beat still sends a fresh packet. */
+  tick: number;
+  animate: boolean;
+}) {
   const scene = SCENES[active];
+  const current = scene.beats[beat];
+  const receiving = new Set(animate ? current.map((i) => LINKS[i].to) : []);
 
   return (
     <svg
@@ -176,29 +225,31 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
 
       {LINKS.map((link, i) => {
         const ep = linkEndpoints(link);
-        const on = scene.edges.includes(i);
+        const inScene = scene.edges.includes(i);
+        const live = animate ? current.includes(i) : inScene;
         return (
-          <g key={i}>
+          <g key={i} style={{ opacity: inScene && !live ? 0.4 : 1, transition: "opacity 300ms" }}>
             <line
               x1={ep.x1}
               y1={ep.y1}
               x2={ep.x2}
               y2={ep.y2}
-              stroke={on ? FLOW : IDLE}
-              strokeWidth={on ? 2 : 1.25}
-              strokeDasharray={on ? undefined : "3 4"}
-              style={{ transition: "stroke 300ms" }}
+              stroke={inScene ? FLOW : IDLE}
+              strokeWidth={live ? 2 : inScene ? 1.5 : 1.25}
+              strokeDasharray={inScene ? undefined : "3 4"}
+              style={{ transition: "stroke 300ms, stroke-width 300ms" }}
             />
-            {on && <FallingDots {...ep} animate={animate} id={`link-${i}`} />}
-            {on && link.label && (
-              <EdgeLabel endpoints={ep} label={link.label} />
-            )}
+            {live && (animate ? <Packet key={tick} {...ep} payload={link.payload} /> : <StaticDots {...ep} />)}
+            {inScene && link.label && <EdgeLabel endpoints={ep} label={link.label} dim={!live} />}
           </g>
         );
       })}
 
       {STAGES.map((s) => {
         const on = scene.nodes.includes(s.id);
+        const arriving = receiving.has(s.id);
+        // The last step ends with an actual answer, so show one instead of the class count.
+        const sub = s.id === "diagnosis" && active === 3 ? "Tomato · Early Blight" : s.sub;
         return (
           <g
             key={s.id}
@@ -211,13 +262,14 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
               height={s.h}
               rx={8}
               fill={on ? "#e8ebe0" : "#f6f7f4"}
-              stroke={on ? OLIVE : "#a9a9a5"}
-              strokeWidth={on ? 1.5 : 1}
-              style={{ transition: "fill 300ms, stroke 300ms" }}
+              stroke={arriving ? FLOW : on ? OLIVE : "#a9a9a5"}
+              strokeWidth={arriving ? 2.5 : on ? 1.5 : 1}
+              // Wait for the packet to land before lighting the box up.
+              style={{ transition: `fill 300ms, stroke 300ms ${PACKET_S * 0.75}s, stroke-width 300ms ${PACKET_S * 0.75}s` }}
             />
             <text
               x={s.x + s.w / 2}
-              y={s.y + (s.sub ? s.h / 2 - 3 : s.h / 2 + 4)}
+              y={s.y + (sub ? s.h / 2 - 3 : s.h / 2 + 4)}
               textAnchor="middle"
               fontSize={12}
               fontWeight={600}
@@ -225,7 +277,7 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
             >
               {s.label}
             </text>
-            {s.sub && (
+            {sub && (
               <text
                 x={s.x + s.w / 2}
                 y={s.y + s.h / 2 + 11}
@@ -233,7 +285,7 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
                 fontSize={10.5}
                 fill="#7a7a76"
               >
-                {s.sub}
+                {sub}
               </text>
             )}
           </g>
@@ -286,6 +338,11 @@ const STEPS: DiagramStep[] = [
   },
 ];
 
+function LiveScene({ active, animate }: { active: number; animate: boolean }) {
+  const { beat, tick } = useBeats(active, SCENES[active].beats.length, BEAT_MS, animate);
+  return <Scene active={active} beat={beat} tick={tick} animate={animate} />;
+}
+
 export function InferencePipelineDiagram() {
   return (
     <StepDiagram
@@ -297,13 +354,16 @@ export function InferencePipelineDiagram() {
         </>
       }
     >
-      {({ active, animate }) => <Scene active={active} animate={animate} />}
+      {({ active, animate }) => <LiveScene active={active} animate={animate} />}
     </StepDiagram>
   );
 }
 
 export function InferencePipelinePreview() {
   const animate = useAnimationsEnabled();
-  const active = useCycle(SCENES.length, 2600, animate);
-  return <Scene active={active} animate={animate} />;
+  const tick = useTick(animate, BEAT_MS);
+  // Walk every step's beats in order, then start over.
+  const timeline = SCENES.flatMap((scene, active) => scene.beats.map((_, beat) => ({ active, beat })));
+  const { active, beat } = timeline[tick % timeline.length];
+  return <Scene active={active} beat={beat} tick={tick} animate={animate} />;
 }
