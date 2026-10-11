@@ -1,22 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useScrollRail } from "@/lib/useScrollRail";
+import { useActiveItem } from "@/lib/useActiveItem";
 import type { Experience, ExperienceImage } from "@/types";
-
-/** Rail column width in px - keep in sync with the grid-cols value below. */
-const RAIL_WIDTH = 12;
 
 function ExperienceRow({
   experience,
-  isFirst,
-  isLast,
   active,
   registerRef,
 }: {
   experience: Experience;
-  isFirst: boolean;
-  isLast: boolean;
   active: boolean;
   registerRef: (el: HTMLElement | null) => void;
 }) {
@@ -39,22 +32,8 @@ function ExperienceRow({
     <div
       ref={registerRef}
       className={`group relative -mx-4 grid gap-x-4 rounded-lg px-4 py-5 transition-colors duration-300 ease-out hover:bg-gray-800/[0.03] ${active ? "bg-gray-800/[0.03]" : ""}`}
-      style={{ gridTemplateColumns: `${RAIL_WIDTH}px 36px 1fr` }}
+      style={{ gridTemplateColumns: "36px 1fr" }}
     >
-      <div className="relative flex justify-center">
-        <span
-          aria-hidden
-          className={`absolute left-1/2 w-px -translate-x-1/2 bg-gray-300 ${isFirst ? "top-1/2" : "top-0"} ${isLast ? "bottom-1/2" : "bottom-0"}`}
-        />
-        <span
-          aria-hidden
-          className={`relative z-10 mt-1.5 h-[9px] w-[9px] rounded-[2px] border transition-colors duration-500 ease-out group-hover:border-brand-600 group-hover:bg-brand-500 ${
-            active
-              ? "border-brand-600 bg-brand-500"
-              : "border-gray-400 bg-[var(--color-page-bg)]"
-          }`}
-        />
-      </div>
       <div className="relative h-9 w-9">
         {logoColor ? (
           <>
@@ -260,31 +239,18 @@ function ExperienceGallery({
 }
 
 export function Experiences({ experiences }: { experiences: Experience[] }) {
-  const { containerRef, registerItem, activeIndex, fillPercent, reducedMotion } =
-    useScrollRail(experiences.length);
+  const { registerItem, activeIndex } = useActiveItem(experiences.length);
 
   if (experiences.length === 0) {
     return null;
   }
 
   return (
-    <div ref={containerRef} className="relative mt-6 flex w-full flex-col">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute top-0 z-[1] w-px bg-brand-500"
-        style={{
-          left: RAIL_WIDTH / 2,
-          height: `${fillPercent}%`,
-          transform: "translateX(-50%)",
-          transition: reducedMotion ? "none" : "height 150ms linear",
-        }}
-      />
+    <div className="relative mt-6 flex w-full flex-col">
       {experiences.map((experience, index) => (
         <ExperienceRow
           key={experience.slug}
           experience={experience}
-          isFirst={index === 0}
-          isLast={index === experiences.length - 1}
           active={index === activeIndex}
           registerRef={registerItem(index)}
         />
