@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   InlineCode,
   StepDiagram,
@@ -14,7 +14,6 @@ const OLIVE = "#5b6529";
 const SCALE = 75;
 const CX = 220;
 const CY = 165;
-const MOVE_MS = 900;
 
 const toX = (x: number) => CX + SCALE * x;
 const toY = (y: number) => CY - SCALE * y;
@@ -48,17 +47,145 @@ const PILLARS = [
 
 const TIME_SCALE = 150;
 
+const ROOM = 2.1;
+const PILLAR_R = 11;
+const RAY_COUNT = 72;
+/** The TurtleBot3 laser reaches 3.5 m. */
+const LIDAR_RANGE = 3.5 * SCALE;
+/** Drive speed in px/s: cruise on the straights, slow down into each goal. */
+const CRUISE = 150;
+const MIN_SPEED = 30;
+
 const waypoints = [START, ...GOALS];
 
-function Scene({ active, animate }: { active: number; animate: boolean }) {
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setReady(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
+/** The drive as one polyline in screen px, with the distance travelled at each waypoint. */
+const ROUTE = waypoints.map((w) => ({ x: toX(w.x), y: toY(w.y) }));
+const CUMULATIVE = ROUTE.reduce<number[]>(
+  (acc, point, i) => (i === 0 ? [0] : [...acc, acc[i - 1] + Math.hypot(point.x - ROUTE[i - 1].x, point.y - ROUTE[i - 1].y)]),
+  [],
+);
 
-  const robotAt = ready ? waypoints[active + 1] : START;
-  const move = animate ? `${MOVE_MS}ms` : "0ms";
+interface Pose {
+  /** Distance driven along ROUTE, px. */
+  s: number;
+  /** Radians, screen space (0 faces right). */
+  heading: number;
+}
+
+/** Index of the leg the robot is on; at a corner, the leg it is driving into (or back out of). */
+function legAt(s: number, direction: number): number {
+  const last = ROUTE.length - 2;
+  for (let i = 0; i <= last; i++) {
+    const inside = direction >= 0 ? s < CUMULATIVE[i + 1] : s <= CUMULATIVE[i + 1];
+    if (inside) return i;
+  }
+  return last;
+}
+
+function legAngle(leg: number, direction: number): number {
+  const angle = Math.atan2(ROUTE[leg + 1].y - ROUTE[leg].y, ROUTE[leg + 1].x - ROUTE[leg].x);
+  return direction < 0 ? angle + Math.PI : angle;
+}
+
+function positionAt(s: number) {
+  const leg = legAt(s, 1);
+  const t = (s - CUMULATIVE[leg]) / (CUMULATIVE[leg + 1] - CUMULATIVE[leg]);
+  return {
+    x: ROUTE[leg].x + (ROUTE[leg + 1].x - ROUTE[leg].x) * t,
+    y: ROUTE[leg].y + (ROUTE[leg + 1].y - ROUTE[leg].y) * t,
+  };
+}
+
+/** Where a ray from (ox, oy) first hits a wall or pillar, in screen px. */
+function castRay(ox: number, oy: number, angle: number) {
+  const dx = Math.cos(angle);
+  const dy = Math.sin(angle);
+  let t = LIDAR_RANGE;
+
+  const left = toX(-ROOM);
+  const right = toX(ROOM);
+  const top = toY(ROOM);
+  const bottom = toY(-ROOM);
+  if (dx > 0) t = Math.min(t, (right - ox) / dx);
+  if (dx < 0) t = Math.min(t, (left - ox) / dx);
+  if (dy > 0) t = Math.min(t, (bottom - oy) / dy);
+  if (dy < 0) t = Math.min(t, (top - oy) / dy);
+
+  for (const [px, py] of PILLARS) {
+    const fx = ox - toX(px);
+    const fy = oy - toY(py);
+    const b = dx * fx + dy * fy;
+    const disc = b * b - (fx * fx + fy * fy - PILLAR_R * PILLAR_R);
+    if (disc < 0) continue;
+    const hit = -b - Math.sqrt(disc);
+    if (hit > 0 && hit < t) t = hit;
+  }
+  return { x: ox + dx * t, y: oy + dy * t };
+}
+
+function angleDelta(from: number, to: number) {
+  return Math.atan2(Math.sin(to - from), Math.cos(to - from));
+}
+
+/** Drives the robot toward the end of `target` along the route, turning to face where it is going. */
+function useRobot(targetS: number, animate: boolean): Pose {
+  const [pose, setPose] = useState<Pose>({ s: 0, heading: legAngle(0, 1) });
+  const latest = useRef(pose);
+
+  useEffect(() => {
+    if (!animate) return;
+    let frame = 0;
+    let last = performance.now();
+    const tick = (now: number) => {
+      const dt = Math.min(now - last, 50) / 1000;
+      last = now;
+      const { s, heading } = latest.current;
+      const remaining = targetS - s;
+      const direction = remaining === 0 ? 1 : Math.sign(remaining);
+      const speed = Math.min(CRUISE, Math.max(MIN_SPEED, Math.abs(remaining) * 4));
+      const nextS = Math.abs(remaining) <= speed * dt ? targetS : s + direction * speed * dt;
+      const wanted = legAngle(legAt(nextS, direction), direction);
+      const next = { s: nextS, heading: heading + angleDelta(heading, wanted) * Math.min(1, dt * 10) };
+      latest.current = next;
+      setPose(next);
+      if (nextS !== targetS) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [targetS, animate]);
+
+  return animate ? pose : { s: targetS, heading: legAngle(legAt(targetS - 0.001, 1), 1) };
+}
+
+/** Top-down TurtleBot3 Burger, facing +x: two drive wheels, the body, the laser puck on top. */
+function Robot({ x, y, heading }: { x: number; y: number; heading: number }) {
+  return (
+    <g transform={`translate(${x} ${y}) rotate(${(heading * 180) / Math.PI})`}>
+      <rect x={-4} y={-12} width={8} height={3.5} rx={1} fill="#37352f" />
+      <rect x={-4} y={8.5} width={8} height={3.5} rx={1} fill="#37352f" />
+      <circle r={9} fill="#4a4840" stroke="#37352f" strokeWidth={1.5} />
+      <path d="M 9 -3.5 L 14 0 L 9 3.5 z" fill={FLOW} />
+      <circle r={4.5} fill="#e8ebe0" stroke="#37352f" strokeWidth={1} />
+      <circle cx={2} r={1.3} fill="#37352f" />
+    </g>
+  );
+}
+
+function Scene({ active, animate }: { active: number; animate: boolean }) {
+  const { s, heading } = useRobot(CUMULATIVE[active + 1], animate);
+  const robot = positionAt(s);
+
+  const scan = Array.from({ length: RAY_COUNT }, (_, i) => {
+    const hit = castRay(robot.x, robot.y, heading + (i / RAY_COUNT) * Math.PI * 2);
+    return `${hit.x.toFixed(1)},${hit.y.toFixed(1)}`;
+  }).join(" ");
+
+  const driven = [
+    ...ROUTE.filter((_, i) => CUMULATIVE[i] < s),
+    robot,
+  ]
+    .map((point) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`)
+    .join(" ");
 
   return (
     <svg
@@ -68,10 +195,10 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
       className="mx-auto h-auto w-full max-w-[440px] font-sans"
     >
       <rect
-        x={toX(-2.1)}
-        y={toY(2.1)}
-        width={SCALE * 4.2}
-        height={SCALE * 4.2}
+        x={toX(-ROOM)}
+        y={toY(ROOM)}
+        width={SCALE * ROOM * 2}
+        height={SCALE * ROOM * 2}
         rx={14}
         fill="#fbfbf9"
         stroke="#37352f"
@@ -80,48 +207,33 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
 
       {Array.from({ length: 5 }, (_, i) => i - 2).map((g) => (
         <g key={g} stroke="#e4e4e0" strokeWidth={1}>
-          <line x1={toX(g)} y1={toY(2.1)} x2={toX(g)} y2={toY(-2.1)} />
-          <line x1={toX(-2.1)} y1={toY(g)} x2={toX(2.1)} y2={toY(g)} />
+          <line x1={toX(g)} y1={toY(ROOM)} x2={toX(g)} y2={toY(-ROOM)} />
+          <line x1={toX(-ROOM)} y1={toY(g)} x2={toX(ROOM)} y2={toY(g)} />
         </g>
       ))}
+
+      <polygon points={scan} fill={FLOW} fillOpacity={0.1} stroke={FLOW} strokeOpacity={0.45} strokeWidth={1} />
 
       {PILLARS.map(([x, y]) => (
         <circle
           key={`${x},${y}`}
           cx={toX(x)}
           cy={toY(y)}
-          r={11}
+          r={PILLAR_R}
           fill="#c9cbc3"
           stroke="#37352f"
           strokeWidth={2}
         />
       ))}
 
-      {GOALS.map((goal, i) => {
-        const from = waypoints[i];
-        const x1 = toX(from.x);
-        const y1 = toY(from.y);
-        const x2 = toX(goal.x);
-        const y2 = toY(goal.y);
-        const length = Math.hypot(x2 - x1, y2 - y1);
-        return (
-          <line
-            key={goal.id}
-            x1={x1}
-            y1={y1}
-            x2={x2}
-            y2={y2}
-            stroke={FLOW}
-            strokeWidth={2.5}
-            strokeLinecap="round"
-            strokeDasharray={length}
-            strokeDashoffset={i <= active && ready ? 0 : length}
-            style={{
-              transition: `stroke-dashoffset ${move} ease-in-out`,
-            }}
-          />
-        );
-      })}
+      <polyline
+        points={driven}
+        fill="none"
+        stroke={FLOW}
+        strokeWidth={2.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
 
       <rect
         x={toX(0) - 7}
@@ -135,8 +247,8 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
       />
 
       {GOALS.slice(0, 4).map((goal, i) => {
-        const reached = i <= active;
-        const current = i === active;
+        const reached = s >= CUMULATIVE[i + 1] - 0.5;
+        const current = i === active && reached;
         return (
           <g key={goal.id}>
             {current && animate && (
@@ -195,15 +307,7 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
         start / goal 5
       </text>
 
-      <g
-        style={{
-          transform: `translate(${toX(robotAt.x)}px, ${toY(robotAt.y)}px)`,
-          transition: `transform ${move} ease-in-out`,
-        }}
-      >
-        <circle r={8} fill="#37352f" />
-        <circle r={3} fill="#e8ebe0" />
-      </g>
+      <Robot x={robot.x} y={robot.y} heading={heading} />
     </svg>
   );
 }
@@ -235,8 +339,9 @@ export function NavigationResultsDiagram() {
       steps={STEPS}
       caption={
         <>
-          The five-goal run: <strong>5/5 reached</strong>. Room layout is a
-          schematic; coordinates, times and errors are from the real run.
+          The five-goal run: <strong>5/5 reached</strong>. The blue fan is the
+          robot&apos;s laser scan. Room layout is a schematic; coordinates,
+          times and errors are from the real run.
         </>
       }
     >
