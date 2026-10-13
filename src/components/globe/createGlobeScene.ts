@@ -87,6 +87,7 @@ export function createGlobeScene(
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.setClearColor(0, 0);
+  renderer.domElement.style.display = "block";
   host.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();
@@ -262,6 +263,7 @@ export function createGlobeScene(
     fly = null;
   });
 
+  let hasFramed = false;
   const resize = () => {
     const { clientWidth: w, clientHeight: h } = host;
     if (!w || !h) return;
@@ -270,6 +272,14 @@ export function createGlobeScene(
     // Keep the whole globe in frame on narrow (portrait) hosts.
     camera.fov = w / h < 1 ? 35 / Math.max(0.6, w / h) : 35;
     camera.updateProjectionMatrix();
+    // The farthest zoom must always show the whole globe, whatever shape the window is.
+    const halfAngle = Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * Math.min(1, w / h));
+    const fit = (1 / Math.sin(halfAngle)) * 1.1;
+    controls.maxDistance = Math.max(MAX_DISTANCE, fit);
+    if (!hasFramed) {
+      hasFramed = true;
+      camera.position.setLength(Math.max(DEFAULT_DISTANCE, fit));
+    }
   };
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(host);
@@ -425,10 +435,13 @@ export function createGlobeScene(
     // Near plane tracks the surface so close zooms don't clip the globe.
     camera.near = Math.max(0.002, (distance - 1) * 0.4);
     camera.updateProjectionMatrix();
-    // Rotation and zoom slow down as the surface gets closer.
-    const closeness = THREE.MathUtils.clamp((distance - 1) / (DEFAULT_DISTANCE - 1), 0.04, 1);
-    controls.rotateSpeed = 0.06 + 0.3 * closeness;
-    controls.zoomSpeed = 0.4 + 0.4 * closeness;
+    // Like Google Earth: a drag moves the surface about as far as the cursor moves, so the angle turned
+    // per pixel scales with the altitude (distance above the surface), and each wheel tick changes the
+    // altitude by a fixed fraction instead of a fraction of the distance from the globe's centre.
+    const altitude = distance - 1;
+    const halfFov = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    controls.rotateSpeed = Math.min(0.36, (altitude * halfFov) / Math.PI);
+    controls.zoomSpeed = 1.3 * (altitude / distance);
 
     if (pointerInside && pointerDirty && !downAt) {
       pointerDirty = false;
