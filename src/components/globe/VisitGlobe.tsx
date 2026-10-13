@@ -98,6 +98,14 @@ export function VisitGlobe({ places }: { places: Place[] }) {
     };
   }, [places, project]);
 
+  // Warm the browser cache with every place photo so the card shows instantly on hover.
+  useEffect(() => {
+    for (const place of places) {
+      const src = place.visits.find((visit) => visit.photo)?.photo;
+      if (src) new Image().src = src;
+    }
+  }, [places]);
+
   useEffect(() => {
     if (!pinned) return;
     const onKey = (event: KeyboardEvent) => {
