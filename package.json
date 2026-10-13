@@ -10,7 +10,8 @@
     "build": "yarn generate && next build",
     "start": "next start",
     "lint": "eslint",
-    "generate": "node scripts/generate-content.mjs"
+    "generate": "node scripts/generate-content.mjs",
+    "resize-places": "node scripts/resize-places.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.23",
@@ -28,11 +29,14 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/mdx": "^2.0.14",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.186.0",
     "@types/topojson-client": "^3.1.5",
+    "@types/topojson-specification": "^1.0.5",
+    "@types/unist": "^3.0.3",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "eslint-plugin-jsx-a11y": "^6.10.2",
