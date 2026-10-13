@@ -87,7 +87,14 @@ export function createGlobeScene(
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.setClearColor(0, 0);
-  renderer.domElement.style.display = "block";
+  // The canvas always fills the host exactly; only the drawing buffer is sized from JS.
+  Object.assign(renderer.domElement.style, {
+    position: "absolute",
+    inset: "0",
+    width: "100%",
+    height: "100%",
+    display: "block",
+  });
   host.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();
@@ -265,9 +272,9 @@ export function createGlobeScene(
 
   let hasFramed = false;
   const resize = () => {
-    const { clientWidth: w, clientHeight: h } = host;
+    const { width: w, height: h } = host.getBoundingClientRect();
     if (!w || !h) return;
-    renderer.setSize(w, h);
+    renderer.setSize(w, h, false);
     camera.aspect = w / h;
     // Keep the whole globe in frame on narrow (portrait) hosts.
     camera.fov = w / h < 1 ? 35 / Math.max(0.6, w / h) : 35;
@@ -283,6 +290,7 @@ export function createGlobeScene(
   };
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(host);
+  window.addEventListener("resize", resize);
   resize();
 
   const tmp = new THREE.Vector3();
@@ -517,6 +525,7 @@ export function createGlobeScene(
       setRunning(false);
       intersection.disconnect();
       resizeObserver.disconnect();
+      window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", syncRunning);
       el.removeEventListener("pointermove", onPointerMove);
       el.removeEventListener("pointerleave", onPointerLeave);
