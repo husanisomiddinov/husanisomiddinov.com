@@ -52,7 +52,7 @@ export function PlaceCard({ place, pinned, onClose }: PlaceCardProps) {
       </figure>
 
       {place.home && place.lived && (
-        <p className="mt-3 text-xs font-bold text-gray-800">Lived here {place.lived}</p>
+        <p className="mt-3 text-xs font-bold text-gray-800">Lived here for {place.lived}</p>
       )}
 
       {!place.home && dated.length > 0 && (
