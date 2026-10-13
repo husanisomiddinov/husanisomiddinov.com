@@ -39,8 +39,7 @@
     "hast": "^1.0.0",
     "tailwindcss": "^4",
     "topojson-client": "^3.1.0",
-    "typescript": "^5",
-    "world-atlas": "^2.0.2"
+    "typescript": "^5"
   },
   "packageManager": "yarn@1.22.22"
 }
