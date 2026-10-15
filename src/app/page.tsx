@@ -29,6 +29,7 @@ export default async function Home() {
         text="From learning English at 5 to quitting Higgsfield for robots. Here is how I got here."
         href="/about"
         buttonLabel="Read about me"
+        image="/images/retro-computer.png"
       />
       <Prose>
         <SocialIcons />
