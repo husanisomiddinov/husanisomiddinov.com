@@ -2,7 +2,6 @@ import Link from "next/link";
 import NextImage from "next/image";
 import { getAllWritingMetadata, type WritingPreview } from "@/lib/posts";
 import { buildMetadata } from "@/lib/metadata";
-import { ArrowRightIcon } from "@/components/icons";
 
 export const metadata = buildMetadata({
   title: "Writing",
@@ -73,9 +72,6 @@ function EssayRow({ post }: { post: WritingPreview }) {
         )}
         <div className="mt-1.5 flex items-center justify-between gap-3">
           <p className="font-sans text-xs text-gray-400">{post.readingTime} min read</p>
-          <span className="shrink-0 -translate-x-1 text-brand-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
-            <ArrowRightIcon />
-          </span>
         </div>
       </div>
     </Link>

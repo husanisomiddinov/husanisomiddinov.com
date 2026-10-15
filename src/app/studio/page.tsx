@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/icons";
 import { PageTitle } from "@/components";
 import { getStudioLinks } from "@/lib/data";
 import type { StudioLink } from "@/types";
@@ -35,9 +34,6 @@ function StudioRow({ item, isLast }: { item: StudioLink; isLast: boolean }) {
           {item.description && (
             <p className="mt-1 text-prose-sm text-gray-600">{item.description}</p>
           )}
-        </div>
-        <div className="shrink-0 -translate-x-1 text-brand-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
-          {external ? <ArrowUpRightIcon /> : <ArrowRightIcon />}
         </div>
       </Link>
       {!isLast && <hr className="border-gray-300" />}

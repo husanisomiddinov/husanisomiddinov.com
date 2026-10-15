@@ -4,7 +4,6 @@ import { getAllBooks } from "@/lib/books";
 import type { ReadingShelfBook } from "@/types";
 import { Bookshelf, Button } from "@/components";
 import { BookStatus } from "@/components/BookStatus";
-import { ArrowRightIcon } from "@/components/icons";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata = buildMetadata({
@@ -53,9 +52,6 @@ function BookCard({ book, index }: { book: ListingBook; index: number }) {
             <h2 className="text-base leading-snug font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500">
               {book.title}
             </h2>
-            <span className="shrink-0 -translate-x-1 text-brand-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
-              <ArrowRightIcon />
-            </span>
           </div>
           <p className="font-sans text-base text-gray-500">{book.author}</p>
           <BookStatus book={book} />

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRightIcon } from "@/components/icons";
 import { DIAGRAM_PREVIEWS } from "@/components/diagrams";
 import type { Project, ProjectKind } from "@/types";
 
@@ -101,9 +100,6 @@ function ProjectRow({
                 <p className="mt-0.5 font-sans text-sm text-gray-500">{date}</p>
               )}
             </div>
-            <span className="shrink-0 -translate-x-1 text-brand-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
-              <ArrowRightIcon />
-            </span>
           </div>
           <p className="line-clamp-3 text-prose text-gray-600">
             {project.summary}

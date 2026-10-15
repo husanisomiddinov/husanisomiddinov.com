@@ -3,7 +3,6 @@
 import { useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
 import NextImage from "next/image";
-import {
   ArrowRightIcon,
   GridIcon,
   ListIcon,
@@ -132,9 +131,6 @@ function ListRow({ book }: { book: CollectionBook }) {
                 ? "Read"
                 : `${book.rating}/10`
               : "Reading"}
-          </span>
-          <span className="-translate-x-1 text-brand-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
-            <ArrowRightIcon />
           </span>
         </div>
       </div>
