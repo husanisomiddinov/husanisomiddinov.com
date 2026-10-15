@@ -78,7 +78,7 @@ export interface ExperienceImage {
   height: number;
 }
 
-export interface PlaceVisit {
+interface PlaceVisit {
   /** "YYYY", "YYYY-MM" or "YYYY-MM-DD". Leave out until known. */
   date?: string;
   /** What I did there. */

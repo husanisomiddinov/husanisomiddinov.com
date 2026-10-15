@@ -6,6 +6,7 @@ import { getAllProjectSlugs } from "@/lib/data";
 
 const STATIC_PAGES = [
   "",
+  "/about",
   "/writing",
   "/reading",
   "/reading/collection",
