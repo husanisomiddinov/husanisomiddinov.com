@@ -1,18 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useActiveItem } from "@/lib/useActiveItem";
 import type { Experience, ExperienceImage } from "@/types";
 
-function ExperienceRow({
-  experience,
-  active,
-  registerRef,
-}: {
-  experience: Experience;
-  active: boolean;
-  registerRef: (el: HTMLElement | null) => void;
-}) {
+function ExperienceRow({ experience }: { experience: Experience }) {
   const {
     name,
     role,
@@ -30,44 +21,19 @@ function ExperienceRow({
 
   return (
     <div
-      ref={registerRef}
-      className={`group relative -mx-4 grid gap-x-4 rounded-lg px-4 py-5 transition-colors duration-300 ease-out hover:bg-gray-800/[0.03] ${active ? "bg-gray-800/[0.03]" : ""}`}
+      className="relative grid gap-x-4 py-5"
       style={{ gridTemplateColumns: "36px 1fr" }}
     >
       <div className="relative h-9 w-9">
-        {logoColor ? (
-          <>
-            <Image
-              src={logo}
-              alt={`${name} logo`}
-              fill
-              sizes="36px"
-              loading="eager"
-              style={logoStyle}
-              className={`object-contain opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-0 ${active ? "opacity-0" : ""}`}
-            />
-            <Image
-              src={logoColor}
-              alt=""
-              aria-hidden
-              fill
-              sizes="36px"
-              loading="eager"
-              style={logoStyle}
-              className={`object-contain opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100 ${active ? "opacity-100" : ""}`}
-            />
-          </>
-        ) : (
-          <Image
-            src={logo}
-            alt={`${name} logo`}
-            fill
-            sizes="36px"
-            loading="eager"
-            style={logoStyle}
-            className="object-contain opacity-70"
-          />
-        )}
+        <Image
+          src={logoColor ?? logo}
+          alt={`${name} logo`}
+          fill
+          sizes="36px"
+          loading="eager"
+          style={logoStyle}
+          className="object-contain"
+        />
       </div>
       <div className="flex min-w-0 flex-col gap-1">
         <div className="flex w-full flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-3">
@@ -90,11 +56,7 @@ function ExperienceRow({
         ) : (
           <p className="font-sans text-sm text-gray-500">{name}</p>
         )}
-        <p
-          className={`text-prose text-ink opacity-80 transition-opacity duration-300 ease-out group-hover:opacity-100 ${active ? "opacity-100" : ""}`}
-        >
-          {description}
-        </p>
+        <p className="text-prose text-ink">{description}</p>
         {images && images.length > 0 && (
           <ExperienceGallery images={images} alt={`${name} photos`} />
         )}
@@ -239,21 +201,14 @@ function ExperienceGallery({
 }
 
 export function Experiences({ experiences }: { experiences: Experience[] }) {
-  const { registerItem, activeIndex } = useActiveItem(experiences.length);
-
   if (experiences.length === 0) {
     return null;
   }
 
   return (
     <div className="relative mt-6 flex w-full flex-col">
-      {experiences.map((experience, index) => (
-        <ExperienceRow
-          key={experience.slug}
-          experience={experience}
-          active={index === activeIndex}
-          registerRef={registerItem(index)}
-        />
+      {experiences.map((experience) => (
+        <ExperienceRow key={experience.slug} experience={experience} />
       ))}
     </div>
   );
