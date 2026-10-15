@@ -150,21 +150,20 @@ function ExperienceGallery({
     );
   }
 
-  // With three or more side photos, stacking them all in one
-  // exact-fit column (above) squeezes each one down to a sliver to
-  // match the main photo's height. Past two, switch to a proper
-  // 2-column square thumbnail grid instead - a light, expected crop
-  // for small previews, in exchange for each one actually being
-  // legible. The main photo still keeps its full aspect ratio.
+  // With three or more side photos, lay them out as a 2-column grid inside
+  // the same framed block as the main photo. The main keeps its natural
+  // aspect ratio and sets the block height; the grid stretches to match it,
+  // so both columns live under one border and align exactly. Thumbnails are
+  // cropped to fill (object-cover); an odd final photo spans both columns so
+  // there's no empty cell.
   const mainWidthPct = 56;
   const sideWidthPct = 100 - mainWidthPct;
+  const sideRows = Math.ceil(side.length / 2);
+  const oddLast = side.length % 2 === 1;
 
   return (
-    <div className="mt-2 flex w-full items-start gap-1">
-      <div
-        style={{ width: `${mainWidthPct}%` }}
-        className="shrink-0 overflow-hidden rounded-lg border border-gray-200"
-      >
+    <div className="mt-2 flex w-full items-stretch gap-1 overflow-hidden rounded-lg border border-gray-200">
+      <div style={{ width: `${mainWidthPct}%` }} className="shrink-0">
         <Image
           src={main.src}
           alt={alt}
@@ -172,17 +171,22 @@ function ExperienceGallery({
           height={main.height}
           quality={95}
           sizes="(max-width: 640px) 56vw, 370px"
-          className="h-auto w-full"
+          className="block h-auto w-full"
         />
       </div>
       <div
-        style={{ width: `${sideWidthPct}%` }}
+        style={{
+          width: `${sideWidthPct}%`,
+          gridTemplateRows: `repeat(${sideRows}, 1fr)`,
+        }}
         className="grid shrink-0 grid-cols-2 gap-1"
       >
-        {side.map((img) => (
+        {side.map((img, i) => (
           <div
             key={img.src}
-            className="relative aspect-square overflow-hidden rounded-lg border border-gray-200"
+            className={`relative overflow-hidden ${
+              oddLast && i === side.length - 1 ? "col-span-2" : ""
+            }`}
           >
             <Image
               src={img.src}
