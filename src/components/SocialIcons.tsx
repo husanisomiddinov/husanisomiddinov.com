@@ -1,24 +1,26 @@
-import { Fragment } from "react";
-
 const socialLinks = [
-  { href: "https://x.com/HusanIsamiddin", label: "Twitter" },
-  { href: "https://hida115.substack.com/", label: "Substack" },
-  { href: "mailto:husanisomiddinov2006@gmail.com", label: "Email" },
+  { href: "https://x.com/HusanIsamiddin", label: "x" },
+  { href: "https://hida115.substack.com/", label: "substack" },
+  { href: "mailto:husanisomiddinov2006@gmail.com", label: "email" },
 ];
 
-/** Renders as plain <p>/<a> so it inherits the site's `.prose` link
- * style - meant to be nested inside <Prose>, not used standalone. */
-export default function SocialIcons() {
+export default function SocialIcons({ className }: { className?: string }) {
   return (
-    <p className="text-center">
-      {socialLinks.map(({ href, label }, i) => (
-        <Fragment key={label}>
-          <a href={href} target="_blank" rel="noopener noreferrer">
-            {label}
-          </a>
-          {i < socialLinks.length - 1 && " · "}
-        </Fragment>
+    <nav
+      aria-label="Social links"
+      className={`flex flex-wrap gap-x-5 gap-y-1 font-sans text-sm ${className ?? ""}`}
+    >
+      {socialLinks.map(({ href, label }) => (
+        <a
+          key={label}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-500 no-underline transition-colors duration-200 hover:text-brand-500"
+        >
+          {label} <span aria-hidden>↗</span>
+        </a>
       ))}
-    </p>
+    </nav>
   );
 }

@@ -25,15 +25,13 @@ export default async function Home() {
     <>
       <Prose>{page.content}</Prose>
       <CtaSection
-        className="mt-6 mb-4"
+        className="mt-6"
         text="From learning English at 5 to quitting Higgsfield for robots. Here is how I got here."
         href="/about"
         buttonLabel="Read about me"
         image="/images/retro-computer.png"
       />
-      <Prose>
-        <SocialIcons />
-      </Prose>
+      <SocialIcons className="mt-3" />
       <hr className="mt-8 border-gray-300" />
       <Experiences experiences={experiences} />
       <CtaSection
