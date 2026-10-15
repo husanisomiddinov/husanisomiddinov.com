@@ -37,7 +37,7 @@ function ExperienceRow({ experience }: { experience: Experience }) {
       </div>
       <div className="flex min-w-0 flex-col gap-1">
         <div className="flex w-full flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-3">
-          <h3 className="font-sans text-base font-bold text-gray-800">
+          <h3 className="font-sans text-lg font-bold text-gray-800">
             {url ? (
               <a
                 href={url}
