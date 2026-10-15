@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 interface CtaSectionProps {
-  title: string;
+  title?: string;
   text: string;
   href: string;
   buttonLabel: string;
@@ -24,9 +24,11 @@ export function CtaSection({
       className={`flex items-center justify-between gap-6 ${className ?? ""}`}
     >
       <div className="flex flex-col items-start gap-3">
-        <h2 className="font-heading tracking-heading text-2xl font-bold text-gray-800">
-          {title}
-        </h2>
+        {title && (
+          <h2 className="font-heading tracking-heading text-2xl font-bold text-gray-800">
+            {title}
+          </h2>
+        )}
         <p className="max-w-sm text-prose text-gray-600">{text}</p>
         <Link
           href={href}
