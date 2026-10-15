@@ -7,3 +7,4 @@ export { BackLink } from "./BackLink";
 export { Breadcrumbs } from "./Breadcrumbs";
 export { Experiences } from "./Experiences";
 export { BioTimeline } from "./BioTimeline";
+export { CtaSection } from "./CtaSection";
