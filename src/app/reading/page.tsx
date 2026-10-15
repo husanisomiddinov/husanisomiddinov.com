@@ -2,7 +2,7 @@ import Link from "next/link";
 import NextImage from "next/image";
 import { getAllBooks } from "@/lib/books";
 import type { ReadingShelfBook } from "@/types";
-import { BackLink, Bookshelf } from "@/components";
+import { Bookshelf, Button } from "@/components";
 import { BookStatus } from "@/components/BookStatus";
 import { ArrowRightIcon } from "@/components/icons";
 import { buildMetadata } from "@/lib/metadata";
@@ -82,9 +82,9 @@ export default function ReadingPage() {
     <div className="flex flex-col gap-5">
       <Bookshelf books={books} />
       <div className="flex justify-center">
-        <BackLink href="/reading/collection">
-          Browse the full collection →
-        </BackLink>
+        <Button href="/reading/collection">
+          Browse the full collection &rarr;
+        </Button>
       </div>
       {books.map((book, index) => (
         <BookCard key={book.slug} book={book} index={index} />
