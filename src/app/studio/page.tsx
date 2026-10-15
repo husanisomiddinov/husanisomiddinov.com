@@ -25,7 +25,7 @@ function StudioRow({ item, isLast }: { item: StudioLink; isLast: boolean }) {
     <div>
       <Link
         {...linkProps}
-        className="group relative -mx-4 flex items-center justify-between gap-4 rounded-lg px-4 py-4 transition-colors duration-300 ease-out hover:no-underline"
+        className="group relative flex items-center justify-between gap-4 py-4 hover:no-underline"
       >
         <div className="min-w-0">
           <p className="font-sans text-base font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500 after:absolute after:inset-0 after:content-['']">

@@ -33,7 +33,7 @@ function BookCard({ book, index }: { book: ListingBook; index: number }) {
       {index > 0 && <hr className="mb-3 w-full border-gray-300" />}
       <Link
         href={book.slug}
-        className="group relative -mx-4 flex flex-row items-start gap-6 rounded-lg px-4 py-2 transition-colors duration-300 ease-out hover:no-underline"
+        className="group relative flex flex-row items-start gap-6 py-2 hover:no-underline"
       >
         <div className="relative h-[100px] w-[66px] shrink-0 overflow-hidden rounded-lg border border-gray-200 sm:h-[140px] sm:w-[93px] md:h-[160px] md:w-[107px]">
           <NextImage

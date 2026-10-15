@@ -86,7 +86,7 @@ function ProjectRow({
 
   return (
     <li className="project-enter" style={{ animationDelay: `${index * 80}ms` }}>
-      <div className="group relative -mx-4 flex items-start gap-5 rounded-lg px-4 py-5 transition-colors duration-300 ease-out">
+      <div className="group relative flex items-start gap-5 py-5">
         <div className="flex min-w-0 flex-1 flex-col items-start gap-2">
           <div className="flex w-full items-start justify-between gap-3">
             <div>

@@ -79,7 +79,7 @@ function GridCard({ book, eager }: { book: CollectionBook; eager: boolean }) {
   return (
     <Link
       href={book.slug}
-      className="group -m-2 block rounded-lg p-2 transition-colors duration-300 ease-out hover:no-underline"
+      className="group block hover:no-underline"
     >
       <div className="flex flex-col items-start gap-2">
         <div
@@ -113,7 +113,7 @@ function ListRow({ book }: { book: CollectionBook }) {
   return (
     <Link
       href={book.slug}
-      className="group -mx-4 block rounded-lg px-4 transition-colors duration-300 ease-out hover:no-underline"
+      className="group block hover:no-underline"
     >
       <div className="flex items-baseline justify-between gap-4 border-b border-gray-200 py-2.5">
         <div className="flex min-w-0 flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
