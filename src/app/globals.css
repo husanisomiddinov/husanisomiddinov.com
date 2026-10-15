@@ -32,25 +32,23 @@
   --color-gray-800: #2a2925;
   --color-gray-900: #111111;
 
-  --font-sans: var(--font-geist-mono), ui-monospace, "SF Mono", "Cascadia Code",
-    Menlo, Consolas, monospace;
+  /* The system sans stack akbar.one uses is the single UI/reading face
+     (nav, dates, labels, body). Kept named --font-sans so existing
+     `font-sans` utilities repoint here. */
+  --font-sans: -apple-system, "system-ui", "Segoe UI", Inter, Helvetica,
+    Arial, sans-serif;
 
-  /* Long-form reading text. Mono (--font-sans) stays for nav, dates and
-     labels; prose body is a readable sans, headings a system serif, the
-     pairing akbar.one uses. */
-  --font-body: var(--font-geist), -apple-system, "system-ui", "Segoe UI",
-    Inter, Helvetica, Arial, sans-serif;
-  --font-heading: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  /* Body copy is the same system sans; headings are Averia Serif Libre,
+     a warm display serif that carries the larger sizes. */
+  --font-body: var(--font-sans);
+  --font-heading: var(--font-averia), "Iowan Old Style", Georgia, serif;
 
   --tracking-heading: -0.01em;
 
   --color-ink: var(--color-gray-800);
 
-  /* Regular body copy stays at Geist Mono's true regular (400). Titles get
-     real bold (700) *and* switch to the dark-ink gray below instead of the
-     olive accent - the actual "boldness" on mono-heavy sites like
-     masonjwang.com comes from near-black-on-muted-gray contrast, not raw
-     weight alone, so both move together. */
+  /* Body stays regular (400); emphasis comes from near-black ink on muted
+     gray rather than raw weight, so semibold maps to a real bold. */
   --font-weight-semibold: 700;
   --font-weight-bold: 700;
 

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Averia_Serif_Libre } from "next/font/google";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
 import { defaultMetadata } from "@/config/seo";
 import { siteUrl } from "@/config/site";
@@ -11,18 +11,14 @@ import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { PostHogAnalytics } from "@/components/PostHogAnalytics";
 import "./globals.css";
 
-const geistMono = Geist_Mono({
-  weight: ["400", "600"],
+// The only loaded webface: a warm display serif for headings. Body/UI use the
+// system sans stack (no webfont), matching akbar.one.
+const averiaSerif = Averia_Serif_Libre({
+  weight: ["400", "700"],
   subsets: ["latin"],
+  style: ["normal", "italic"],
   display: "swap",
-  variable: "--font-geist-mono",
-});
-
-const geist = Geist({
-  weight: ["400", "600"],
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-geist",
+  variable: "--font-averia",
 });
 
 export const metadata: Metadata = defaultMetadata;
@@ -33,7 +29,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistMono.variable} ${geist.variable}`}>
+    <html lang="en" className={averiaSerif.variable}>
       <head>
         <link rel="icon" href="/favicon.ico?v=2" />
         <link rel="apple-touch-icon" href="/favicon.ico?v=2" />
