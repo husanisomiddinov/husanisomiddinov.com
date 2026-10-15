@@ -100,6 +100,8 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
 
   const book = books[selected];
   const progress = books.length > 1 ? (selected / (books.length - 1)) * 100 : 0;
+  const isOpenBook =
+    currentSlug !== undefined && book?.slug === `/reading/${currentSlug}`;
   if (!book)
     return (
       <section className={styles.empty}>
@@ -160,17 +162,21 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
           <ChevronRightIcon className="size-3.5" />
         </button>
       </div>
-      <div
-        className="flex flex-col items-start gap-2 border-t border-gray-300 pt-3"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        <h2 className="text-base leading-snug font-bold text-balance text-gray-800">
-          {book.title}
-        </h2>
-        <p className="font-sans text-base text-gray-500">{book.author}</p>
-        <BookStatus book={book} />
-      </div>
+      {/* On a book page the open book's title, author and status are already
+          in the page header, so only caption a different selection. */}
+      {!isOpenBook && (
+        <div
+          className="flex flex-col items-start gap-1 border-t border-gray-300 pt-3"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <h2 className="font-sans text-lg leading-snug font-bold text-balance text-gray-800">
+            {book.title}
+          </h2>
+          <p className="font-sans text-sm text-gray-500">{book.author}</p>
+          <BookStatus book={book} />
+        </div>
+      )}
     </section>
   );
 }
