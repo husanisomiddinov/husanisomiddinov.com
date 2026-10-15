@@ -1,5 +1,5 @@
 const socialLinks = [
-  { href: "https://x.com/HusanIsamiddin", label: "X" },
+  { href: "https://x.com/HusanIsamiddin", label: "Twitter" },
   { href: "https://hida115.substack.com/", label: "Substack" },
   { href: "mailto:husanisomiddinov2006@gmail.com", label: "Email" },
 ];
