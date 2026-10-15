@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 type Variant = "primary" | "secondary";
-type Size = "md" | "sm";
+type Size = "md" | "sm" | "icon";
 
 const base =
   "inline-flex cursor-pointer items-center justify-center rounded-lg font-sans font-bold no-underline transition-colors duration-200 hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 disabled:cursor-default disabled:opacity-50";
@@ -16,6 +16,7 @@ const variants: Record<Variant, string> = {
 const sizes: Record<Size, string> = {
   md: "px-5 py-2.5 text-sm",
   sm: "px-3.5 py-1.5 text-sm",
+  icon: "size-8 shrink-0 p-0",
 };
 
 interface CommonProps {

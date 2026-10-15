@@ -14,6 +14,7 @@ import type { ReadingShelfBook } from "@/types";
 import type { ShelfScene } from "./bookshelf/createShelfScene";
 import styles from "./bookshelf/Bookshelf.module.css";
 import { BookStatus } from "@/components/BookStatus";
+import { Button } from "@/components/Button";
 
 interface BookshelfProps {
   books: ReadingShelfBook[];
@@ -29,9 +30,6 @@ export function Bookshelf({ books, currentSlug }: BookshelfProps) {
     />
   );
 }
-
-const arrowClass =
-  "grid size-7 shrink-0 cursor-pointer place-items-center rounded-md border border-gray-300 text-gray-500 transition-colors duration-200 hover:border-brand-500 hover:text-brand-500 disabled:cursor-default disabled:opacity-30 disabled:hover:border-gray-300 disabled:hover:text-gray-500";
 
 function Shelf({ books, currentSlug }: BookshelfProps) {
   const [selected, setSelected] = useState(() =>
@@ -132,15 +130,14 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
         )}
       </div>
       <div className="my-1 flex items-center gap-3">
-        <button
-          type="button"
-          className={arrowClass}
+        <Button
+          size="icon"
           aria-label="Previous book"
           disabled={selected === 0}
           onClick={() => select(selected - 1)}
         >
           <ChevronLeftIcon className="size-3.5" />
-        </button>
+        </Button>
         <input
           className={styles.range}
           style={{ "--progress": `${progress}%` } as CSSProperties}
@@ -152,15 +149,14 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
           aria-valuetext={`${book.title} by ${book.author}`}
           onChange={(event) => select(Number(event.target.value))}
         />
-        <button
-          type="button"
-          className={arrowClass}
+        <Button
+          size="icon"
           aria-label="Next book"
           disabled={selected === books.length - 1}
           onClick={() => select(selected + 1)}
         >
           <ChevronRightIcon className="size-3.5" />
-        </button>
+        </Button>
       </div>
       {/* On a book page the open book's title, author and status are already
           in the page header, so only caption a different selection. */}
