@@ -3,7 +3,7 @@
 import { useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
 import NextImage from "next/image";
-  ArrowRightIcon,
+import {
   GridIcon,
   ListIcon,
   SearchIcon,
