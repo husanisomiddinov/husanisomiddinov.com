@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { BackLink } from "@/components";
+import { BackLink, Button } from "@/components";
 import type { Place } from "@/types";
 import { createGlobeScene, type GlobeScene, type ProjectedPlace } from "./createGlobeScene";
 import { PlaceCard } from "./PlaceCard";
@@ -189,14 +189,15 @@ export function VisitGlobe({ places }: { places: Place[] }) {
             ))}
           </ul>
         )}
-        <button
-          type="button"
+        <Button
+          variant="secondary"
+          size="sm"
           onClick={() => setListOpen((open) => !open)}
           aria-expanded={listOpen}
-          className="cursor-pointer rounded-md border border-gray-300 bg-page-bg px-3 py-1.5 text-sm text-gray-600 transition-colors duration-200 hover:border-brand-500 hover:text-brand-500"
-        >
+          className="bg-page-bg"
+          >
           {listOpen ? "Hide list" : "All places"}
-        </button>
+          </Button>
       </div>
 
       <p className="pointer-events-none absolute right-5 bottom-5 z-20 hidden text-xs text-gray-500 sm:block">

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Button } from "./Button";
 
 interface CtaSectionProps {
   title?: string;
@@ -30,12 +30,9 @@ export function CtaSection({
           </h2>
         )}
         <p className="text-prose text-ink">{text}</p>
-        <Link
-          href={href}
-          className="mt-1 rounded-lg bg-brand-500 px-5 py-2.5 font-sans text-sm font-bold text-brand-50 no-underline transition-colors hover:bg-brand-600"
-        >
+        <Button href={href} className="mt-1">
           {buttonLabel}
-        </Link>
+        </Button>
       </div>
       {image && (
         // eslint-disable-next-line @next/next/no-img-element

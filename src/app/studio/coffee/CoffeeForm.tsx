@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect, type KeyboardEvent } from "react";
+import { Button } from "@/components";
 
 const STEPS = [
   { key: "name", prompt: "What's your name?", placeholder: "First name is fine" },
@@ -224,9 +225,9 @@ export function CoffeeForm() {
           <p className="text-sm text-gray-500">husan</p>
           <p className="text-base text-gray-800">Thank you, {form.name}!</p>
         </div>
-        <button type="button" onClick={reset} className="mt-6 text-sm text-gray-400 transition-colors hover:text-gray-600">
+        <Button variant="secondary" onClick={reset} className="mt-6">
           Start over
-        </button>
+        </Button>
       </div>
     );
   }
@@ -241,17 +242,12 @@ export function CoffeeForm() {
         )}
 
         <div className="mt-2 flex items-center gap-4">
-          <button
-            type="button"
-            onClick={submit}
-            disabled={status === "submitting"}
-            className="rounded-lg bg-brand-500 px-5 py-2.5 font-sans text-sm font-bold text-brand-50 transition-colors hover:bg-brand-600 disabled:opacity-50"
-          >
+          <Button onClick={submit} disabled={status === "submitting"}>
             {status === "submitting" ? "Sending..." : "Looks good, send it"}
-          </button>
-          <button type="button" onClick={() => editStep(0)} className="text-sm text-gray-400 transition-colors hover:text-gray-600">
+          </Button>
+          <Button variant="secondary" onClick={() => editStep(0)}>
             Edit
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -271,9 +267,9 @@ export function CoffeeForm() {
           <div className="flex flex-col gap-3">
             <CalendarPicker value={form.date} onChange={(v) => update("date", v)} onConfirm={advance} />
             {form.date && (
-              <button type="button" onClick={advance} className="self-start text-sm text-gray-400 transition-colors hover:text-gray-800">
+              <Button onClick={advance} className="self-start">
                 {formatDate(form.date)} &rarr;
-              </button>
+              </Button>
             )}
           </div>
         ) : (
@@ -301,14 +297,9 @@ export function CoffeeForm() {
                 />
               )}
             </div>
-            <button
-              type="button"
-              onClick={advance}
-              disabled={!isValid(current.key, form[current.key])}
-              className="shrink-0 pb-2 text-sm text-gray-400 transition-colors hover:text-gray-800 disabled:opacity-30"
-            >
+            <Button size="sm" onClick={advance} disabled={!isValid(current.key, form[current.key])} className="shrink-0">
               {step < STEPS.length - 1 ? "next" : "review"} &rarr;
-            </button>
+            </Button>
           </div>
         )}
       </div>
