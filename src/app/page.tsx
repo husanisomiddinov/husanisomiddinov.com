@@ -25,6 +25,17 @@ export default async function Home() {
   return (
     <>
       <Prose>{page.content}</Prose>
+      <div className="mt-2 mb-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+        <p className="text-prose-sm text-gray-600">
+          Want the longer story, from age 5 to now?
+        </p>
+        <Link
+          href="/about"
+          className="rounded-lg bg-brand-500 px-4 py-2 font-sans text-sm font-bold text-brand-50 no-underline transition-colors hover:bg-brand-600"
+        >
+          Read about me
+        </Link>
+      </div>
       <Prose>
         <SocialIcons />
       </Prose>
