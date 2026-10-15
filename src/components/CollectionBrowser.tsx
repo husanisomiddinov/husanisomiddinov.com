@@ -80,7 +80,7 @@ function GridCard({ book, eager }: { book: CollectionBook; eager: boolean }) {
   return (
     <Link
       href={book.slug}
-      className="group -m-2 block rounded-lg p-2 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04] hover:no-underline"
+      className="group -m-2 block rounded-lg p-2 transition-colors duration-300 ease-out hover:no-underline"
     >
       <div className="flex flex-col items-start gap-2">
         <div
@@ -98,7 +98,7 @@ function GridCard({ book, eager }: { book: CollectionBook; eager: boolean }) {
           />
         </div>
         <div className="w-full">
-          <p className="line-clamp-2 font-sans text-sm leading-snug font-bold text-gray-800">
+          <p className="line-clamp-2 font-sans text-sm leading-snug font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500">
             {book.title}
           </p>
           <p className="truncate font-sans text-xs text-gray-500">
@@ -114,11 +114,11 @@ function ListRow({ book }: { book: CollectionBook }) {
   return (
     <Link
       href={book.slug}
-      className="group -mx-4 block rounded-lg px-4 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04] hover:no-underline"
+      className="group -mx-4 block rounded-lg px-4 transition-colors duration-300 ease-out hover:no-underline"
     >
       <div className="flex items-baseline justify-between gap-4 border-b border-gray-200 py-2.5">
         <div className="flex min-w-0 flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
-          <p className="font-sans text-base leading-snug font-bold text-gray-800 sm:truncate">
+          <p className="font-sans text-base leading-snug font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500 sm:truncate">
             {book.title}
           </p>
           <p className="truncate font-sans text-sm text-gray-500 sm:shrink-0">
@@ -133,7 +133,7 @@ function ListRow({ book }: { book: CollectionBook }) {
                 : `${book.rating}/10`
               : "Reading"}
           </span>
-          <span className="-translate-x-1 text-gray-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
+          <span className="-translate-x-1 text-brand-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
             <ArrowRightIcon />
           </span>
         </div>

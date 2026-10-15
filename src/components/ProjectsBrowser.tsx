@@ -87,13 +87,13 @@ function ProjectRow({
 
   return (
     <li className="project-enter" style={{ animationDelay: `${index * 80}ms` }}>
-      <div className="group relative -mx-4 flex items-start gap-5 rounded-lg px-4 py-5 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04]">
+      <div className="group relative -mx-4 flex items-start gap-5 rounded-lg px-4 py-5 transition-colors duration-300 ease-out">
         <div className="flex min-w-0 flex-1 flex-col items-start gap-2">
           <div className="flex w-full items-start justify-between gap-3">
             <div>
               <Link
                 href={`/projects/${project.slug}`}
-                className="font-sans text-lg leading-snug font-bold text-gray-800 no-underline after:absolute after:inset-0 after:content-['']"
+                className="font-sans text-lg leading-snug font-bold text-gray-800 no-underline transition-colors duration-200 group-hover:text-brand-500 after:absolute after:inset-0 after:content-['']"
               >
                 {project.title}
               </Link>
@@ -101,7 +101,7 @@ function ProjectRow({
                 <p className="mt-0.5 font-sans text-sm text-gray-500">{date}</p>
               )}
             </div>
-            <span className="shrink-0 -translate-x-1 text-gray-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
+            <span className="shrink-0 -translate-x-1 text-brand-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
               <ArrowRightIcon />
             </span>
           </div>

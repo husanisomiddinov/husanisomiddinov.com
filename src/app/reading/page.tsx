@@ -34,7 +34,7 @@ function BookCard({ book, index }: { book: ListingBook; index: number }) {
       {index > 0 && <hr className="mb-3 w-full border-gray-300" />}
       <Link
         href={book.slug}
-        className="group relative -mx-4 flex flex-row items-start gap-6 rounded-lg px-4 py-2 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04] hover:no-underline"
+        className="group relative -mx-4 flex flex-row items-start gap-6 rounded-lg px-4 py-2 transition-colors duration-300 ease-out hover:no-underline"
       >
         <div className="relative h-[100px] w-[66px] shrink-0 overflow-hidden rounded-lg border border-gray-200 sm:h-[140px] sm:w-[93px] md:h-[160px] md:w-[107px]">
           <NextImage
@@ -50,10 +50,10 @@ function BookCard({ book, index }: { book: ListingBook; index: number }) {
         </div>
         <div className="flex grow flex-col items-start gap-2">
           <div className="flex w-full items-start justify-between gap-3">
-            <h2 className="text-base leading-snug font-bold text-gray-800">
+            <h2 className="text-base leading-snug font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500">
               {book.title}
             </h2>
-            <span className="shrink-0 -translate-x-1 text-gray-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
+            <span className="shrink-0 -translate-x-1 text-brand-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
               <ArrowRightIcon />
             </span>
           </div>

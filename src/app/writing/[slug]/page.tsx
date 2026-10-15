@@ -160,10 +160,10 @@ export default async function WritingPostPage({
               {newer && (
                 <Link
                   href={`/writing/${newer.slug}`}
-                  className="-mx-3 block rounded-lg px-3 py-2 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04] hover:no-underline"
+                  className="group -mx-3 block rounded-lg px-3 py-2 transition-colors duration-300 ease-out hover:no-underline"
                 >
                   <p className="font-sans text-sm text-gray-500">Newer</p>
-                  <p className="line-clamp-2 font-sans text-sm font-bold text-gray-800">
+                  <p className="line-clamp-2 font-sans text-sm font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500">
                     {newer.title}
                   </p>
                 </Link>
@@ -173,10 +173,10 @@ export default async function WritingPostPage({
               {older && (
                 <Link
                   href={`/writing/${older.slug}`}
-                  className="-mx-3 block rounded-lg px-3 py-2 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04] hover:no-underline"
+                  className="group -mx-3 block rounded-lg px-3 py-2 transition-colors duration-300 ease-out hover:no-underline"
                 >
                   <p className="font-sans text-sm text-gray-500">Older</p>
-                  <p className="line-clamp-2 font-sans text-sm font-bold text-gray-800">
+                  <p className="line-clamp-2 font-sans text-sm font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500">
                     {older.title}
                   </p>
                 </Link>

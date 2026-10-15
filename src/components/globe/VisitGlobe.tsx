@@ -172,10 +172,10 @@ export function VisitGlobe({ places }: { places: Place[] }) {
                 <button
                   type="button"
                   onClick={() => choose(place.slug)}
-                  className="flex w-full cursor-pointer items-baseline justify-between gap-3 rounded-md px-3 py-2 text-left transition-colors duration-200 hover:bg-gray-800/[0.04]"
+                  className="group flex w-full cursor-pointer items-baseline justify-between gap-3 rounded-md px-3 py-2 text-left transition-colors duration-200"
                 >
                   <span className="min-w-0">
-                    <span className="block font-sans text-sm font-bold text-gray-800">{place.name}</span>
+                    <span className="block font-sans text-sm font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500">{place.name}</span>
                     <span className="block text-xs text-gray-600">{place.country}</span>
                   </span>
                   <span className="shrink-0 text-right text-xs text-gray-500">

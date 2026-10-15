@@ -26,17 +26,17 @@ function StudioRow({ item, isLast }: { item: StudioLink; isLast: boolean }) {
     <div>
       <Link
         {...linkProps}
-        className="group relative -mx-4 flex items-center justify-between gap-4 rounded-lg px-4 py-4 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04] hover:no-underline"
+        className="group relative -mx-4 flex items-center justify-between gap-4 rounded-lg px-4 py-4 transition-colors duration-300 ease-out hover:no-underline"
       >
         <div className="min-w-0">
-          <p className="font-sans text-base font-bold text-gray-800 after:absolute after:inset-0 after:content-['']">
+          <p className="font-sans text-base font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500 after:absolute after:inset-0 after:content-['']">
             {item.name}
           </p>
           {item.description && (
             <p className="mt-1 text-prose-sm text-gray-600">{item.description}</p>
           )}
         </div>
-        <div className="shrink-0 -translate-x-1 text-gray-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
+        <div className="shrink-0 -translate-x-1 text-brand-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
           {external ? <ArrowUpRightIcon /> : <ArrowRightIcon />}
         </div>
       </Link>
