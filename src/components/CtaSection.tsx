@@ -23,13 +23,13 @@ export function CtaSection({
     <section
       className={`flex items-center justify-between gap-6 ${className ?? ""}`}
     >
-      <div className="flex flex-col items-start gap-3">
+      <div className="flex min-w-0 flex-col items-start gap-3">
         {title && (
           <h2 className="font-heading tracking-heading text-2xl font-bold text-gray-800">
             {title}
           </h2>
         )}
-        <p className="max-w-sm text-prose text-gray-600">{text}</p>
+        <p className="text-prose text-ink">{text}</p>
         <Link
           href={href}
           className="mt-1 rounded-lg bg-brand-500 px-5 py-2.5 font-sans text-sm font-bold text-brand-50 no-underline transition-colors hover:bg-brand-600"
