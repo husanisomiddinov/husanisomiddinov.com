@@ -56,7 +56,7 @@ function EssayRow({ post }: { post: WritingPreview }) {
   return (
     <Link
       href={`/writing/${post.slug}`}
-      className="group -mx-4 flex w-full items-start gap-4 rounded-lg px-4 py-3 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04] hover:no-underline"
+      className="group -mx-4 flex items-start gap-4 rounded-lg px-4 py-3 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04] hover:no-underline"
     >
       <Thumb post={post} />
       <div className="min-w-0 flex-1">

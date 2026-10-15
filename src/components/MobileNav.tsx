@@ -22,7 +22,7 @@ export function MobileNav() {
   return (
     <>
       <div className="fixed top-0 left-0 z-50 flex h-12 w-full items-center justify-between bg-page-bg lg:hidden">
-        <div className="flex w-full items-center justify-between px-8">
+        <div className="flex w-full items-center justify-between px-4">
           <Logo />
           <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Trigger asChild>

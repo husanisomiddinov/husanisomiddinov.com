@@ -114,14 +114,14 @@ function ListRow({ book }: { book: CollectionBook }) {
   return (
     <Link
       href={book.slug}
-      className="group -mx-4 block w-full rounded-lg px-4 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04] hover:no-underline"
+      className="group -mx-4 block rounded-lg px-4 transition-colors duration-300 ease-out hover:bg-gray-800/[0.04] hover:no-underline"
     >
       <div className="flex items-baseline justify-between gap-4 border-b border-gray-200 py-2.5">
-        <div className="flex min-w-0 items-baseline gap-3">
-          <p className="truncate font-sans text-base font-bold text-gray-800">
+        <div className="flex min-w-0 flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
+          <p className="font-sans text-base leading-snug font-bold text-gray-800 sm:truncate">
             {book.title}
           </p>
-          <p className="shrink-0 truncate font-sans text-sm text-gray-500">
+          <p className="truncate font-sans text-sm text-gray-500 sm:shrink-0">
             {book.author}
           </p>
         </div>
