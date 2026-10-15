@@ -26,7 +26,7 @@ export default async function Home() {
       <Prose>{page.content}</Prose>
       <CtaSection
         className="mt-6"
-        text="From learning English at 5 to quitting Higgsfield for robots. Here is how I got here."
+        text="From learning English at 5 to quitting Higgsfield for robots. My humble story..."
         href="/about"
         buttonLabel="Read about me"
         image="/images/retro-computer.png"
