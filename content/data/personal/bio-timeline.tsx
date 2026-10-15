@@ -173,12 +173,4 @@ export const bioMilestones: BioMilestone[] = [
       </p>
     ),
   },
-  {
-    id: "now",
-    age: 19,
-    dateLabel: "Now",
-    content: (
-      <p>So right now, I am unemployed. Learning physical ai in the middle of somewhere.</p>
-    ),
-  },
 ];
