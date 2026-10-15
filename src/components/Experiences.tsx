@@ -38,24 +38,24 @@ function ExperienceRow({ experience }: { experience: Experience }) {
       <div className="flex min-w-0 flex-col gap-1">
         <div className="flex w-full flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-3">
           <h3 className="font-sans text-base font-bold text-gray-800">
-            {role}
+            {url ? (
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-800 no-underline transition-colors duration-200 ease-out hover:text-brand-500 after:absolute after:inset-0 after:content-['']"
+              >
+                {name}
+              </a>
+            ) : (
+              name
+            )}
           </h3>
           <span className="shrink-0 font-sans text-sm text-gray-500">
             {date}
           </span>
         </div>
-        {url ? (
-          <a
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-fit font-sans text-sm text-gray-500 underline decoration-dotted decoration-brand-300 underline-offset-4 transition-colors duration-300 ease-out hover:text-brand-500 hover:decoration-brand-500 after:absolute after:inset-0 after:content-['']"
-          >
-            {name}
-          </a>
-        ) : (
-          <p className="font-sans text-sm text-gray-500">{name}</p>
-        )}
+        <p className="font-sans text-sm text-gray-500">{role}</p>
         <p className="text-prose text-ink">{description}</p>
         {images && images.length > 0 && (
           <ExperienceGallery images={images} alt={`${name} photos`} />
