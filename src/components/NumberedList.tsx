@@ -17,7 +17,7 @@ export function NumberedList({ items }: NumberedListProps) {
             <span className="min-w-[30px] font-sans text-base font-medium text-brand-500">
               {String(i + 1).padStart(pad, "0")}
             </span>
-            <span className="text-base leading-[1.6] text-gray-600">{item}</span>
+            <span className="text-prose text-gray-600">{item}</span>
           </div>
           {i < items.length - 1 && (
             <hr className="mt-4 w-full border-gray-300" />

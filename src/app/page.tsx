@@ -34,8 +34,8 @@ export default async function Home() {
       <Experiences experiences={experiences} />
       <section className="mt-12 flex items-center justify-between gap-6 border-t border-gray-300 pt-8">
         <div className="flex flex-col items-start gap-3">
-          <h2 className="font-sans text-xl font-bold text-gray-800">Talk with me</h2>
-          <p className="max-w-sm text-base text-gray-600">
+          <h2 className="font-heading tracking-heading text-2xl font-bold text-gray-800">Talk with me</h2>
+          <p className="max-w-sm text-prose text-gray-600">
             The most fruitful and natural exercise of our minds is, in my opinion, conversation. Oh, that&apos;s not me. Copied it from Montaigne. Anyways, grab a coffee with me)
           </p>
           <Link

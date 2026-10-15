@@ -14,7 +14,7 @@ export default function NotFound() {
       <p className="font-sans text-base font-bold text-gray-800">
         404. Page not found
       </p>
-      <p className="text-base leading-[1.6] text-gray-600">
+      <p className="text-prose text-gray-600">
         This page doesn&apos;t exist or has been moved. Here&apos;s where you can go:
       </p>
       <nav aria-label="Site links" className="flex flex-col items-start gap-2">

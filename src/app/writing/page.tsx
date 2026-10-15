@@ -69,7 +69,7 @@ function EssayRow({ post }: { post: WritingPreview }) {
           </span>
         </div>
         {post.excerpt && (
-          <p className="mt-1 line-clamp-2 text-sm text-gray-600">{post.excerpt}</p>
+          <p className="mt-1 line-clamp-2 text-prose-sm text-gray-600">{post.excerpt}</p>
         )}
         <div className="mt-1.5 flex items-center justify-between gap-3">
           <p className="font-sans text-xs text-gray-400">{post.readingTime} min read</p>

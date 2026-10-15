@@ -105,7 +105,7 @@ function ProjectRow({
               <ArrowRightIcon />
             </span>
           </div>
-          <p className="line-clamp-3 text-base leading-[1.6] text-gray-600">
+          <p className="line-clamp-3 text-prose text-gray-600">
             {project.summary}
           </p>
           {project.previews && <DiagramPreviews names={project.previews} />}

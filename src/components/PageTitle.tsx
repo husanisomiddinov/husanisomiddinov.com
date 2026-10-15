@@ -8,7 +8,7 @@ interface PageTitleProps {
 /** The site's single page-heading style. Every page title should render through this. */
 export function PageTitle({ children, className }: PageTitleProps) {
   return (
-    <h1 className={`text-lg leading-snug font-bold text-gray-800 md:text-xl ${className ?? ""}`}>
+    <h1 className={`font-heading tracking-heading text-xl leading-snug font-bold text-gray-800 md:text-2xl ${className ?? ""}`}>
       {children}
     </h1>
   );

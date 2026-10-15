@@ -15,7 +15,7 @@ export default function ProjectsPage() {
     <div className="flex w-full flex-col items-stretch gap-8">
       <div>
         <PageTitle>Projects</PageTitle>
-        <p className="mt-1 text-base text-gray-600">
+        <p className="mt-1 text-prose text-gray-600">
           Things I&apos;ve built across robotics, machine learning, and the web.
         </p>
       </div>

@@ -33,7 +33,7 @@ function StudioRow({ item, isLast }: { item: StudioLink; isLast: boolean }) {
             {item.name}
           </p>
           {item.description && (
-            <p className="mt-1 text-sm text-gray-600">{item.description}</p>
+            <p className="mt-1 text-prose-sm text-gray-600">{item.description}</p>
           )}
         </div>
         <div className="shrink-0 -translate-x-1 text-gray-500 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100">
@@ -52,7 +52,7 @@ export default function StudioPage() {
     <div className="flex w-full flex-col items-stretch gap-6">
       <div>
         <PageTitle>idk</PageTitle>
-        <p className="mt-1 text-base text-gray-600">The messy side of things.</p>
+        <p className="mt-1 text-prose text-gray-600">The messy side of things.</p>
       </div>
       <div className="flex flex-col">
         {links.map((item, i) => (

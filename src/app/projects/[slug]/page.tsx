@@ -238,7 +238,7 @@ export default async function ProjectPage({
             { label: project.title, href: `/projects/${project.slug}` },
           ]}
         />
-        <h1 className="mt-4 font-sans text-3xl leading-tight font-bold text-balance text-gray-800">
+        <h1 className="mt-4 font-heading tracking-heading text-4xl leading-tight font-bold text-balance text-gray-800">
           {project.title}
         </h1>
         <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 font-sans text-sm text-gray-500">
@@ -263,7 +263,7 @@ export default async function ProjectPage({
       </header>
 
       <div className="flex w-full flex-col gap-4 rounded-md bg-brand-50 p-4">
-        <p className="text-base leading-[1.6] font-bold text-gray-800">
+        <p className="text-prose font-bold text-gray-800">
           {project.summary}
         </p>
         {sections.length > 1 && (
@@ -285,7 +285,7 @@ export default async function ProjectPage({
       {(hasDescription || project.status === "planned") && (
         <article className="flex w-full flex-col items-start gap-3 text-gray-800">
           {!hasDescription ? (
-            <p className="text-base leading-[1.7] text-gray-500">
+            <p className="text-prose text-gray-500">
               {project.status === "planned"
                 ? "This project hasn't started yet. Check back soon."
                 : "No description yet."}
@@ -303,8 +303,8 @@ export default async function ProjectPage({
                   return (
                     <Tag
                       id={id}
-                      className={`group relative scroll-mt-28 font-sans font-bold text-gray-800 ${
-                        isH2 ? "pt-8 text-2xl" : "pt-3 text-lg"
+                      className={`group relative scroll-mt-28 font-heading tracking-heading font-bold text-gray-800 ${
+                        isH2 ? "pt-8 text-3xl" : "pt-3 text-xl"
                       }`}
                     >
                       <a
@@ -326,7 +326,7 @@ export default async function ProjectPage({
                       {block.items.map((item, itemIdx) => (
                         <li
                           key={itemIdx}
-                          className="flex w-full items-start gap-2 text-base leading-[1.7]"
+                          className="flex w-full items-start gap-2 text-prose"
                         >
                           <span aria-hidden className="text-gray-400">
                             •
@@ -344,7 +344,7 @@ export default async function ProjectPage({
                 }
 
                 return (
-                  <p className="text-base leading-[1.7]">
+                  <p className="text-prose">
                     {renderInline(block.text)}
                   </p>
                 );
@@ -357,7 +357,7 @@ export default async function ProjectPage({
 
       {hasPapers && (
         <section id="papers" className="flex w-full flex-col gap-3">
-          <h2 className="font-sans text-2xl font-bold text-gray-800">
+          <h2 className="font-heading tracking-heading text-3xl font-bold text-gray-800">
             Papers Read
           </h2>
           <div className="flex w-full flex-col items-start gap-3">
@@ -369,7 +369,7 @@ export default async function ProjectPage({
                     {paper.title}
                   </p>
                   {paper.notes && (
-                    <p className="mt-0.5 text-base leading-[1.7] text-gray-800">
+                    <p className="mt-0.5 text-prose text-gray-800">
                       {paper.notes}
                     </p>
                   )}

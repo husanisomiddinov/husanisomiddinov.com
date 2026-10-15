@@ -60,7 +60,7 @@ function BookCard({ book, index }: { book: ListingBook; index: number }) {
           <p className="font-sans text-base text-gray-500">{book.author}</p>
           <BookStatus book={book} />
           {book.summaryExcerpt && (
-            <p className="line-clamp-4 text-sm text-gray-700">
+            <p className="line-clamp-4 text-prose-sm text-gray-700">
               {book.summaryExcerpt}
             </p>
           )}

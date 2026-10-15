@@ -15,7 +15,7 @@ export default function QuotesPage() {
       {quotes.map((item, i) => (
         <div key={`${item.author}-${i}`} className="w-full">
           <div className="flex w-full flex-col items-start gap-2">
-            <p className="text-base leading-[1.6] text-gray-600">
+            <p className="text-prose text-gray-600">
               &ldquo;{item.quote}&rdquo;
             </p>
             <p className="font-sans text-base font-medium text-brand-500">

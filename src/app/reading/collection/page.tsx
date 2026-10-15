@@ -32,7 +32,7 @@ export default function CollectionPage() {
           ]}
         />
         <PageTitle className="mt-3">The collection</PageTitle>
-        <p className="mt-1 text-base text-gray-600">
+        <p className="mt-1 text-prose text-gray-600">
           Every book on the shelf. Search the shelf, filter by status, and switch between
           cover and list views.
         </p>

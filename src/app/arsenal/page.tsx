@@ -18,7 +18,7 @@ export default function ArsenalPage() {
           {arsenal.software.map((item) => (
             <div key={item.name} className="w-full">
               <p className="font-sans text-base font-bold text-gray-800">{item.name}</p>
-              <p className="text-base text-gray-600">{item.description}</p>
+              <p className="text-prose text-gray-600">{item.description}</p>
             </div>
           ))}
         </div>
@@ -32,7 +32,7 @@ export default function ArsenalPage() {
           {arsenal.hardware.map((item) => (
             <div key={item.name} className="w-full">
               <p className="font-sans text-base font-bold text-gray-800">{item.name}</p>
-              <p className="text-base text-gray-600">{item.description}</p>
+              <p className="text-prose text-gray-600">{item.description}</p>
             </div>
           ))}
         </div>
