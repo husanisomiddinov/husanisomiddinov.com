@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
-import { Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
 import { defaultMetadata } from "@/config/seo";
 import { siteUrl } from "@/config/site";
@@ -18,6 +18,13 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
+const geist = Geist({
+  weight: ["400", "600"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-geist",
+});
+
 export const metadata: Metadata = defaultMetadata;
 
 export const viewport: Viewport = {
@@ -26,7 +33,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={geistMono.variable}>
+    <html lang="en" className={`${geistMono.variable} ${geist.variable}`}>
       <head>
         <link rel="icon" href="/favicon.ico?v=2" />
         <link rel="apple-touch-icon" href="/favicon.ico?v=2" />

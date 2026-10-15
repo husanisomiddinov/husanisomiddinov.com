@@ -23,7 +23,7 @@ export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
               </p>
               <div
                 className={`prose transition-opacity duration-500 ease-out ${
-                  active ? "opacity-100" : "opacity-60"
+                  active ? "opacity-100" : "opacity-80"
                 }`}
               >
                 {milestone.content}

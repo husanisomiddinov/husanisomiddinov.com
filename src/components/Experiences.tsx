@@ -91,7 +91,7 @@ function ExperienceRow({
           <p className="font-sans text-sm text-gray-500">{name}</p>
         )}
         <p
-          className={`text-[0.9375rem] leading-[1.6] text-gray-600 opacity-70 transition-opacity duration-300 ease-out group-hover:opacity-100 ${active ? "opacity-100" : ""}`}
+          className={`font-body text-[1.0625rem] leading-[1.7] text-ink opacity-80transition-opacity duration-300 ease-out group-hover:opacity-100 ${active ? "opacity-100" : ""}`}
         >
           {description}
         </p>
