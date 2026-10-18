@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Button } from "@/components/Button";
 import { EssayRow } from "@/components/EssayRow";
 import type { WritingPreview } from "@/lib/posts";
 
@@ -14,12 +14,9 @@ export function FeaturedWriting({ posts }: { posts: WritingPreview[] }) {
           <EssayRow key={post.slug} post={post} />
         ))}
       </div>
-      <Link
-        href="/writing"
-        className="font-sans text-sm font-medium text-gray-500 no-underline transition-colors duration-200 hover:text-brand-500"
-      >
-        All writing
-      </Link>
+      <Button href="/writing" className="mt-4">
+        All writing &rarr;
+      </Button>
     </section>
   );
 }

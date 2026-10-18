@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Button } from "@/components/Button";
 import { ProjectRow } from "@/components/ProjectsBrowser";
 import type { Project } from "@/types";
 
@@ -19,12 +19,9 @@ export function FeaturedProjects({ projects }: { projects: Project[] }) {
           />
         ))}
       </ul>
-      <Link
-        href="/projects"
-        className="font-sans text-sm font-medium text-gray-500 no-underline transition-colors duration-200 hover:text-brand-500"
-      >
-        All projects
-      </Link>
+      <Button href="/projects" className="mt-4">
+        All projects &rarr;
+      </Button>
     </section>
   );
 }

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Button } from "@/components/Button";
 import { BookCard, buildSummaryExcerpt } from "@/components/BookCard";
 import type { Book } from "@/types/content";
 
@@ -18,12 +18,9 @@ export function FeaturedBooks({ books }: { books: Book[] }) {
           />
         ))}
       </div>
-      <Link
-        href="/reading"
-        className="font-sans text-sm font-medium text-gray-500 no-underline transition-colors duration-200 hover:text-brand-500"
-      >
-        All books
-      </Link>
+      <Button href="/reading" className="mt-4">
+        All books &rarr;
+      </Button>
     </section>
   );
 }
