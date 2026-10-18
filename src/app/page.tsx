@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import { Prose, SocialIcons, Experiences, CtaSection } from "@/components";
+import { Prose, SocialIcons, Experiences, FeaturedProjects, CtaSection } from "@/components";
 import { getHomePage } from "@/lib/pages";
-import { getExperiences } from "@/lib/data";
+import { getExperiences, getFeaturedProjects } from "@/lib/data";
 import { buildMetadata } from "@/lib/metadata";
 
 export async function generateMetadata() {
@@ -20,6 +20,7 @@ export default async function Home() {
   }
 
   const experiences = getExperiences();
+  const featuredProjects = getFeaturedProjects();
 
   return (
     <>
@@ -34,6 +35,7 @@ export default async function Home() {
       <SocialIcons className="mt-3" />
       <hr className="mt-8 border-gray-300" />
       <Experiences experiences={experiences} />
+      <FeaturedProjects projects={featuredProjects} />
       <CtaSection
         className="mt-12 border-t border-gray-300 pt-8"
         title="Talk with me"

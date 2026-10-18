@@ -9,3 +9,4 @@ export { Experiences } from "./Experiences";
 export { BioTimeline } from "./BioTimeline";
 export { CtaSection } from "./CtaSection";
 export { Button } from "./Button";
+export { FeaturedProjects } from "./FeaturedProjects";

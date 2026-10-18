@@ -73,7 +73,7 @@ function DiagramPreviews({ names }: { names: string[] }) {
   );
 }
 
-function ProjectRow({
+export function ProjectRow({
   project,
   isLast,
   index,

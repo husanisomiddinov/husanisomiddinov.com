@@ -31,6 +31,8 @@ export interface Project {
   tech?: string[];
   date?: string;
   status?: ProjectStatus;
+  /** Shown in the featured projects section on the home page. */
+  featured?: boolean;
   links?: ProjectLinks;
   papers?: ProjectPaper[];
   /** Diagram names (see components/diagrams) shown as live previews on the projects index. */

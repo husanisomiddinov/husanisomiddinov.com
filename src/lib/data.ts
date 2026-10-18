@@ -52,6 +52,10 @@ export function getProjects(): Project[] {
   return loadJson<Project[]>("portfolio", "projects");
 }
 
+export function getFeaturedProjects(): Project[] {
+  return getProjects().filter((p) => p.featured);
+}
+
 export function getProject(slug: string): Project | undefined {
   return getProjects().find((p) => p.slug === slug);
 }
