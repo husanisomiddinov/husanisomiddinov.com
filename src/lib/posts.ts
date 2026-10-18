@@ -58,6 +58,7 @@ export interface WritingPreview {
   cover: string | null;
   excerpt: string;
   readingTime: number;
+  featured: boolean;
 }
 
 export const getAllWritingMetadata = cache((): WritingPreview[] => {
@@ -75,6 +76,7 @@ export const getAllWritingMetadata = cache((): WritingPreview[] => {
       cover: data.cover ?? null,
       excerpt: buildExcerpt(plain),
       readingTime: readingTimeMinutes(plain),
+      featured: data.featured === true,
     };
   });
 

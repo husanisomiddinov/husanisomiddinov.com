@@ -10,3 +10,5 @@ export { BioTimeline } from "./BioTimeline";
 export { CtaSection } from "./CtaSection";
 export { Button } from "./Button";
 export { FeaturedProjects } from "./FeaturedProjects";
+export { FeaturedWriting } from "./FeaturedWriting";
+export { FeaturedBooks } from "./FeaturedBooks";

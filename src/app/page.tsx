@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
-import { Prose, SocialIcons, Experiences, FeaturedProjects, CtaSection } from "@/components";
+import { Prose, SocialIcons, Experiences, FeaturedProjects, FeaturedWriting, FeaturedBooks, CtaSection } from "@/components";
 import { getHomePage } from "@/lib/pages";
 import { getExperiences, getFeaturedProjects } from "@/lib/data";
+import { getAllWritingMetadata } from "@/lib/posts";
+import { getFeaturedBooks } from "@/lib/books";
 import { buildMetadata } from "@/lib/metadata";
 
 export async function generateMetadata() {
@@ -21,6 +23,8 @@ export default async function Home() {
 
   const experiences = getExperiences();
   const featuredProjects = getFeaturedProjects();
+  const featuredWriting = getAllWritingMetadata().filter((p) => p.featured);
+  const featuredBooks = getFeaturedBooks();
 
   return (
     <>
@@ -36,6 +40,8 @@ export default async function Home() {
       <hr className="mt-8 border-gray-300" />
       <Experiences experiences={experiences} />
       <FeaturedProjects projects={featuredProjects} />
+      <FeaturedWriting posts={featuredWriting} />
+      <FeaturedBooks books={featuredBooks} />
       <CtaSection
         className="mt-12 border-t border-gray-300 pt-8"
         title="Talk with me"

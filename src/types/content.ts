@@ -15,6 +15,8 @@ export interface Book {
   textColor: string;
   slug: string;
   summaryContent?: string;
+  /** Shown in the featured books section on the home page. */
+  featured?: boolean;
 }
 
 export type ReadingShelfBook = Pick<
@@ -36,4 +38,6 @@ export interface Post {
   tag?: "essay" | "note";
   description?: string;
   cover?: string;
+  /** Shown in the featured writing section on the home page. */
+  featured?: boolean;
 }

@@ -34,3 +34,7 @@ export function toReadingShelfBooks(books: Book[]): ReadingShelfBook[] {
     slug,
   }));
 }
+
+export function getFeaturedBooks(): Book[] {
+  return getAllBooks().filter((book) => book.featured);
+}
