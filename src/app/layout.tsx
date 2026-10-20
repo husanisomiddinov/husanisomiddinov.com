@@ -59,6 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 sameAs: [
                   "https://x.com/HusanIsamiddin",
                   "https://hida115.substack.com/",
+                  "https://github.com/husanisomiddinov",
                 ],
               },
             ],
