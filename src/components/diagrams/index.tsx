@@ -42,5 +42,6 @@ export const DIAGRAM_PREVIEWS: Record<
   "crop-classification": {
     Component: CropClassificationPreview,
     aspect: 440 / 352,
+    bare: true,
   },
 };

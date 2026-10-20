@@ -1,11 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import {
   StepDiagram,
   startMotion,
-  useAnimationsEnabled,
-  useCycle,
   type DiagramStep,
 } from "./StepDiagram";
 
@@ -235,8 +234,18 @@ export function CropClassificationDiagram() {
   );
 }
 
+/** Project-card thumbnail: a still 3D render of a plant instead of the live schematic. */
 export function CropClassificationPreview() {
-  const animate = useAnimationsEnabled();
-  const active = useCycle(SAMPLES.length, 2800, animate);
-  return <Scene active={active} animate={animate} />;
+  return (
+    <div className="flex aspect-[440/352] w-full items-center justify-center">
+      <Image
+        src="/images/plant.webp"
+        alt=""
+        width={512}
+        height={467}
+        sizes="320px"
+        className="h-full w-auto object-contain"
+      />
+    </div>
+  );
 }
