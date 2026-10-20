@@ -10,179 +10,211 @@ import {
   type DiagramStep,
 } from "./StepDiagram";
 
+const DATA = "#d4573b";
 const FLOW = "#5b84b8";
-const IDLE = "#c9c9c6";
-const OLIVE = "#5b6529";
+const API = "#5b6529";
+const MODEL = "#e3b341";
+const MODEL_TINT = "#f6e7b4";
+const IDLE_LINE = "#dcdcd8";
+const IDLE_TILE = "#e4e4e0";
+const INK = "#2a2925";
+const MUTED = "#6b6a64";
+
 const BEAT_MS = 1400;
-/** A packet crosses its link in a bit less than a beat, so each hop lands before the next starts. */
+/** A packet crosses its lane in a bit less than a beat, so each hop lands before the next starts. */
 const PACKET_S = 1.05;
 
-interface StageDef {
-  id: string;
-  label: string;
-  sub?: string;
-  x: number;
+const BUS_X = 190;
+const NUM_X = 236;
+const API_X = 410;
+const BAR_X = 438;
+const PANEL_X = 448;
+
+/** One horizontal lane per step, like a row of a sequence diagram. */
+interface Lane {
   y: number;
-  w: number;
-  h: number;
+  label: string;
+  caption: string;
+  /** Beats within the step; the lane has one beat per way in. */
+  beats: number;
 }
 
-const STAGES: StageDef[] = [
-  { id: "camera", label: "capture", sub: "phone / drone", x: 20, y: 10, w: 130, h: 36 },
-  { id: "telegram", label: "Telegram", sub: "bot polling", x: 290, y: 10, w: 130, h: 36 },
-  { id: "nextjs", label: "Next.js 15", sub: "App Router", x: 40, y: 76, w: 160, h: 36 },
-  { id: "fastapi", label: "FastAPI", sub: "/predict", x: 125, y: 138, w: 190, h: 36 },
-  { id: "preprocess", label: "preprocess", sub: "224×224 · norm", x: 135, y: 200, w: 170, h: 36 },
-  { id: "resnet", label: "ResNet-18", sub: "ONNX Runtime", x: 95, y: 262, w: 250, h: 40 },
-  { id: "diagnosis", label: "diagnosis", sub: "38 classes", x: 135, y: 322, w: 170, h: 36 },
+const LANES: Lane[] = [
+  { y: 90, label: "capture", caption: "photo", beats: 1 },
+  { y: 152, label: "POST /predict", caption: "web | bot", beats: 2 },
+  { y: 214, label: "preprocess", caption: "224x224x3", beats: 1 },
+  { y: 276, label: "resnet18", caption: "38 classes", beats: 1 },
 ];
 
-/** What travels along a link: the photo, then the tensor made from it, then the class scores. */
-type Payload = "photo" | "tensor" | "scores";
-
-interface LinkDef {
-  from: string;
-  to: string;
-  label?: string;
-  payload: Payload;
-}
-
-const LINKS: LinkDef[] = [
-  { from: "camera", to: "nextjs", payload: "photo" },
-  { from: "nextjs", to: "fastapi", label: "upload", payload: "photo" },
-  { from: "telegram", to: "fastapi", label: "photo", payload: "photo" },
-  { from: "fastapi", to: "preprocess", payload: "photo" },
-  { from: "preprocess", to: "resnet", label: "tensor", payload: "tensor" },
-  { from: "resnet", to: "diagnosis", label: "scores", payload: "scores" },
+const LEGEND = [
+  { x: 20, color: DATA, label: "photo" },
+  { x: 160, color: FLOW, label: "app" },
+  { x: 372, color: API, label: "FastAPI" },
+  { x: 448, color: MODEL, label: "model" },
 ];
 
-interface StepScene {
-  nodes: string[];
-  /** Every link in the step; the beat picks which one carries a packet right now. */
-  edges: number[];
-  beats: number[][];
-}
+/** Fixed class scores for the output bars; index WINNER is the diagnosis. */
+const SCORES = [0.12, 0.2, 0.08, 0.3, 0.15, 0.1, 0.22, 0.92, 0.18, 0.09, 0.26, 0.14, 0.07, 0.19, 0.11, 0.24, 0.1, 0.16, 0.08];
+const WINNER = 7;
 
-const SCENES: StepScene[] = [
-  { nodes: ["camera", "nextjs"], edges: [0], beats: [[0]] },
-  // The web upload and the Telegram bot are two ways in, so they take turns.
-  { nodes: ["nextjs", "telegram", "fastapi"], edges: [1, 2], beats: [[1], [2]] },
-  { nodes: ["fastapi", "preprocess", "resnet"], edges: [3, 4], beats: [[3], [4]] },
-  { nodes: ["resnet", "diagnosis"], edges: [5], beats: [[5]] },
-];
+const PHOTO = { x: 20, y: 52, cell: 22, gap: 4, cols: 4, rows: 9 };
+const photoEdge = PHOTO.x + PHOTO.cols * PHOTO.cell + (PHOTO.cols - 1) * PHOTO.gap;
 
-const stageById = new Map(STAGES.map((s) => [s.id, s]));
+const mono = "font-mono";
 
-function linkEndpoints(link: LinkDef) {
-  const from = stageById.get(link.from)!;
-  const to = stageById.get(link.to)!;
-  return {
-    x1: from.x + from.w / 2,
-    y1: from.y + from.h + 3,
-    x2: to.x + to.w / 2,
-    y2: to.y - 3,
-  };
-}
-
-/** Resting state for reduced motion: dots spread along the link. */
-function StaticDots({ x1, y1, x2, y2 }: { x1: number; y1: number; x2: number; y2: number }) {
-  return (
-    <>
-      {[0.33, 0.67].map((t) => (
-        <circle key={t} cx={x1 + (x2 - x1) * t} cy={y1 + (y2 - y1) * t} r={3.5} fill={FLOW} />
-      ))}
-    </>
-  );
-}
-
-/** The little picture of what is being sent, centred on (0, 0). */
-function PayloadGlyph({ payload }: { payload: Payload }) {
-  if (payload === "photo") {
-    return (
-      <>
-        <rect x={-8} y={-6} width={16} height={12} rx={2} fill="#fbfbf9" stroke={FLOW} strokeWidth={1.5} />
-        <circle cx={-2.5} cy={-1.5} r={1.8} fill={FLOW} />
-        <path d="M -8 6 L -3 0 L 1 4 L 4 1 L 8 6 z" fill={FLOW} fillOpacity={0.55} />
-      </>
-    );
-  }
-  if (payload === "tensor") {
-    return (
-      <>
-        {[-6, 0, 6].flatMap((x) => [-6, 0, 6].map((y) => (
-          <rect key={`${x},${y}`} x={x - 2.5} y={y - 2.5} width={5} height={5} rx={1} fill={FLOW} fillOpacity={0.35 + ((x + y + 12) % 7) / 12} />
-        )))}
-      </>
-    );
-  }
-  return (
-    <>
-      <rect x={-8} y={-8} width={16} height={16} rx={2} fill="#fbfbf9" stroke={FLOW} strokeWidth={1.5} />
-      {[-4.5, -0.5, 3.5].map((y, i) => (
-        <rect key={y} x={-5.5} y={y - 1} width={[10, 5, 2.5][i]} height={2.4} rx={1} fill={FLOW} />
-      ))}
-    </>
-  );
-}
-
-/** One packet making a single trip along a link; mount it with a fresh key to send another. */
-function Packet({
-  x1,
-  y1,
-  x2,
-  y2,
-  payload,
-}: {
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
-  payload: Payload;
-}) {
+function PhotoGrid({ active, scanRow }: { active: boolean; scanRow: number }) {
   return (
     <g>
-      <PayloadGlyph payload={payload} />
+      {Array.from({ length: PHOTO.rows }, (_, r) =>
+        Array.from({ length: PHOTO.cols }, (_, c) => (
+          <rect
+            key={`${r},${c}`}
+            x={PHOTO.x + c * (PHOTO.cell + PHOTO.gap)}
+            y={PHOTO.y + r * (PHOTO.cell + PHOTO.gap)}
+            width={PHOTO.cell}
+            height={PHOTO.cell}
+            rx={2}
+            fill={active ? DATA : IDLE_TILE}
+            fillOpacity={active ? (r === scanRow ? 1 : 0.62) : 0.7}
+            style={{ transition: "fill 300ms, fill-opacity 300ms" }}
+          />
+        )),
+      )}
+    </g>
+  );
+}
+
+/** What the lane carries, drawn as tiles to the right of the FastAPI line. */
+function Panel({ lane, y, on, beat, tick }: { lane: number; y: number; on: boolean; beat: number; tick: number }) {
+  const top = y - 17;
+  if (lane === 0) {
+    return (
+      <g>
+        {Array.from({ length: 2 }, (_, r) =>
+          Array.from({ length: 11 }, (_, c) => (
+            <rect
+              key={`${r},${c}`}
+              x={PANEL_X + c * 15}
+              y={top + r * 18}
+              width={12}
+              height={15}
+              rx={2}
+              fill={on ? DATA : IDLE_TILE}
+              fillOpacity={on ? 0.4 + (((c * 5 + r * 3) % 7) / 10) : 0.7}
+              style={{ transition: "fill 300ms, fill-opacity 300ms" }}
+            />
+          )),
+        )}
+      </g>
+    );
+  }
+  if (lane === 1) {
+    return (
+      <g>
+        {["web", "bot"].map((name, i) => {
+          const lit = on && beat === i;
+          return (
+            <g key={name}>
+              <rect
+                x={PANEL_X + i * 92}
+                y={top}
+                width={84}
+                height={34}
+                rx={3}
+                fill={lit ? MODEL_TINT : IDLE_TILE}
+                stroke={lit ? MODEL : "none"}
+                strokeWidth={1.5}
+                style={{ transition: `fill 300ms ${PACKET_S * 0.75}s, stroke 300ms ${PACKET_S * 0.75}s` }}
+              />
+              <text
+                x={PANEL_X + i * 92 + 42}
+                y={y + 4}
+                textAnchor="middle"
+                fontSize={11}
+                fill={lit ? INK : MUTED}
+                className={mono}
+              >
+                {name}
+              </text>
+            </g>
+          );
+        })}
+      </g>
+    );
+  }
+  if (lane === 2) {
+    return (
+      <g>
+        {Array.from({ length: 2 }, (_, r) =>
+          Array.from({ length: 14 }, (_, c) => {
+            const wave = on ? 0.35 + 0.65 * (((c + r * 3 + tick * 2) % 6) / 5) : 0.7;
+            return (
+              <rect
+                key={`${r},${c}`}
+                x={PANEL_X + c * 12.5}
+                y={top + r * 18}
+                width={10}
+                height={15}
+                rx={2}
+                fill={on ? MODEL : IDLE_TILE}
+                fillOpacity={wave}
+                style={{ transition: "fill 300ms, fill-opacity 500ms" }}
+              />
+            );
+          }),
+        )}
+      </g>
+    );
+  }
+  return (
+    <g>
+      {SCORES.map((score, i) => {
+        const win = on && i === WINNER;
+        const height = Math.max(score * 34, 3);
+        return (
+          <rect
+            key={i}
+            x={PANEL_X + i * 9.2}
+            y={y + 17 - height}
+            width={6}
+            height={height}
+            rx={1.5}
+            fill={win ? MODEL : IDLE_TILE}
+            style={{
+              transformBox: "fill-box",
+              transformOrigin: "bottom",
+              transform: `scaleY(${on ? 1 : 0.35})`,
+              transition: "transform 600ms, fill 300ms",
+            }}
+          />
+        );
+      })}
+    </g>
+  );
+}
+
+/** One packet making a single trip down a lane; mount it with a fresh key to send another. */
+function Packet({ y }: { y: number }) {
+  return (
+    <g>
+      <circle r={4.5} fill={FLOW} />
       <animateMotion
         ref={startMotion}
         begin="indefinite"
         dur={`${PACKET_S}s`}
         fill="freeze"
-        path={`M ${x1} ${y1} L ${x2} ${y2}`}
+        path={`M ${BUS_X} ${y} L ${API_X} ${y}`}
+      />
+      <animate
+        ref={startMotion}
+        attributeName="opacity"
+        values="1;1;0"
+        keyTimes="0;0.85;1"
+        begin="indefinite"
+        dur={`${PACKET_S}s`}
+        fill="freeze"
       />
     </g>
-  );
-}
-
-function EdgeLabel({
-  endpoints,
-  label,
-  dim,
-}: {
-  endpoints: { x1: number; y1: number; x2: number; y2: number };
-  label: string;
-  dim?: boolean;
-}) {
-  const dx = endpoints.x2 - endpoints.x1;
-  const dy = endpoints.y2 - endpoints.y1;
-  const len = Math.hypot(dx, dy);
-  let nx = -dy / len;
-  let ny = dx / len;
-  if (Math.abs(ny) > Math.abs(nx) ? ny > 0 : nx < 0) {
-    nx = -nx;
-    ny = -ny;
-  }
-  const vertical = Math.abs(ny) <= Math.abs(nx);
-  return (
-    <text
-      x={(endpoints.x1 + endpoints.x2) / 2 + nx * 10}
-      y={(endpoints.y1 + endpoints.y2) / 2 + ny * 10 + 3}
-      textAnchor={vertical ? "start" : "middle"}
-      fontSize={10.5}
-      fill={FLOW}
-      style={{ opacity: dim ? 0.45 : 1, transition: "opacity 300ms" }}
-    >
-      {label}
-    </text>
   );
 }
 
@@ -191,103 +223,161 @@ function Scene({
   beat,
   tick,
   animate,
+  wide,
 }: {
   active: number;
   beat: number;
   /** Counts every beat since the scene started, so a repeated beat still sends a fresh packet. */
   tick: number;
   animate: boolean;
+  /** The full-size diagram keeps a readable minimum width and scrolls on narrow screens. */
+  wide?: boolean;
 }) {
-  const scene = SCENES[active];
-  const current = scene.beats[beat];
-  const receiving = new Set(animate ? current.map((i) => LINKS[i].to) : []);
+  const busY = LANES[active].y;
+  const resultLabel = active === 3 ? "Tomato · Early Blight" : LANES[3].caption;
 
   return (
     <svg
-      viewBox="0 0 440 368"
+      viewBox="0 0 640 316"
       role="img"
-      aria-label="Vertical diagram of the crop inference pipeline"
-      className="mx-auto h-auto w-full max-w-[440px] font-sans"
+      aria-label="Diagram of the crop inference pipeline, one row per step from capture to diagnosis"
+      className={`mx-auto h-auto w-full max-w-[640px] font-sans ${wide ? "min-w-[560px]" : ""}`}
     >
-      <rect
-        x={26}
-        y={58}
-        width={388}
-        height={310}
-        rx={8}
-        fill="none"
-        stroke="#bdbdb8"
-        strokeDasharray="5 4"
+      {LEGEND.map((item) => (
+        <g key={item.label}>
+          <circle cx={item.x} cy={22} r={3.5} fill={item.color} />
+          <text x={item.x + 9} y={26} fontSize={11} fill={MUTED} className={mono}>
+            {item.label}
+          </text>
+        </g>
+      ))}
+
+      <PhotoGrid active={active === 0} scanRow={animate ? tick % PHOTO.rows : -1} />
+
+      {/* The bus the app sits on: grey all the way down, blue down to the active lane. */}
+      <line x1={BUS_X} y1={LANES[0].y} x2={BUS_X} y2={LANES[3].y} stroke={IDLE_LINE} strokeWidth={3} />
+      <line
+        x1={BUS_X}
+        y1={LANES[0].y}
+        x2={BUS_X}
+        y2={busY}
+        stroke={FLOW}
+        strokeWidth={3}
+        style={{ transition: "all 400ms" }}
       />
-      <text x={34} y={72} fontSize={10} fill="#8d8d88">
-        Vercel · serverless
-      </text>
+      <line
+        x1={photoEdge + 8}
+        y1={LANES[0].y}
+        x2={BUS_X}
+        y2={LANES[0].y}
+        stroke={active === 0 ? DATA : IDLE_LINE}
+        strokeWidth={3}
+        style={{ transition: "stroke 300ms" }}
+      />
+      <circle
+        cx={photoEdge + 4}
+        cy={LANES[0].y}
+        r={6}
+        fill={active === 0 ? DATA : IDLE_LINE}
+        stroke="#f6f7f4"
+        strokeWidth={2.5}
+        style={{ transition: "fill 300ms" }}
+      />
 
-      {LINKS.map((link, i) => {
-        const ep = linkEndpoints(link);
-        const inScene = scene.edges.includes(i);
-        const live = animate ? current.includes(i) : inScene;
+      <line
+        x1={API_X}
+        y1={LANES[0].y}
+        x2={API_X}
+        y2={LANES[3].y}
+        stroke="#b9b9b4"
+        strokeWidth={1.5}
+        strokeDasharray="2 4"
+      />
+
+      {LANES.map((lane, i) => {
+        const on = i === active;
+        const reached = i <= active;
         return (
-          <g key={i} style={{ opacity: inScene && !live ? 0.4 : 1, transition: "opacity 300ms" }}>
+          <g key={lane.label}>
+            <line x1={BUS_X} y1={lane.y} x2={API_X} y2={lane.y} stroke={IDLE_LINE} strokeWidth={2.5} />
             <line
-              x1={ep.x1}
-              y1={ep.y1}
-              x2={ep.x2}
-              y2={ep.y2}
-              stroke={inScene ? FLOW : IDLE}
-              strokeWidth={live ? 2 : inScene ? 1.5 : 1.25}
-              strokeDasharray={inScene ? undefined : "3 4"}
-              style={{ transition: "stroke 300ms, stroke-width 300ms" }}
+              x1={BUS_X}
+              y1={lane.y}
+              x2={API_X}
+              y2={lane.y}
+              stroke={FLOW}
+              strokeWidth={2.5}
+              style={{ opacity: on ? 1 : 0, transition: "opacity 300ms" }}
             />
-            {live && (animate ? <Packet key={tick} {...ep} payload={link.payload} /> : <StaticDots {...ep} />)}
-            {inScene && link.label && <EdgeLabel endpoints={ep} label={link.label} dim={!live} />}
-          </g>
-        );
-      })}
+            <line
+              x1={API_X}
+              y1={lane.y}
+              x2={BAR_X}
+              y2={lane.y}
+              stroke={on ? API : IDLE_LINE}
+              strokeWidth={2.5}
+              style={{ transition: `stroke 300ms ${animate ? PACKET_S * 0.75 : 0}s` }}
+            />
 
-      {STAGES.map((s) => {
-        const on = scene.nodes.includes(s.id);
-        const arriving = receiving.has(s.id);
-        // The last step ends with an actual answer, so show one instead of the class count.
-        const sub = s.id === "diagnosis" && active === 3 ? "Tomato · Early Blight" : s.sub;
-        return (
-          <g
-            key={s.id}
-            style={{ opacity: on ? 1 : 0.4, transition: "opacity 300ms" }}
-          >
-            <rect
-              x={s.x}
-              y={s.y}
-              width={s.w}
-              height={s.h}
-              rx={8}
-              fill={on ? "#e8ebe0" : "#f6f7f4"}
-              stroke={arriving ? FLOW : on ? OLIVE : "#a9a9a5"}
-              strokeWidth={arriving ? 2.5 : on ? 1.5 : 1}
-              // Wait for the packet to land before lighting the box up.
-              style={{ transition: `fill 300ms, stroke 300ms ${PACKET_S * 0.75}s, stroke-width 300ms ${PACKET_S * 0.75}s` }}
+            <circle cx={BUS_X} cy={lane.y} r={6} fill={reached ? FLOW : IDLE_LINE} style={{ transition: "fill 300ms" }} />
+            {on && <circle cx={BUS_X} cy={lane.y} r={10.5} fill="none" stroke={FLOW} strokeWidth={2} />}
+
+            <circle
+              cx={NUM_X}
+              cy={lane.y}
+              r={11}
+              fill={on ? "#111111" : "#ffffff"}
+              stroke={on ? "#111111" : "#cfcfcb"}
+              strokeWidth={1.25}
+              style={{ transition: "fill 300ms, stroke 300ms" }}
             />
             <text
-              x={s.x + s.w / 2}
-              y={s.y + (sub ? s.h / 2 - 3 : s.h / 2 + 4)}
+              x={NUM_X}
+              y={lane.y + 4}
               textAnchor="middle"
-              fontSize={12}
-              fontWeight={600}
-              fill="#37352f"
+              fontSize={11.5}
+              fill={on ? "#ffffff" : INK}
+              className={mono}
             >
-              {s.label}
+              {i + 1}
             </text>
-            {sub && (
-              <text
-                x={s.x + s.w / 2}
-                y={s.y + s.h / 2 + 11}
-                textAnchor="middle"
-                fontSize={10.5}
-                fill="#7a7a76"
-              >
-                {sub}
-              </text>
-            )}
+
+            <text
+              x={API_X - 14}
+              y={lane.y - 10}
+              textAnchor="end"
+              fontSize={11.5}
+              fill={on ? "#274b7a" : MUTED}
+              className={mono}
+              style={{ transition: "fill 300ms" }}
+            >
+              {lane.label}
+            </text>
+
+            <circle
+              cx={API_X}
+              cy={lane.y}
+              r={6.5}
+              fill={on ? API : "#f6f7f4"}
+              stroke={API}
+              strokeWidth={2}
+              style={{ transition: `fill 300ms ${animate ? PACKET_S * 0.75 : 0}s` }}
+            />
+
+            <rect
+              x={BAR_X}
+              y={lane.y - 21}
+              width={3}
+              height={42}
+              fill={on ? API : "#cfcfcb"}
+              style={{ transition: "fill 300ms" }}
+            />
+            <Panel lane={i} y={lane.y} on={on} beat={beat} tick={tick} />
+            <text x={PANEL_X} y={lane.y + 33} fontSize={10.5} fill={on && i === 3 ? INK : MUTED} className={mono}>
+              {i === 3 ? resultLabel : lane.caption}
+            </text>
+
+            {on && animate && <Packet key={`${tick}-${i}`} y={lane.y} />}
           </g>
         );
       })}
@@ -339,8 +429,8 @@ const STEPS: DiagramStep[] = [
 ];
 
 function LiveScene({ active, animate }: { active: number; animate: boolean }) {
-  const { beat, tick } = useBeats(active, SCENES[active].beats.length, BEAT_MS, animate);
-  return <Scene active={active} beat={beat} tick={tick} animate={animate} />;
+  const { beat, tick } = useBeats(active, LANES[active].beats, BEAT_MS, animate);
+  return <Scene active={active} beat={beat} tick={tick} animate={animate} wide />;
 }
 
 export function InferencePipelineDiagram() {
@@ -363,7 +453,7 @@ export function InferencePipelinePreview() {
   const animate = useAnimationsEnabled();
   const tick = useTick(animate, BEAT_MS);
   // Walk every step's beats in order, then start over.
-  const timeline = SCENES.flatMap((scene, active) => scene.beats.map((_, beat) => ({ active, beat })));
+  const timeline = LANES.flatMap((lane, active) => Array.from({ length: lane.beats }, (_, beat) => ({ active, beat })));
   const { active, beat } = timeline[tick % timeline.length];
   return <Scene active={active} beat={beat} tick={tick} animate={animate} />;
 }
