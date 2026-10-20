@@ -80,7 +80,7 @@ function ExperienceGallery({
           alt={alt}
           width={main.width}
           height={main.height}
-          quality={95}
+          quality={85}
           sizes="(max-width: 640px) 100vw, 660px"
           className="h-auto w-full"
         />
@@ -121,7 +121,7 @@ function ExperienceGallery({
             alt={alt}
             width={main.width}
             height={main.height}
-            quality={95}
+            quality={85}
             sizes="(max-width: 640px) 60vw, 400px"
             className="h-auto w-full"
           />
@@ -138,7 +138,7 @@ function ExperienceGallery({
               aria-hidden
               width={img.width}
               height={img.height}
-              quality={95}
+              quality={85}
               sizes="(max-width: 640px) 40vw, 260px"
               className="h-auto w-full"
             />
@@ -167,7 +167,7 @@ function ExperienceGallery({
           alt={alt}
           width={main.width}
           height={main.height}
-          quality={95}
+          quality={85}
           sizes="(max-width: 640px) 56vw, 370px"
           className="block h-auto w-full"
         />
@@ -191,7 +191,7 @@ function ExperienceGallery({
               alt=""
               aria-hidden
               fill
-              quality={95}
+              quality={85}
               sizes="(max-width: 640px) 22vw, 145px"
               className="object-cover"
             />

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Button } from "./Button";
 
 interface CtaSectionProps {
@@ -35,8 +36,14 @@ export function CtaSection({
         </Button>
       </div>
       {image && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={image} alt="" className="w-28 shrink-0 sm:w-36" />
+        <Image
+          src={image}
+          alt=""
+          width={500}
+          height={500}
+          sizes="(max-width: 640px) 112px, 144px"
+          className="h-auto w-28 shrink-0 sm:w-36"
+        />
       )}
     </section>
   );

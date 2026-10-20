@@ -33,8 +33,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <link rel="icon" href="/favicon.ico?v=2" />
         <link rel="apple-touch-icon" href="/favicon.ico?v=2" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://app.posthog.com" />
         <link rel="dns-prefetch" href="https://m.media-amazon.com" />
         <link rel="dns-prefetch" href="https://images-na.ssl-images-amazon.com" />
         <GoogleAnalytics />

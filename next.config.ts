@@ -19,7 +19,16 @@ const nextConfig: NextConfig = {
         value: "max-age=63072000; includeSubDomains; preload",
       },
     ];
-    return [{ source: "/:path*", headers: securityHeaders }];
+    // Files in public/ keep their names when edited in place, so avoid
+    // `immutable`: cache for a day and revalidate in the background.
+    const staticCache = [
+      { key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" },
+    ];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      { source: "/images/:path*", headers: staticCache },
+      { source: "/data/:path*", headers: staticCache },
+    ];
   },
 
   async redirects() {
@@ -54,6 +63,8 @@ const nextConfig: NextConfig = {
 
   images: {
     formats: ["image/avif", "image/webp"],
+    // Content column is under 700px, so skip the 1920/2048/3840 srcset entries.
+    deviceSizes: [640, 750, 828, 1080, 1200],
     qualities: [75, 85, 95],
     remotePatterns: [
       { protocol: "https", hostname: "m.media-amazon.com" },
