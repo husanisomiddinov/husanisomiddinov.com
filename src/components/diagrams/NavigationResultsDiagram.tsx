@@ -433,7 +433,7 @@ export function NavigationResultsPreview() {
         width={512}
         height={486}
         sizes="320px"
-        className="h-full w-auto object-contain"
+        className="h-[55%] w-auto object-contain"
       />
     </div>
   );

@@ -244,7 +244,7 @@ export function CropClassificationPreview() {
         width={512}
         height={467}
         sizes="320px"
-        className="h-[85%] w-auto object-contain"
+        className="h-[55%] w-auto object-contain"
       />
     </div>
   );
