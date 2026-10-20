@@ -159,16 +159,15 @@ function useRobot(targetS: number, animate: boolean): Pose {
   return animate ? pose : { s: targetS, heading: legAngle(legAt(targetS - 0.001, 1), 1) };
 }
 
-/** Top-down TurtleBot3 Burger, facing +x: two drive wheels, the body, the laser puck on top. */
-function Robot({ x, y, heading }: { x: number; y: number; heading: number }) {
+/** The rover sprite is a 3D render, so it can't rotate with the heading; it mirrors to face left or right instead. */
+function Robot({ x, y, heading, scale = 1 }: { x: number; y: number; heading: number; scale?: number }) {
+  const flip = Math.cos(heading) < 0 ? -1 : 1;
   return (
-    <g transform={`translate(${x} ${y}) rotate(${(heading * 180) / Math.PI})`}>
-      <rect x={-4} y={-12} width={8} height={3.5} rx={1} fill="#37352f" />
-      <rect x={-4} y={8.5} width={8} height={3.5} rx={1} fill="#37352f" />
-      <circle r={9} fill="#4a4840" stroke="#37352f" strokeWidth={1.5} />
-      <path d="M 9 -3.5 L 14 0 L 9 3.5 z" fill={FLOW} />
-      <circle r={4.5} fill="#e8ebe0" stroke="#37352f" strokeWidth={1} />
-      <circle cx={2} r={1.3} fill="#37352f" />
+    <g transform={`translate(${x} ${y}) scale(${scale})`}>
+      <ellipse cx={0} cy={9} rx={19} ry={5} fill="#37352f" fillOpacity={0.18} />
+      <g transform={`scale(${flip} 1)`}>
+        <image href="/images/rover.webp" x={-24} y={-36} width={48} height={45.6} />
+      </g>
     </g>
   );
 }
@@ -340,8 +339,8 @@ function LegendItem({ icon, children }: { icon: ReactNode; children: ReactNode }
 function Legend() {
   return (
     <ul className="mx-auto mt-4 grid max-w-[440px] grid-cols-1 gap-x-6 gap-y-2.5 font-sans text-xs leading-snug text-gray-600 sm:grid-cols-2">
-      <LegendItem icon={<Robot x={0} y={0} heading={0} />}>
-        <strong className="text-gray-800">Robot.</strong> A TurtleBot3; the blue wedge is its front.
+      <LegendItem icon={<Robot x={0} y={2} heading={0} scale={0.6} />}>
+        <strong className="text-gray-800">Robot.</strong> The rover driving the route.
       </LegendItem>
       <LegendItem
         icon={
