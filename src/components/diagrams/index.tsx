@@ -24,15 +24,16 @@ export const DIAGRAMS: Record<string, ComponentType> = {
   "crop-classification": CropClassificationDiagram,
 };
 
-/** Auto-playing, non-interactive versions for project cards; aspect is width / height. */
+/** Auto-playing, non-interactive versions for project cards; aspect is width / height. `bare` drops the card chrome. */
 export const DIAGRAM_PREVIEWS: Record<
   string,
-  { Component: ComponentType; aspect: number }
+  { Component: ComponentType; aspect: number; bare?: boolean }
 > = {
   "execution-flow": { Component: ExecutionFlowPreview, aspect: 760 / 290 },
   "navigation-results": {
     Component: NavigationResultsPreview,
     aspect: 440 / 330,
+    bare: true,
   },
   "inference-pipeline": {
     Component: InferencePipelinePreview,

@@ -430,10 +430,10 @@ export function NavigationResultsPreview() {
       <Image
         src="/images/rover.webp"
         alt=""
-        width={256}
-        height={243}
-        sizes="240px"
-        className="h-[88%] w-auto object-contain"
+        width={512}
+        height={486}
+        sizes="320px"
+        className="h-full w-auto object-contain"
       />
     </div>
   );

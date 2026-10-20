@@ -60,11 +60,11 @@ function DiagramPreviews({ names }: { names: string[] }) {
 
   return (
     <div aria-hidden className="pointer-events-none flex w-full gap-2 pt-1">
-      {previews.map(({ name, Component, aspect }) => (
+      {previews.map(({ name, Component, aspect, bare }) => (
         <div
           key={name}
           style={{ flexGrow: aspect, flexBasis: 0 }}
-          className="min-w-0 rounded-lg border border-gray-200 bg-brand-50 p-2"
+          className={`min-w-0 ${bare ? "" : "rounded-lg border border-gray-200 bg-brand-50 p-2"}`}
         >
           <Component />
         </div>
