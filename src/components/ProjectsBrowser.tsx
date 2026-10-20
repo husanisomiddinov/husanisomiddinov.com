@@ -50,6 +50,9 @@ function FilterTab({
   );
 }
 
+/** Tallest a card-style diagram preview may grow, px, when a bare image shares its row. */
+const DIAGRAM_MAX_HEIGHT = 340;
+
 /** Live previews of the project page's animated diagrams, sized by aspect so they share a height. */
 function DiagramPreviews({ names }: { names: string[] }) {
   const previews = names.flatMap((name) => {
@@ -58,12 +61,22 @@ function DiagramPreviews({ names }: { names: string[] }) {
   });
   if (previews.length === 0) return null;
 
+  // A bare preview is a small still image: it keeps a compact slot and the
+  // card-style diagrams beside it take the remaining width, up to a height cap.
+  const hasBare = previews.some((preview) => preview.bare);
+
   return (
     <div aria-hidden className="pointer-events-none flex w-full gap-2 pt-1">
       {previews.map(({ name, Component, aspect, bare }) => (
         <div
           key={name}
-          style={{ flexGrow: aspect, flexBasis: 0 }}
+          style={
+            !hasBare
+              ? { flexGrow: aspect, flexBasis: 0 }
+              : bare
+                ? { flexGrow: 1, flexBasis: "9rem" }
+                : { flexGrow: 1000, flexBasis: 0, maxWidth: aspect * DIAGRAM_MAX_HEIGHT }
+          }
           className={`min-w-0 ${bare ? "" : "rounded-lg border border-gray-200 bg-brand-50 p-2"}`}
         >
           <Component />

@@ -426,14 +426,14 @@ export function NavigationResultsDiagram() {
 /** Project-card thumbnail: a still 3D render of the robot instead of the live schematic. */
 export function NavigationResultsPreview() {
   return (
-    <div className="flex aspect-[440/330] w-full items-center justify-center">
+    <div className="flex h-full w-full items-center justify-center">
       <Image
         src="/images/rover.webp"
         alt=""
         width={512}
         height={486}
-        sizes="320px"
-        className="h-[55%] w-auto object-contain"
+        sizes="144px"
+        className="h-auto w-36"
       />
     </div>
   );
