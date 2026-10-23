@@ -218,3 +218,78 @@ i {
     animation: none;
   }
 }
+
+/* Diagram motion: arrows carry dashes along their length, hot tiles breathe, small icons loop. */
+@keyframes diagram-flow {
+  to {
+    stroke-dashoffset: -22;
+  }
+}
+
+@keyframes diagram-pulse {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes diagram-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes diagram-scan {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(30px);
+  }
+}
+
+@keyframes diagram-bar {
+  0%,
+  100% {
+    transform: scaleY(0.55);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.diagram-flow {
+  animation: diagram-flow 1.4s linear infinite;
+}
+
+.diagram-pulse {
+  animation: diagram-pulse 2.8s ease-in-out infinite;
+}
+
+.diagram-sweep {
+  animation: diagram-sweep 3.2s linear infinite;
+}
+
+.diagram-scan {
+  animation: diagram-scan 2.6s ease-in-out infinite;
+}
+
+.diagram-bar {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: diagram-bar 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diagram-flow,
+  .diagram-pulse,
+  .diagram-sweep,
+  .diagram-scan,
+  .diagram-bar {
+    animation: none;
+  }
+}

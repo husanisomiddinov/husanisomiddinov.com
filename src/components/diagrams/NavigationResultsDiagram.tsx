@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-import {
-  InlineCode,
-  StepDiagram,
-  type DiagramStep,
-} from "./StepDiagram";
+import { DiagramFigure } from "./FlowKit";
+import { useAnimationsEnabled, useTick } from "./motion";
 
 const FLOW = "#5b84b8";
+const TRAIL = "#e3b341";
+/** Time each goal gets on screen: the drive plus a short stop at the goal. */
+const GOAL_MS = 2600;
 const OLIVE = "#5b6529";
 const SCAN = "#2f9e8f";
 const SCALE = 75;
@@ -44,8 +44,6 @@ const PILLARS = [
   [1.5, -1],
   [-1.5, 0],
 ];
-
-const TIME_SCALE = 150;
 
 const ROOM = 2.1;
 const PILLAR_R = 11;
@@ -129,9 +127,11 @@ function angleDelta(from: number, to: number) {
 }
 
 /** Drives the robot toward the end of `target` along the route, turning to face where it is going. */
-function useRobot(targetS: number, animate: boolean): Pose {
+/** `epoch` changes when the run starts over; the robot then jumps back to the start, which is also goal 5. */
+function useRobot(targetS: number, animate: boolean, epoch: number): Pose {
   const [pose, setPose] = useState<Pose>({ s: 0, heading: legAngle(0, 1) });
   const latest = useRef(pose);
+  const seenEpoch = useRef(epoch);
 
   useEffect(() => {
     if (!animate) return;
@@ -140,6 +140,10 @@ function useRobot(targetS: number, animate: boolean): Pose {
     const tick = (now: number) => {
       const dt = Math.min(now - last, 50) / 1000;
       last = now;
+      if (seenEpoch.current !== epoch) {
+        seenEpoch.current = epoch;
+        latest.current = { s: 0, heading: legAngle(0, 1) };
+      }
       const { s, heading } = latest.current;
       const remaining = targetS - s;
       const direction = remaining === 0 ? 1 : Math.sign(remaining);
@@ -153,7 +157,7 @@ function useRobot(targetS: number, animate: boolean): Pose {
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [targetS, animate]);
+  }, [targetS, animate, epoch]);
 
   return animate ? pose : { s: targetS, heading: legAngle(legAt(targetS - 0.001, 1), 1) };
 }
@@ -172,8 +176,8 @@ function Robot({ x, y, heading }: { x: number; y: number; heading: number }) {
   );
 }
 
-function Scene({ active, animate }: { active: number; animate: boolean }) {
-  const { s, heading } = useRobot(CUMULATIVE[active + 1], animate);
+function Scene({ active, epoch, animate }: { active: number; epoch: number; animate: boolean }) {
+  const { s, heading } = useRobot(CUMULATIVE[active + 1], animate, epoch);
   const robot = positionAt(s);
 
   const gradientId = useId();
@@ -190,6 +194,7 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
     .join(" ");
 
   return (
+    <>
     <svg
       viewBox="0 0 440 330"
       role="img"
@@ -242,10 +247,12 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
       <polyline
         points={driven}
         fill="none"
-        stroke={FLOW}
-        strokeWidth={2.5}
+        stroke={TRAIL}
+        strokeWidth={3}
         strokeLinecap="round"
         strokeLinejoin="round"
+        strokeDasharray="6 16"
+        className="diagram-flow"
       />
 
       <rect
@@ -322,6 +329,25 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
 
       <Robot x={robot.x} y={robot.y} heading={heading} />
     </svg>
+    <ul className="mx-auto mt-4 grid max-w-[440px] gap-1 font-mono text-xs text-gray-600">
+      {GOALS.map((goal, i) => {
+        const reached = s >= CUMULATIVE[i + 1] - 0.5;
+        return (
+          <li
+            key={goal.id}
+            className={`flex items-center justify-between rounded-md border px-2.5 py-1 transition-colors duration-300 ${
+              reached ? "border-[#c9a93a] bg-[#f5d56f] text-gray-900" : "border-[#d3d5c8] bg-[#ecede6]"
+            }`}
+          >
+            <span>{goal.id}</span>
+            <span>
+              {goal.seconds} s, {goal.error.toFixed(2)} m error
+            </span>
+          </li>
+        );
+      })}
+    </ul>
+    </>
   );
 }
 
@@ -369,7 +395,7 @@ function Legend() {
       >
         <strong className="text-gray-800">Goal.</strong> A target to reach; it turns green once the robot arrives.
       </LegendItem>
-      <LegendItem icon={<line x1={-13} y1={0} x2={13} y2={0} stroke={FLOW} strokeWidth={2.5} strokeLinecap="round" />}>
+      <LegendItem icon={<line x1={-13} y1={0} x2={13} y2={0} stroke={TRAIL} strokeWidth={3} strokeLinecap="round" strokeDasharray="6 5" />}>
         <strong className="text-gray-800">Path.</strong> The route driven so far.
       </LegendItem>
       <LegendItem
@@ -381,31 +407,16 @@ function Legend() {
   );
 }
 
-const STEPS: DiagramStep[] = GOALS.map((goal, i) => ({
-  label: i === GOALS.length - 1 ? "goal 5" : `goal ${i + 1}`,
-  body: (
-    <>
-      <InlineCode>{goal.id}</InlineCode> at ({goal.x.toFixed(1)},{" "}
-      {goal.y.toFixed(1)}) m: <strong>reached</strong> in {goal.seconds} s with{" "}
-      {goal.error.toFixed(2)} m arrival error.
-      <span className="mt-3 flex items-center gap-2 font-sans text-xs text-gray-500">
-        <span className="w-12 shrink-0">time</span>
-        <span className="h-2 flex-1 rounded-full bg-gray-300">
-          <span
-            className="block h-full rounded-full bg-brand-500"
-            style={{ width: `${Math.min((goal.seconds / TIME_SCALE) * 100, 100)}%` }}
-          />
-        </span>
-        <span className="w-10 shrink-0 text-right">{goal.seconds} s</span>
-      </span>
-    </>
-  ),
-}));
+/** Drives the five goals in a loop; the start is also goal 5, so the run wraps without a jump. */
+function Loop() {
+  const animate = useAnimationsEnabled();
+  const tick = useTick(animate, GOAL_MS);
+  return <Scene active={tick % GOALS.length} epoch={Math.floor(tick / GOALS.length)} animate={animate} />;
+}
 
 export function NavigationResultsDiagram() {
   return (
-    <StepDiagram
-      steps={STEPS}
+    <DiagramFigure
       caption={
         <>
           The five-goal run: <strong>5/5 reached</strong>. Room layout is a schematic; coordinates,
@@ -413,13 +424,9 @@ export function NavigationResultsDiagram() {
         </>
       }
     >
-      {({ active, animate }) => (
-        <>
-          <Scene active={active} animate={animate} />
-          <Legend />
-        </>
-      )}
-    </StepDiagram>
+      <Loop />
+      <Legend />
+    </DiagramFigure>
   );
 }
 

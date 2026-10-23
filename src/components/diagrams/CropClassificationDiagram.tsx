@@ -2,16 +2,15 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import {
-  StepDiagram,
-  startMotion,
-  type DiagramStep,
-} from "./StepDiagram";
+import { DiagramFigure } from "./FlowKit";
+import { startMotion, useAnimationsEnabled, useTick } from "./motion";
 
 const CARD_W = 120;
 const CARD_H = 110;
 /** How long the scan sweeps the leaf before the model's answer appears. */
 const SCAN_MS = 1200;
+/** Time each leaf gets: the scan, the answer, then a pause before the next card. */
+const SAMPLE_MS = 3400;
 
 interface Sample {
   id: string;
@@ -194,34 +193,15 @@ function Scene({ active, animate }: { active: number; animate: boolean }) {
   );
 }
 
-const STEPS: DiagramStep[] = SAMPLES.map((sample, i) => ({
-  label: `sample ${i + 1}`,
-  body: (
-    <>
-      <strong>{sample.crop}</strong> leaf classified as{" "}
-      <strong>{sample.condition}</strong> with {sample.confidence}% confidence in{" "}
-      {sample.ms} ms.
-      <span className="mt-3 flex items-center gap-2 font-sans text-xs text-gray-500">
-        <span className="w-16 shrink-0">confidence</span>
-        <span className="h-2 flex-1 rounded-full bg-gray-300">
-          <span
-            className="block h-full rounded-full"
-            style={{
-              width: `${sample.confidence}%`,
-              backgroundColor: sample.color,
-            }}
-          />
-        </span>
-        <span className="w-12 shrink-0 text-right">{sample.confidence}%</span>
-      </span>
-    </>
-  ),
-}));
+function Loop() {
+  const animate = useAnimationsEnabled();
+  const tick = useTick(animate, SAMPLE_MS);
+  return <Scene active={tick % SAMPLES.length} animate={animate} />;
+}
 
 export function CropClassificationDiagram() {
   return (
-    <StepDiagram
-      steps={STEPS}
+    <DiagramFigure
       caption={
         <>
           Five samples classified by the ResNet-18 model. Confidence scores
@@ -229,8 +209,8 @@ export function CropClassificationDiagram() {
         </>
       }
     >
-      {({ active, animate }) => <Scene active={active} animate={animate} />}
-    </StepDiagram>
+      <Loop />
+    </DiagramFigure>
   );
 }
 

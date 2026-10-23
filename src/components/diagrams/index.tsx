@@ -37,7 +37,7 @@ export const DIAGRAM_PREVIEWS: Record<
   },
   "inference-pipeline": {
     Component: InferencePipelinePreview,
-    aspect: 640 / 316,
+    aspect: 760 / 270,
   },
   "crop-classification": {
     Component: CropClassificationPreview,
