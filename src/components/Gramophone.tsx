@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { MusicTrack } from "../../content/data/personal/about-media";
 
 const FADE_MS = 5000;
@@ -15,16 +15,26 @@ export function Gramophone({ tracks, className }: { tracks: MusicTrack[]; classN
   const audioRef = useRef<HTMLAudioElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const resume = useRef(false);
-  const [index, setIndex] = useState(0);
+  // The start track is random per visit. Null on the server, so server and client markup match.
+  const startRef = useRef<number | null>(null);
+  const start = useSyncExternalStore(
+    () => () => {},
+    () => (startRef.current ??= Math.floor(Math.random() * tracks.length)),
+    () => null,
+  );
+  const [offset, setOffset] = useState(0);
+  const ready = start !== null && tracks.length > 0;
+  const index = tracks.length ? ((start ?? 0) + offset) % tracks.length : 0;
+  const setIndex = (target: number) =>
+    setOffset((target - (start ?? 0) + tracks.length) % tracks.length);
   const [playing, setPlaying] = useState(false);
   const track = tracks[index];
 
   // Start playing when the page loads, fading in from silence. Browsers block sound
   // before the visitor interacts, so if that happens, wait for their first touch outside the player.
-  const hasTracks = tracks.length > 0;
   useEffect(() => {
     const element = audioRef.current;
-    if (!hasTracks || !element) return;
+    if (!ready || !element) return;
     const audio: HTMLAudioElement = element;
     let fade: ReturnType<typeof setInterval> | undefined;
 
@@ -62,7 +72,7 @@ export function Gramophone({ tracks, className }: { tracks: MusicTrack[]; classN
       removeListeners();
       audio.pause();
     };
-  }, [hasTracks]);
+  }, [ready]);
 
   // Start the new track after a skip if music was already playing.
   useEffect(() => {
@@ -115,11 +125,11 @@ export function Gramophone({ tracks, className }: { tracks: MusicTrack[]; classN
       </div>
 
       {track && (
-        <div className="flex flex-col gap-2">
+        <div className={`flex flex-col gap-2 ${ready ? "" : "invisible"}`}>
           {/* eslint-disable-next-line jsx-a11y/media-has-caption -- music only, there is nothing to caption */}
           <audio
             ref={audioRef}
-            src={track.src}
+            src={ready ? track.src : undefined}
             preload="none"
             onPlay={() => setPlaying(true)}
             onPause={() => setPlaying(false)}
