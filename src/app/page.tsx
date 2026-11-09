@@ -34,7 +34,7 @@ export default async function Home() {
         text="From learning English at 5 to quitting Higgsfield for robots. My humble story..."
         href="/about"
         buttonLabel="Read about me"
-        image="/images/retro-computer.png"
+        animatedComputer
       />
       <SocialIcons className="mt-3" />
       <hr className="mt-8 border-gray-300" />

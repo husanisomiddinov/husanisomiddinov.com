@@ -284,7 +284,46 @@ i {
   animation: diagram-bar 2.4s ease-in-out infinite;
 }
 
+/* Retro computer screen: blinking cursor and a faint flicker. */
+@keyframes computer-blink {
+  0%,
+  49% {
+    opacity: 0.85;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes computer-flicker {
+  0%,
+  100% {
+    opacity: 0.04;
+  }
+  50% {
+    opacity: 0.1;
+  }
+}
+
+.computer-cursor {
+  animation: computer-blink 1.1s steps(1) infinite;
+}
+
+.computer-flicker {
+  opacity: 0.06;
+  animation: computer-flicker 3.2s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .computer-cursor,
+  .computer-flicker {
+    animation: none;
+  }
+  .computer-cursor {
+    opacity: 0.85;
+  }
+
   .diagram-flow,
   .diagram-pulse,
   .diagram-sweep,

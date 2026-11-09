@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Button } from "./Button";
+import { RetroComputer } from "./RetroComputer";
 
 interface CtaSectionProps {
   title?: string;
@@ -8,6 +9,8 @@ interface CtaSectionProps {
   buttonLabel: string;
   /** Optional illustration shown on the right. */
   image?: string;
+  /** Swap the image for the animated retro computer. */
+  animatedComputer?: boolean;
   className?: string;
 }
 
@@ -18,6 +21,7 @@ export function CtaSection({
   href,
   buttonLabel,
   image,
+  animatedComputer,
   className,
 }: CtaSectionProps) {
   return (
@@ -35,7 +39,10 @@ export function CtaSection({
           {buttonLabel}
         </Button>
       </div>
-      {image && (
+      {animatedComputer ? (
+        <RetroComputer className="w-28 shrink-0 sm:w-36" />
+      ) : (
+        image && (
         <Image
           src={image}
           alt=""
@@ -44,6 +51,7 @@ export function CtaSection({
           sizes="(max-width: 640px) 112px, 144px"
           className="h-auto w-28 shrink-0 sm:w-36"
         />
+        )
       )}
     </section>
   );
