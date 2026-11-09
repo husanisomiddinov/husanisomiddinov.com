@@ -12,4 +12,9 @@ export const musicTracks: MusicTrack[] = [
     artist: "America, George Martin",
     src: "/music/a-horse-with-no-name.mp3",
   },
+  {
+    title: "I'm Still Standing",
+    artist: "Elton John",
+    src: "/music/im-still-standing.mp3",
+  },
 ];
