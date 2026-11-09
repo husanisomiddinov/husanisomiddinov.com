@@ -7,9 +7,7 @@ export interface BioMilestone {
   /** Shown instead of a repeated age once age stops changing. */
   dateLabel?: string;
   content: ReactNode;
-  /** Optional photos shown under the text, side by side, at their true aspect ratio. */
-  photos?: { src: string; alt: string; width: number; height: number }[];
-  /** Optional looping photo strip, for sets of many photos of mixed shapes. */
+  /** Optional looping photo strip under the text. Every photo is shown at the same height, at its true shape. */
   gallery?: { src: string; alt: string; width: number; height: number }[];
 }
 
@@ -35,7 +33,7 @@ export const bioMilestones: BioMilestone[] = [
   {
     id: "high-school",
     age: 16,
-    photos: [
+    gallery: [
       {
         src: "/images/about/high-school-pose.webp",
         alt: "Me striking a pose in front of a school banner at night",
