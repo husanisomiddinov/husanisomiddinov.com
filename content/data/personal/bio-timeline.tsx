@@ -272,6 +272,12 @@ export const bioMilestones: BioMilestone[] = [
         width: 960,
         height: 1280,
       },
+      {
+        src: "/images/about/wpt-paper.webp",
+        alt: "First page of the paper Multi-Object Charging in Room-Sized Weakly Coupled WPT System, from the lab I worked with",
+        width: 495,
+        height: 640,
+      },
     ],
     content: (
       <p>
