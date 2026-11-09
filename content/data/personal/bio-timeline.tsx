@@ -307,6 +307,26 @@ export const bioMilestones: BioMilestone[] = [
     id: "higgsfield",
     age: 19,
     dateLabel: "June 2026",
+    gallery: [
+      {
+        src: "/images/experiences/higgsfield/office-meeting.jpg",
+        alt: "A meeting in the Higgsfield office",
+        width: 1280,
+        height: 960,
+      },
+      {
+        src: "/images/experiences/higgsfield/iman-gadzhi-billboard.jpg",
+        alt: "The Iman Gadzhi billboard at the Higgsfield office",
+        width: 960,
+        height: 1280,
+      },
+      {
+        src: "/images/experiences/higgsfield/desk-setup.jpg",
+        alt: "My desk setup at Higgsfield",
+        width: 960,
+        height: 1280,
+      },
+    ],
     content: (
       <p>
         Joined Higgsfield. Worked very hard for 3 months. Hosted Iman Gadzhi
