@@ -165,6 +165,26 @@ export const bioMilestones: BioMilestone[] = [
     id: "ai500",
     age: 19,
     dateLabel: "Nov 2025",
+    gallery: [
+      {
+        src: "/images/about/ai500/pitch-portrait.webp",
+        alt: "Me pitching Apollo on stage at AI500",
+        width: 320,
+        height: 480,
+      },
+      {
+        src: "/images/about/ai500/pitch-stage.webp",
+        alt: "Presenting the Apollo plant disease detection slide to the AI500 audience",
+        width: 720,
+        height: 480,
+      },
+      {
+        src: "/images/about/ai500/winners.webp",
+        alt: "Our team holding the first place prize cheque at AI500",
+        width: 720,
+        height: 480,
+      },
+    ],
     content: (
       <p>
         Before my Agora exit, I started getting technical. Did a few
