@@ -1,39 +1,60 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { Button } from "./Button";
+import { useEffect, useRef, useState } from "react";
 import type { MusicTrack } from "../../content/data/personal/about-media";
 
-/** Turns a normal open.spotify.com link into its embed URL, or null if it is not one. */
-function toEmbedUrl(link: string) {
-  const match = link.match(
-    /^https:\/\/open\.spotify\.com\/(track|album|playlist)\/([A-Za-z0-9]+)/,
-  );
-  return match
-    ? `https://open.spotify.com/embed/${match[1]}/${match[2]}`
-    : null;
-}
+const iconClass = "size-5";
+const controlClass =
+  "inline-flex size-8 cursor-pointer items-center justify-center rounded transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500";
 
-const arrow = "h-4 w-4";
-
-/** Pixel gramophone with a spinning record, and a player below it to switch between tracks. The Spotify iframe loads only after a click. */
-export function Gramophone({
-  tracks,
-  className,
-}: {
-  tracks: MusicTrack[];
-  className?: string;
-}) {
+/** Pixel gramophone whose record spins while the track plays, with shuffle, previous, play/pause, next and repeat below it. */
+export function Gramophone({ tracks, className }: { tracks: MusicTrack[]; className?: string }) {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const resume = useRef(false);
   const [index, setIndex] = useState(0);
-  const [loaded, setLoaded] = useState(false);
-  const playable = tracks.filter((track) => toEmbedUrl(track.link));
-  const track = playable[index];
+  const [playing, setPlaying] = useState(false);
+  const [shuffle, setShuffle] = useState(false);
+  const [repeat, setRepeat] = useState(false);
+  const track = tracks[index];
 
-  const step = (delta: number) =>
-    setIndex(
-      (current) => (current + delta + playable.length) % playable.length,
-    );
+  // Start the new track after a skip if music was already playing.
+  useEffect(() => {
+    if (resume.current) void audioRef.current?.play();
+  }, [index]);
+
+  const go = (next: number) => {
+    resume.current = playing;
+    setIndex(next);
+  };
+
+  const randomOther = () => {
+    if (tracks.length < 2) return index;
+    let next = index;
+    while (next === index) next = Math.floor(Math.random() * tracks.length);
+    return next;
+  };
+
+  const skip = (delta: number) =>
+    go(shuffle && delta > 0 ? randomOther() : (index + delta + tracks.length) % tracks.length);
+
+  const toggle = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (audio.paused) void audio.play();
+    else audio.pause();
+  };
+
+  const onEnded = () => {
+    const audio = audioRef.current;
+    if (repeat && audio) {
+      audio.currentTime = 0;
+      void audio.play();
+    } else {
+      resume.current = true;
+      setIndex(shuffle ? randomOther() : (index + 1) % tracks.length);
+    }
+  };
 
   return (
     <div className={`flex flex-col gap-3 ${className ?? ""}`}>
@@ -52,24 +73,9 @@ export function Gramophone({
           className="pointer-events-none absolute inset-0 size-full"
         >
           <g transform="translate(255 260) scale(1 0.45)">
-            <g className="gramophone-spin">
-              <circle
-                r="82"
-                fill="none"
-                stroke="#d9d9d7"
-                strokeOpacity="0.28"
-                strokeWidth="5"
-                strokeDasharray="70 446"
-              />
-              <circle
-                r="62"
-                fill="none"
-                stroke="#d9d9d7"
-                strokeOpacity="0.2"
-                strokeWidth="4"
-                strokeDasharray="50 340"
-                strokeDashoffset="-120"
-              />
+            <g className="gramophone-spin" style={{ animationPlayState: playing ? "running" : "paused" }}>
+              <circle r="82" fill="none" stroke="#d9d9d7" strokeOpacity="0.28" strokeWidth="5" strokeDasharray="70 446" />
+              <circle r="62" fill="none" stroke="#d9d9d7" strokeOpacity="0.2" strokeWidth="4" strokeDasharray="50 340" strokeDashoffset="-120" />
             </g>
           </g>
         </svg>
@@ -77,64 +83,73 @@ export function Gramophone({
 
       {track && (
         <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between gap-2">
-            {playable.length > 1 && (
-              <Button
-                variant="secondary"
-                size="icon"
-                aria-label="Previous track"
-                onClick={() => step(-1)}
-              >
-                <svg
-                  viewBox="0 0 16 16"
-                  className={arrow}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  aria-hidden="true"
-                >
-                  <path d="M10 3 5 8l5 5" />
-                </svg>
-              </Button>
-            )}
-            <p className="min-w-0 truncate text-center text-sm font-bold text-gray-700">
-              {track.title}
-            </p>
-            {playable.length > 1 && (
-              <Button
-                variant="secondary"
-                size="icon"
-                aria-label="Next track"
-                onClick={() => step(1)}
-              >
-                <svg
-                  viewBox="0 0 16 16"
-                  className={arrow}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  aria-hidden="true"
-                >
-                  <path d="m6 3 5 5-5 5" />
-                </svg>
-              </Button>
-            )}
+          {/* eslint-disable-next-line jsx-a11y/media-has-caption -- music only, there is nothing to caption */}
+          <audio
+            ref={audioRef}
+            src={track.src}
+            preload="none"
+            onPlay={() => setPlaying(true)}
+            onPause={() => setPlaying(false)}
+            onEnded={onEnded}
+          />
+          <div className="min-w-0 text-center">
+            <p className="truncate text-sm font-bold text-gray-700">{track.title}</p>
+            <p className="truncate text-xs text-gray-500">{track.artist}</p>
           </div>
-          {loaded ? (
-            <iframe
-              key={track.link}
-              src={toEmbedUrl(track.link) ?? undefined}
-              title={`Player: ${track.title}`}
-              width="100%"
-              height="152"
-              allow="encrypted-media"
-              className="rounded-lg border-0"
-            />
-          ) : (
-            <Button variant="primary" size="sm" onClick={() => setLoaded(true)}>
-              Play
-            </Button>
-          )}
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              aria-label="Shuffle"
+              aria-pressed={shuffle}
+              onClick={() => setShuffle(!shuffle)}
+              className={`${controlClass} ${shuffle ? "text-brand-500" : "text-gray-500 hover:text-brand-500"}`}
+            >
+              <svg viewBox="0 0 24 24" className={iconClass} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Previous track"
+              onClick={() => skip(-1)}
+              className={`${controlClass} text-gray-600 hover:text-brand-500`}
+            >
+              <svg viewBox="0 0 24 24" className={iconClass} fill="currentColor" aria-hidden="true">
+                <path d="M6 5h2v14H6zM20 5v14L9 12z" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label={playing ? "Pause" : "Play"}
+              onClick={toggle}
+              className="inline-flex size-10 cursor-pointer items-center justify-center rounded-full bg-gray-900 text-brand-50 transition-colors duration-200 hover:bg-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
+            >
+              <svg viewBox="0 0 24 24" className={iconClass} fill="currentColor" aria-hidden="true">
+                {playing ? <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" /> : <path d="M8 5v14l11-7z" />}
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Next track"
+              onClick={() => skip(1)}
+              className={`${controlClass} text-gray-600 hover:text-brand-500`}
+            >
+              <svg viewBox="0 0 24 24" className={iconClass} fill="currentColor" aria-hidden="true">
+                <path d="M16 5h2v14h-2zM4 5v14l11-7z" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Repeat track"
+              aria-pressed={repeat}
+              onClick={() => setRepeat(!repeat)}
+              className={`${controlClass} ${repeat ? "text-brand-500" : "text-gray-500 hover:text-brand-500"}`}
+            >
+              <svg viewBox="0 0 24 24" className={iconClass} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="m17 2 4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3" />
+              </svg>
+            </button>
+          </div>
         </div>
       )}
     </div>

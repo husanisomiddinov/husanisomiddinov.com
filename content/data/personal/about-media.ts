@@ -1,13 +1,9 @@
 export interface MusicTrack {
   title: string;
-  /** open.spotify.com link to a track, album or playlist. */
-  link: string;
+  artist: string;
+  /** Path under /public, for example "/music/song.mp3". Only host audio you have the rights to. */
+  src: string;
 }
 
-/** Tracks the About page gramophone can switch between. Empty hides the player. */
-export const musicTracks: MusicTrack[] = [
-  {
-    title: "My playlist",
-    link: "https://open.spotify.com/playlist/3hRgMuahevtXQWsq3vFSPg",
-  },
-];
+/** Tracks the About page gramophone plays. Empty hides the player controls. */
+export const musicTracks: MusicTrack[] = [];

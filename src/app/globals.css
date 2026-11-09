@@ -323,6 +323,7 @@ i {
 }
 
 .gramophone-spin {
+  animation-play-state: paused;
   transform-origin: 0 0;
   animation: gramophone-spin 3.6s linear infinite;
 }

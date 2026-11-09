@@ -335,7 +335,7 @@ Rules:
 - Hover is a color change to `brand-500`. No scale-up, no lift, no shadow.
 - Page scroll is smooth (`scroll-behavior: smooth`).
 - Loading uses reserved space (set `width`/`height` or aspect ratio), not spinners, so nothing jumps.
-- Infinite animations are allowed only in diagrams and the home page retro computer screen and the About page gramophone record, at low amplitude. They must not run offscreen when avoidable (3D scenes stop when offscreen; CSS loops are cheap enough to leave).
+- Infinite animations are allowed only in diagrams and the home page retro computer screen and the About page gramophone record (only while music plays), at low amplitude. They must not run offscreen when avoidable (3D scenes stop when offscreen; CSS loops are cheap enough to leave).
 
 ### Reduced motion (required)
 
