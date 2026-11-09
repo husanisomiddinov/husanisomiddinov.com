@@ -34,7 +34,7 @@ export const bioMilestones: BioMilestone[] = [
           I may take this whole thing for granted at times, but believe me, it
           was a huge privilege, and it paid off: a full merit scholarship to a
           competitive private school in town, a few mid-ranked college
-          acceptances (I didn&apos;t take them), and Discord, Reddit, and
+          acceptances which I didn&apos;t pursue, and Discord, Reddit, and
           Twitter without end. English put the whole discourse on
           technological, philosophical, and whatever-ical thought a click away.
         </p>
