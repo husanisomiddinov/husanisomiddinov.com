@@ -328,7 +328,33 @@ i {
   animation: gramophone-spin 3.6s linear infinite;
 }
 
+/* About page photo strip: two identical copies, slide by exactly one copy for a seamless loop. */
+@keyframes photo-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.photo-marquee-track {
+  animation: photo-marquee 60s linear infinite;
+}
+
+.photo-marquee:hover .photo-marquee-track,
+.photo-marquee:focus-within .photo-marquee-track {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .photo-marquee {
+    overflow-x: auto;
+  }
+  .photo-marquee-track {
+    animation: none;
+  }
+  .photo-marquee-copy {
+    display: none;
+  }
+
   .gramophone-spin,
   .computer-cursor,
   .computer-flicker {

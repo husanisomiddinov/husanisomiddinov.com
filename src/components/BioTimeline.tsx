@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { PhotoMarquee } from "./PhotoMarquee";
 import { useActiveItem } from "@/lib/useActiveItem";
 import type { BioMilestone } from "../../content/data/personal/bio-timeline";
 
@@ -29,6 +30,7 @@ export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
               >
                 {milestone.content}
               </div>
+              {milestone.gallery && <PhotoMarquee photos={milestone.gallery} className="mt-3" />}
               {milestone.photos && (
                 <div className="mt-3 grid grid-cols-2 gap-3">
                   {milestone.photos.map((photo) => (

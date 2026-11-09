@@ -9,6 +9,8 @@ export interface BioMilestone {
   content: ReactNode;
   /** Optional photos shown under the text, side by side, at their true aspect ratio. */
   photos?: { src: string; alt: string; width: number; height: number }[];
+  /** Optional looping photo strip, for sets of many photos of mixed shapes. */
+  gallery?: { src: string; alt: string; width: number; height: number }[];
 }
 
 export const bioMilestones: BioMilestone[] = [
@@ -69,6 +71,56 @@ export const bioMilestones: BioMilestone[] = [
     id: "agora",
     age: 18,
     dateLabel: "Jan 2025",
+    gallery: [
+      {
+        src: "/images/about/agora/website.webp",
+        alt: "The Agora website homepage",
+        width: 878,
+        height: 480,
+      },
+      {
+        src: "/images/about/agora/office-wall.webp",
+        alt: "The Agora office wall reading \"You will never walk alone\"",
+        width: 360,
+        height: 480,
+      },
+      {
+        src: "/images/about/agora/group.webp",
+        alt: "A group photo of Agora students and mentors in a courtyard",
+        width: 640,
+        height: 480,
+      },
+      {
+        src: "/images/about/agora/telegram.webp",
+        alt: "The Agora Telegram channel with over 2,000 subscribers",
+        width: 806,
+        height: 480,
+      },
+      {
+        src: "/images/about/agora/i-write.webp",
+        alt: "Agora poster reading \"I write; therefore I am.\"",
+        width: 221,
+        height: 480,
+      },
+      {
+        src: "/images/about/agora/team-cafe.webp",
+        alt: "Three of us at a cafe table with a laptop",
+        width: 640,
+        height: 480,
+      },
+      {
+        src: "/images/about/agora/atlas.webp",
+        alt: "The cover of Atlas, Getting the Words Right",
+        width: 371,
+        height: 480,
+      },
+      {
+        src: "/images/about/agora/on-writing-well.webp",
+        alt: "On Writing Well by William Zinsser next to a laptop showing a slide",
+        width: 360,
+        height: 480,
+      },
+    ],
     content: (
       <>
         <p>

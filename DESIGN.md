@@ -61,7 +61,7 @@ These come from direct feedback and from what has already been judged to look ge
 - **No new colors outside the palette** (section 4), including for charts and diagrams (section 11 has the only extra palette).
 - **No box shadows on content.** The only shadow on the site is the mobile drawer.
 - **No gradients on surfaces, no glassmorphism, no emoji as decoration, no stock illustration style.**
-- **No decorative animation** (parallax, scroll-jacking, floating blobs, auto-playing carousels, typing effects).
+- **No decorative animation** (parallax, scroll-jacking, floating blobs, auto-playing carousels, typing effects). The one exception is the About page photo strip (`PhotoMarquee`): it loops slowly, pauses on hover and focus, and becomes a plain scrollable strip with reduced motion.
 - **No second webfont.** The heading serif is the only loaded face.
 - **No pure `#000` or `#fff`** for page, text or surfaces. Use the tokens.
 - **No hover-only information.** Anything revealed on hover must also be reachable by keyboard and touch.
