@@ -42,4 +42,9 @@ export const musicTracks: MusicTrack[] = [
     artist: "Eagles",
     src: "/music/hotel-california.mp3",
   },
+  {
+    title: "Biting Bullets",
+    artist: "ridgeclub",
+    src: "/music/biting-bullets.mp3",
+  },
 ];
