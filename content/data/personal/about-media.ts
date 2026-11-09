@@ -27,4 +27,9 @@ export const musicTracks: MusicTrack[] = [
     artist: "Vance Joy",
     src: "/music/riptide.mp3",
   },
+  {
+    title: "Iris",
+    artist: "The Goo Goo Dolls",
+    src: "/music/iris.mp3",
+  },
 ];
