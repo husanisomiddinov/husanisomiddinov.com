@@ -32,7 +32,7 @@ export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
               </div>
               {milestone.gallery && <PhotoMarquee photos={milestone.gallery} className="mt-3" />}
               {milestone.photos && (
-                <div className="mt-3 grid grid-cols-2 gap-3">
+                <div className="mt-3 flex flex-wrap gap-3">
                   {milestone.photos.map((photo) => (
                     <Image
                       key={photo.src}
@@ -40,8 +40,8 @@ export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
                       alt={photo.alt}
                       width={photo.width}
                       height={photo.height}
-                      sizes={photo.width > photo.height ? "(max-width: 640px) 100vw, 440px" : "(max-width: 640px) 50vw, 320px"}
-                      className={`h-auto w-full rounded-lg border border-gray-200 ${photo.width > photo.height ? "col-span-2" : ""}`}
+                      sizes="192px"
+                      className="h-28 w-auto rounded-lg border border-gray-200 sm:h-32"
                     />
                   ))}
                 </div>
