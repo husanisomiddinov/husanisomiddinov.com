@@ -55,7 +55,7 @@ The site descends from masonjwang.com and akbar.one (content column width, syste
 These come from direct feedback and from what has already been judged to look generic or AI-made. They are not negotiable and they override taste.
 
 - **No eyebrow labels.** No small label or kicker above a heading, in any style: not all-caps tracked text, not small mono tags, not "Platform" or "Reasoning" style tags above titles. Lead with the heading itself. Small mono or small text is for real data only (dates, counts, code, captions).
-- **No all-caps styling and no wide letter-spacing** on labels, links, buttons or headers. Use sentence case. (Navigation labels are lowercase by design: `reading`, `writing`, `projects`, `idk`.)
+- **No all-caps styling and no wide letter-spacing** on labels, links, buttons or headers. Use sentence case. (Navigation labels start with a capital: `Reading`, `Writing`, `Projects`, `Idk`.)
 - **No em dashes or en dashes** in copy, comments or content. Use a comma, a period, a colon, or a plain hyphen for label-style separators ("Merch - Agora Runs"). Number ranges use "to" or a hyphen.
 - **No templated section formula.** Do not default to "big heading + one accent-colored word + two-column split + scroll reveal". Vary structure, and match the plainer native pages.
 - **No new colors outside the palette** (section 4), including for charts and diagrams (section 11 has the only extra palette).
