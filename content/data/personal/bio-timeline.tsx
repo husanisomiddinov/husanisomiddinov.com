@@ -241,6 +241,38 @@ export const bioMilestones: BioMilestone[] = [
     id: "nuu",
     age: 19,
     dateLabel: "Jan 2026",
+    gallery: [
+      {
+        src: "/images/experiences/nuu/quadruped.jpg",
+        alt: "A quadruped robot at the lab",
+        width: 1280,
+        height: 958,
+      },
+      {
+        src: "/images/experiences/nuu/humanoid-unboxing.jpg",
+        alt: "Unboxing a humanoid robot",
+        width: 960,
+        height: 1280,
+      },
+      {
+        src: "/images/experiences/nuu/lidar-robot.jpg",
+        alt: "A wheeled robot with a lidar sensor",
+        width: 1280,
+        height: 562,
+      },
+      {
+        src: "/images/experiences/nuu/rviz-slam.jpg",
+        alt: "A SLAM map in RViz on a laptop screen",
+        width: 2000,
+        height: 1500,
+      },
+      {
+        src: "/images/experiences/nuu/jetson-nano.jpg",
+        alt: "A Jetson Nano board on the bench",
+        width: 960,
+        height: 1280,
+      },
+    ],
     content: (
       <p>
         Later joined a robotics lab in a local university and researched
