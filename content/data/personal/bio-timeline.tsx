@@ -48,6 +48,12 @@ export const bioMilestones: BioMilestone[] = [
         width: 800,
         height: 1067,
       },
+      {
+        src: "/images/about/silk-road-paper.webp",
+        alt: "The abstract of my paper, Fragments of Power: Foucault and Disruptions and Disjunctures in the Silk Road Narratives",
+        width: 1198,
+        height: 861,
+      },
     ],
     content: (
       <p>

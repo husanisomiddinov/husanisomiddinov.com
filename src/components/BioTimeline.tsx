@@ -40,8 +40,8 @@ export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
                       alt={photo.alt}
                       width={photo.width}
                       height={photo.height}
-                      sizes="(max-width: 640px) 50vw, 320px"
-                      className="h-auto w-full rounded-lg border border-gray-200"
+                      sizes={photo.width > photo.height ? "(max-width: 640px) 100vw, 440px" : "(max-width: 640px) 50vw, 320px"}
+                      className={`h-auto w-full rounded-lg border border-gray-200 ${photo.width > photo.height ? "col-span-2" : ""}`}
                     />
                   ))}
                 </div>
