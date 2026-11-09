@@ -6,4 +6,10 @@ export interface MusicTrack {
 }
 
 /** Tracks the About page gramophone plays. Empty hides the player controls. */
-export const musicTracks: MusicTrack[] = [];
+export const musicTracks: MusicTrack[] = [
+  {
+    title: "A Horse with No Name",
+    artist: "America, George Martin",
+    src: "/music/a-horse-with-no-name.mp3",
+  },
+];
