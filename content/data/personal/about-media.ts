@@ -32,4 +32,14 @@ export const musicTracks: MusicTrack[] = [
     artist: "The Goo Goo Dolls",
     src: "/music/iris.mp3",
   },
+  {
+    title: "California Dreamin'",
+    artist: "The Mamas & The Papas",
+    src: "/music/california-dreamin.mp3",
+  },
+  {
+    title: "Hotel California",
+    artist: "Eagles",
+    src: "/music/hotel-california.mp3",
+  },
 ];
