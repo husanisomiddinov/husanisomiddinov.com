@@ -2,9 +2,6 @@ import { memo } from "react";
 import Image from "next/image";
 import type { GalleryPhoto } from "../../content/data/personal/bio-timeline";
 
-/** Strip height in px. Matches the `h-60` class below; used to size the image requests. */
-const HEIGHT = 240;
-
 function Strip({ photos, copy }: { photos: GalleryPhoto[]; copy?: boolean }) {
   return (
     <ul
@@ -18,7 +15,12 @@ function Strip({ photos, copy }: { photos: GalleryPhoto[]; copy?: boolean }) {
             alt={copy ? "" : photo.alt}
             width={photo.width}
             height={photo.height}
-            sizes={`${Math.round((HEIGHT * photo.width) / photo.height)}px`}
+            // Files are already webp at twice the shown size, so they skip the image optimizer
+            // (no first-hit encoding delay) and load early at low priority, so nothing pops in as the strip moves.
+            unoptimized
+            loading="eager"
+            fetchPriority="low"
+            decoding="async"
             className="h-full w-auto rounded-lg border border-gray-200"
           />
         </li>

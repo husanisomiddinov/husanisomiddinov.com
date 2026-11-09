@@ -412,6 +412,7 @@ Defined once in `globals.css`: `diagram-flow` (dash offset, period 22 to match `
 - **Photos:** shown at their true aspect ratio in a `rounded-lg` frame with a `gray-200` border. Never cropped to a decorative shape. Galleries solve for equal heights so nothing is cropped (see `Experiences`).
 - **Covers and thumbnails:** square 52/60px, `rounded-lg`, `gray-200` border. Without a cover, a first-letter placeholder on `brand-50` with a `brand-100` border.
 - **Format and loading:** use `next/image` with explicit `width`/`height` and a correct `sizes`. Prefer `webp`. Optimize with `yarn optimize-images`. Lazy by default; `loading="eager"` only for above-the-fold logos.
+- **Photo strips (About page):** photos are pre-sized to 480px tall webp in `public/images/about/`, served as is (`unoptimized`), and load eagerly at low priority so they are ready before the strip scrolls to them.
 - **Alt text:** meaningful for content images, empty (`alt=""`) for decorative ones, and `aria-hidden` on repeated gallery thumbnails.
 - **Logos:** shown in a 36px square, `object-contain`, with an optional `logoScale` to fix optical size.
 - **No stock photography, no AI-looking hero art, no background images behind text.**
