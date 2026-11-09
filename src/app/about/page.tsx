@@ -1,5 +1,6 @@
-import { BioTimeline, PageTitle } from "@/components";
+import { BioTimeline, MusicEmbed, PageTitle } from "@/components";
 import { buildMetadata } from "@/lib/metadata";
+import { musicLink } from "../../../content/data/personal/about-media";
 import { bioMilestones } from "../../../content/data/personal/bio-timeline";
 
 export const metadata = buildMetadata({
@@ -13,6 +14,7 @@ export default function AboutPage() {
     <div className="flex w-full flex-col items-start">
       <PageTitle>About</PageTitle>
       <BioTimeline milestones={bioMilestones} />
+      {musicLink && <MusicEmbed link={musicLink} className="mt-6 w-full" />}
     </div>
   );
 }

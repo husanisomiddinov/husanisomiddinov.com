@@ -7,6 +7,8 @@ export interface BioMilestone {
   /** Shown instead of a repeated age once age stops changing. */
   dateLabel?: string;
   content: ReactNode;
+  /** Optional photo shown under the text, at its true aspect ratio. */
+  photo?: { src: string; alt: string; width: number; height: number };
 }
 
 export const bioMilestones: BioMilestone[] = [
