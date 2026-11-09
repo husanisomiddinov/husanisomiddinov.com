@@ -27,7 +27,7 @@ function Strip({ photos, copy }: { photos: GalleryPhoto[]; copy?: boolean }) {
   );
 }
 
-/** A looping strip of photos at one shared height, so none is cropped or shrunk. Pauses on hover and focus. With reduced motion it becomes a plain scrollable strip. */
+/** A looping strip of photos at one shared height, so none is cropped or shrunk. With reduced motion it becomes a plain scrollable strip. */
 export const PhotoMarquee = memo(function PhotoMarquee({ photos, className }: { photos: GalleryPhoto[]; className?: string }) {
   return (
     <div className={`photo-marquee overflow-hidden ${className ?? ""}`}>

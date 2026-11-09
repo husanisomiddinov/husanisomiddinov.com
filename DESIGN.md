@@ -339,7 +339,7 @@ Rules:
   - Diagrams (flow, pulse, icon loops).
   - The home page retro computer screen (blinking cursor, faint flicker).
   - The About page gramophone record, which spins only while music plays.
-  - The About page photo strip (`PhotoMarquee`): a slow loop that pauses on hover and focus and becomes a plain scrollable strip with reduced motion.
+  - The About page photo strip (`PhotoMarquee`): a slow loop that keeps moving on hover and becomes a plain scrollable strip with reduced motion.
 - Sound: audio may autoplay only on the About page. It must fade in from silence, be pausable, and never start before the visitor has interacted if the browser blocks it.
 - Overlays drawn on top of an illustration (computer screen, record) use token colors like any other element, and their hand-measured coordinates are noted next to the code.
 

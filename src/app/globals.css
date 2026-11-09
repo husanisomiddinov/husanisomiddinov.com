@@ -335,11 +335,6 @@ i {
   animation: photo-marquee 60s linear infinite;
 }
 
-.photo-marquee:hover .photo-marquee-track,
-.photo-marquee:focus-within .photo-marquee-track {
-  animation-play-state: paused;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .diagram-flow,
   .diagram-pulse,
