@@ -86,7 +86,7 @@ export function Gramophone({ tracks, className }: { tracks: MusicTrack[]; classN
               type="button"
               aria-label="Previous track"
               onClick={() => skip(-1)}
-              className={`${controlClass} text-gray-600 hover:text-brand-500`}
+              className={`${controlClass} text-brand-500 hover:text-brand-600`}
             >
               <svg viewBox="0 0 24 24" className={iconClass} fill="currentColor" aria-hidden="true">
                 <path d="M6 5h2v14H6zM20 5v14L9 12z" />
@@ -96,7 +96,7 @@ export function Gramophone({ tracks, className }: { tracks: MusicTrack[]; classN
               type="button"
               aria-label={playing ? "Pause" : "Play"}
               onClick={toggle}
-              className="inline-flex size-10 cursor-pointer items-center justify-center rounded-full bg-gray-900 text-brand-50 transition-colors duration-200 hover:bg-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
+              className="inline-flex size-10 cursor-pointer items-center justify-center rounded-full bg-brand-500 text-brand-50 transition-colors duration-200 hover:bg-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
             >
               <svg viewBox="0 0 24 24" className={iconClass} fill="currentColor" aria-hidden="true">
                 {playing ? <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" /> : <path d="M8 5v14l11-7z" />}
@@ -106,7 +106,7 @@ export function Gramophone({ tracks, className }: { tracks: MusicTrack[]; classN
               type="button"
               aria-label="Next track"
               onClick={() => skip(1)}
-              className={`${controlClass} text-gray-600 hover:text-brand-500`}
+              className={`${controlClass} text-brand-500 hover:text-brand-600`}
             >
               <svg viewBox="0 0 24 24" className={iconClass} fill="currentColor" aria-hidden="true">
                 <path d="M16 5h2v14h-2zM4 5v14l11-7z" />
