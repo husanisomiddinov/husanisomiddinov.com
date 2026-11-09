@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type RefObject } from "react";
 
 const FADE_MS = 5000;
-const INTERACTION_EVENTS = ["pointerdown", "keydown", "touchstart"] as const;
+// The events browsers count as a real gesture that unlocks sound (touchstart and pointerdown alone do not on touch screens).
+const INTERACTION_EVENTS = ["pointerup", "touchend", "click", "keydown"] as const;
 
 const mod = (n: number, m: number) => ((n % m) + m) % m;
 
