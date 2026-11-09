@@ -29,15 +29,20 @@ export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
               >
                 {milestone.content}
               </div>
-              {milestone.photo && (
-                <Image
-                  src={milestone.photo.src}
-                  alt={milestone.photo.alt}
-                  width={milestone.photo.width}
-                  height={milestone.photo.height}
-                  sizes="(max-width: 1024px) 100vw, 660px"
-                  className="mt-3 h-auto w-full rounded-lg border border-gray-200"
-                />
+              {milestone.photos && (
+                <div className="mt-3 grid grid-cols-2 gap-3">
+                  {milestone.photos.map((photo) => (
+                    <Image
+                      key={photo.src}
+                      src={photo.src}
+                      alt={photo.alt}
+                      width={photo.width}
+                      height={photo.height}
+                      sizes="(max-width: 640px) 50vw, 320px"
+                      className="h-auto w-full rounded-lg border border-gray-200"
+                    />
+                  ))}
+                </div>
               )}
             </div>
           </div>

@@ -7,8 +7,8 @@ export interface BioMilestone {
   /** Shown instead of a repeated age once age stops changing. */
   dateLabel?: string;
   content: ReactNode;
-  /** Optional photo shown under the text, at its true aspect ratio. */
-  photo?: { src: string; alt: string; width: number; height: number };
+  /** Optional photos shown under the text, side by side, at their true aspect ratio. */
+  photos?: { src: string; alt: string; width: number; height: number }[];
 }
 
 export const bioMilestones: BioMilestone[] = [
@@ -33,6 +33,20 @@ export const bioMilestones: BioMilestone[] = [
   {
     id: "high-school",
     age: 16,
+    photos: [
+      {
+        src: "/images/about/high-school-pose.webp",
+        alt: "Me striking a pose in front of a school banner at night",
+        width: 800,
+        height: 1067,
+      },
+      {
+        src: "/images/about/the-plague.webp",
+        alt: "Me wearing a travel pillow and holding The Plague by Albert Camus",
+        width: 800,
+        height: 1067,
+      },
+    ],
     content: (
       <p>
         At 16, in high school, I studied philosophy and politics. I wanted to
