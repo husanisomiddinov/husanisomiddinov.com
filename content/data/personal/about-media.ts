@@ -5,4 +5,9 @@ export interface MusicTrack {
 }
 
 /** Tracks the About page gramophone can switch between. Empty hides the player. */
-export const musicTracks: MusicTrack[] = [];
+export const musicTracks: MusicTrack[] = [
+  {
+    title: "My playlist",
+    link: "https://open.spotify.com/playlist/3hRgMuahevtXQWsq3vFSPg",
+  },
+];
