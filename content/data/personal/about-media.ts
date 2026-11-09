@@ -22,4 +22,9 @@ export const musicTracks: MusicTrack[] = [
     artist: "Peter, Paul and Mary",
     src: "/music/500-miles.mp3",
   },
+  {
+    title: "Riptide",
+    artist: "Vance Joy",
+    src: "/music/riptide.mp3",
+  },
 ];
