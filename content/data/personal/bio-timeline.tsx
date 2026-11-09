@@ -130,6 +130,12 @@ export const bioMilestones: BioMilestone[] = [
         width: 360,
         height: 480,
       },
+      {
+        src: "/images/about/agora/books.webp",
+        alt: "A table of books for our writing mentors, including Gödel, Escher, Bach, Surely You're Joking, Mr. Feynman and On Writing",
+        width: 480,
+        height: 640,
+      },
     ],
     content: (
       <>
