@@ -179,6 +179,18 @@ export const bioMilestones: BioMilestone[] = [
     dateLabel: "Nov 2025",
     gallery: [
       {
+        src: "/images/about/ai500/hacking.webp",
+        alt: "Two of us working on laptops at the AI500 hackathon, at the table for team Apollo",
+        width: 719,
+        height: 480,
+      },
+      {
+        src: "/images/about/ai500/pitch-deck.webp",
+        alt: "The title slide of our Apollo AI pitch deck",
+        width: 876,
+        height: 480,
+      },
+      {
         src: "/images/about/ai500/pitch-portrait.webp",
         alt: "Me pitching Apollo on stage at AI500",
         width: 320,
@@ -193,6 +205,18 @@ export const bioMilestones: BioMilestone[] = [
       {
         src: "/images/about/ai500/winners.webp",
         alt: "Our team holding the first place prize cheque at AI500",
+        width: 720,
+        height: 480,
+      },
+      {
+        src: "/images/about/ai500/confetti.webp",
+        alt: "Gold confetti falling as we hold the first place cheque",
+        width: 702,
+        height: 480,
+      },
+      {
+        src: "/images/about/ai500/ceremony.webp",
+        alt: "The AI500 award stage with all the winning teams and their cheques",
         width: 720,
         height: 480,
       },
