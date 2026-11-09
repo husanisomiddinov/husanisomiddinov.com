@@ -25,14 +25,24 @@ export const bioMilestones: BioMilestone[] = [
     content: (
       <>
         <p>
-          I started learning English at 5. The language unlocked many doors.
-          Merit scholarship to a private school, some college acceptances
-          (didn&apos;t pursue college though), and endless Discord on Reddit
-          and Twitter.
+          I come from Samarkand, an ancient caravan city in the middle of
+          somewhere. I grew up on English cartoons. My dad started teaching me
+          the basics when I was five, and I was fluent long before the school
+          exams and the SAT thing showed up.
         </p>
         <p>
-          But of all these, it taught me to learn things on my own. And so I
-          learnt to become an autodidact.
+          I may take this whole thing for granted at times, but believe me, it
+          was a huge privilege, and it paid off: a full merit scholarship to a
+          competitive private school in town, a few mid-ranked college
+          acceptances (I didn&apos;t take them), and Discord, Reddit, and
+          Twitter without end. English put the whole discourse on
+          technological, philosophical, and whatever-ical thought a click away.
+        </p>
+        <p>
+          But the biggest thing it gave me was the ability to teach myself.
+          English was my caravan, a door to exploring the world far beyond the
+          reaches of my Samarkand. And that, to me, is worth more than any
+          bachelor&apos;s diploma.
         </p>
       </>
     ),
