@@ -47,6 +47,12 @@ export const bioMilestones: BioMilestone[] = [
         height: 1067,
       },
       {
+        src: "/images/about/high-school-speaking.webp",
+        alt: "Me speaking to a room, holding a notebook, in front of a bright window",
+        width: 640,
+        height: 480,
+      },
+      {
         src: "/images/about/silk-road-paper.webp",
         alt: "The abstract of my paper, Fragments of Power: Foucault and Disruptions and Disjunctures in the Silk Road Narratives",
         width: 1198,
