@@ -39,7 +39,7 @@ export function Gramophone({ tracks, className }: { tracks: MusicTrack[]; classN
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 size-full"
         >
-          <g transform="translate(245 260) scale(1 0.45)">
+          <g transform="translate(255 260) scale(1 0.45)">
             <g className="gramophone-spin">
               <circle r="82" fill="none" stroke="#d9d9d7" strokeOpacity="0.28" strokeWidth="5" strokeDasharray="70 446" />
               <circle r="62" fill="none" stroke="#d9d9d7" strokeOpacity="0.2" strokeWidth="4" strokeDasharray="50 340" strokeDashoffset="-120" />
