@@ -1,5 +1,12 @@
 import type { ReactNode } from "react";
 
+export interface GalleryPhoto {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
 export interface BioMilestone {
   id: string;
   /** Age at the time of this milestone. */
@@ -8,7 +15,7 @@ export interface BioMilestone {
   dateLabel?: string;
   content: ReactNode;
   /** Optional looping photo strip under the text. Every photo is shown at the same height, at its true shape. */
-  gallery?: { src: string; alt: string; width: number; height: number }[];
+  gallery?: GalleryPhoto[];
 }
 
 export const bioMilestones: BioMilestone[] = [

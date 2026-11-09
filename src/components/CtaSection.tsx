@@ -1,27 +1,29 @@
+import type { ReactNode } from "react";
 import Image from "next/image";
 import { Button } from "./Button";
-import { RetroComputer } from "./RetroComputer";
 
 interface CtaSectionProps {
   title?: string;
   text: string;
   href: string;
   buttonLabel: string;
-  /** Optional illustration shown on the right. */
+  /** Optional still illustration shown on the right, from a path under /public. */
   image?: string;
-  /** Swap the image for the animated retro computer. */
-  animatedComputer?: boolean;
+  /** Optional custom illustration on the right (for example an animated one). Wins over `image`. */
+  illustration?: ReactNode;
   className?: string;
 }
 
-/** Heading, short text and a green button, with an optional image on the right. */
+const illustrationSize = "w-28 shrink-0 sm:w-36";
+
+/** Heading, short text and a green button, with an optional illustration on the right. */
 export function CtaSection({
   title,
   text,
   href,
   buttonLabel,
   image,
-  animatedComputer,
+  illustration,
   className,
 }: CtaSectionProps) {
   return (
@@ -39,20 +41,17 @@ export function CtaSection({
           {buttonLabel}
         </Button>
       </div>
-      {animatedComputer ? (
-        <RetroComputer className="w-28 shrink-0 sm:w-36" />
-      ) : (
-        image && (
-        <Image
-          src={image}
-          alt=""
-          width={500}
-          height={500}
-          sizes="(max-width: 640px) 112px, 144px"
-          className="h-auto w-28 shrink-0 sm:w-36"
-        />
-        )
-      )}
+      {illustration ??
+        (image && (
+          <Image
+            src={image}
+            alt=""
+            width={500}
+            height={500}
+            sizes="(max-width: 640px) 112px, 144px"
+            className={`h-auto ${illustrationSize}`}
+          />
+        ))}
     </section>
   );
 }

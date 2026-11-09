@@ -1,7 +1,8 @@
 import type { SVGProps } from "react";
 
 /**
- * Shared inline SVG icons drawn in a single 24x24 stroke style. Each accepts
+ * Shared inline SVG icons drawn on a 24x24 grid, mostly in a single stroke style
+ * (the player transport icons are solid fills). Each accepts
  * standard SVG props, so callers can override size/color via className
  * (e.g. <SearchIcon className="size-4 text-gray-400" />). The `className`
  * default matches each icon's original call sites.
@@ -121,3 +122,30 @@ export function ListIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+function SolidIcon({ d, className, ...props }: { d: string } & SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      className={mergeClassName("size-5", className)}
+      {...props}
+    >
+      <path d={d} />
+    </svg>
+  );
+}
+
+export const SkipPreviousIcon = (props: SVGProps<SVGSVGElement>) => (
+  <SolidIcon d="M6 5h2v14H6zM20 5v14L9 12z" {...props} />
+);
+export const SkipNextIcon = (props: SVGProps<SVGSVGElement>) => (
+  <SolidIcon d="M16 5h2v14h-2zM4 5v14l11-7z" {...props} />
+);
+export const PlayIcon = (props: SVGProps<SVGSVGElement>) => (
+  <SolidIcon d="M8 5v14l11-7z" {...props} />
+);
+export const PauseIcon = (props: SVGProps<SVGSVGElement>) => (
+  <SolidIcon d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" {...props} />
+);

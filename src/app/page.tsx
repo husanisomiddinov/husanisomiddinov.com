@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { Prose, SocialIcons, Experiences, FeaturedProjects, FeaturedWriting, FeaturedBooks, CtaSection } from "@/components";
+import { Prose, SocialIcons, Experiences, FeaturedProjects, FeaturedWriting, FeaturedBooks, CtaSection, RetroComputer } from "@/components";
 import { getHomePage } from "@/lib/pages";
 import { getExperiences, getFeaturedProjects } from "@/lib/data";
 import { getAllWritingMetadata } from "@/lib/posts";
@@ -34,7 +34,7 @@ export default async function Home() {
         text="From learning English at 5 to quitting Higgsfield for robots. My humble story..."
         href="/about"
         buttonLabel="Read about me"
-        animatedComputer
+        illustration={<RetroComputer />}
       />
       <SocialIcons className="mt-3" />
       <hr className="mt-8 border-gray-300" />

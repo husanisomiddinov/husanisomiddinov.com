@@ -1,7 +1,7 @@
 "use client";
 
-import { PhotoMarquee } from "./PhotoMarquee";
 import { useActiveItem } from "@/lib/useActiveItem";
+import { PhotoMarquee } from "./PhotoMarquee";
 import type { BioMilestone } from "../../content/data/personal/bio-timeline";
 
 export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
@@ -29,7 +29,9 @@ export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
               >
                 {milestone.content}
               </div>
-              {milestone.gallery && <PhotoMarquee photos={milestone.gallery} className="mt-3" />}
+              {milestone.gallery && (
+                <PhotoMarquee photos={milestone.gallery} className="mt-3" />
+              )}
             </div>
           </div>
         );

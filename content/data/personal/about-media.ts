@@ -5,7 +5,7 @@ export interface MusicTrack {
   src: string;
 }
 
-/** Tracks the About page gramophone plays. Empty hides the player controls. */
+/** Tracks the About page gramophone plays. With none, the gramophone shows without controls or sound. */
 export const musicTracks: MusicTrack[] = [
   {
     title: "A Horse with No Name",

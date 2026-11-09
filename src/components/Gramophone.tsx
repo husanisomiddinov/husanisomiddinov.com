@@ -1,103 +1,43 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useRef, type ReactNode } from "react";
+import { useAudioPlaylist } from "@/lib/useAudioPlaylist";
 import type { MusicTrack } from "../../content/data/personal/about-media";
+import { PauseIcon, PlayIcon, SkipNextIcon, SkipPreviousIcon } from "./icons";
 
-const FADE_MS = 5000;
-const INTERACTION_EVENTS = ["pointerdown", "keydown", "touchstart"] as const;
-const iconClass = "size-5";
-const controlClass =
-  "inline-flex size-8 cursor-pointer items-center justify-center rounded transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500";
+const focusRing =
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500";
+
+function ControlButton({
+  label,
+  onClick,
+  className,
+  children,
+}: {
+  label: string;
+  onClick: () => void;
+  className: string;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      className={`inline-flex cursor-pointer items-center justify-center transition-colors duration-200 ${focusRing} ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
 
 /** Pixel gramophone whose record spins while the track plays, with previous, play/pause and next below it. */
 export function Gramophone({ tracks, className }: { tracks: MusicTrack[]; className?: string }) {
-  const audioRef = useRef<HTMLAudioElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
-  const resume = useRef(false);
-  // The start track is random per visit. Null on the server, so server and client markup match.
-  const startRef = useRef<number | null>(null);
-  const start = useSyncExternalStore(
-    () => () => {},
-    () => (startRef.current ??= Math.floor(Math.random() * tracks.length)),
-    () => null,
-  );
-  const [offset, setOffset] = useState(0);
-  const ready = start !== null && tracks.length > 0;
-  const index = tracks.length ? ((start ?? 0) + offset) % tracks.length : 0;
-  const setIndex = (target: number) =>
-    setOffset((target - (start ?? 0) + tracks.length) % tracks.length);
-  const [playing, setPlaying] = useState(false);
+  const { ready, index, playing, step, toggle, audioProps } = useAudioPlaylist(tracks.length, rootRef);
   const track = tracks[index];
-
-  // Start playing when the page loads, fading in from silence. Browsers block sound
-  // before the visitor interacts, so if that happens, wait for their first touch outside the player.
-  useEffect(() => {
-    const element = audioRef.current;
-    if (!ready || !element) return;
-    const audio: HTMLAudioElement = element;
-    let fade: ReturnType<typeof setInterval> | undefined;
-
-    const fadeIn = () => {
-      const start = performance.now();
-      clearInterval(fade);
-      fade = setInterval(() => {
-        const t = Math.min((performance.now() - start) / FADE_MS, 1);
-        audio.volume = t * t * (3 - 2 * t);
-        if (t === 1) clearInterval(fade);
-      }, 50);
-    };
-
-    const start = () => {
-      audio.volume = 0;
-      audio.play().then(fadeIn, waitForInteraction);
-    };
-
-    function onInteract(event: Event) {
-      if (rootRef.current?.contains(event.target as Node)) return;
-      removeListeners();
-      start();
-    }
-    function waitForInteraction() {
-      audio.volume = 1;
-      for (const type of INTERACTION_EVENTS) window.addEventListener(type, onInteract);
-    }
-    function removeListeners() {
-      for (const type of INTERACTION_EVENTS) window.removeEventListener(type, onInteract);
-    }
-
-    start();
-    return () => {
-      clearInterval(fade);
-      removeListeners();
-      audio.pause();
-    };
-  }, [ready]);
-
-  // Start the new track after a skip if music was already playing.
-  useEffect(() => {
-    if (resume.current) void audioRef.current?.play();
-  }, [index]);
-
-  const go = (next: number) => {
-    resume.current = playing;
-    setIndex(next);
-  };
-
-  const skip = (delta: number) => go((index + delta + tracks.length) % tracks.length);
-
-  const toggle = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (audio.paused) void audio.play();
-    else audio.pause();
-  };
-
-  const onEnded = () => {
-    resume.current = true;
-    if (tracks.length === 1 && audioRef.current) void audioRef.current.play();
-    else setIndex((index + 1) % tracks.length);
-  };
+  const skipClass = "size-8 rounded text-brand-500 hover:text-brand-600";
 
   return (
     <div ref={rootRef} className={`flex flex-col gap-3 ${className ?? ""}`}>
@@ -110,15 +50,16 @@ export function Gramophone({ tracks, className }: { tracks: MusicTrack[]; classN
           sizes="(max-width: 640px) 176px, 224px"
           className="h-auto w-full"
         />
+        {/* Hand-measured to sit on the record in gramophone.webp (500x500). Redo if the art changes. */}
         <svg
           viewBox="0 0 500 500"
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 size-full"
         >
           <g transform="translate(255 260) scale(1 0.45)">
-            <g className="gramophone-spin" style={{ animationPlayState: playing ? "running" : "paused" }}>
-              <circle r="82" fill="none" stroke="#d9d9d7" strokeOpacity="0.28" strokeWidth="5" strokeDasharray="70 446" />
-              <circle r="62" fill="none" stroke="#d9d9d7" strokeOpacity="0.2" strokeWidth="4" strokeDasharray="50 340" strokeDashoffset="-120" />
+            <g className="gramophone-spin text-gray-300" data-playing={playing} fill="none" stroke="currentColor">
+              <circle r="82" strokeOpacity="0.28" strokeWidth="5" strokeDasharray="70 446" />
+              <circle r="62" strokeOpacity="0.2" strokeWidth="4" strokeDasharray="50 340" strokeDashoffset="-120" />
             </g>
           </g>
         </svg>
@@ -127,49 +68,25 @@ export function Gramophone({ tracks, className }: { tracks: MusicTrack[]; classN
       {track && (
         <div className={`flex flex-col gap-2 ${ready ? "" : "invisible"}`}>
           {/* eslint-disable-next-line jsx-a11y/media-has-caption -- music only, there is nothing to caption */}
-          <audio
-            ref={audioRef}
-            src={ready ? track.src : undefined}
-            preload="none"
-            onPlay={() => setPlaying(true)}
-            onPause={() => setPlaying(false)}
-            onEnded={onEnded}
-          />
+          <audio {...audioProps} src={ready ? track.src : undefined} />
           <div className="min-w-0 text-center">
             <p className="truncate text-sm font-bold text-gray-700">{track.title}</p>
             <p className="truncate text-xs text-gray-500">{track.artist}</p>
           </div>
           <div className="flex items-center justify-center gap-5">
-            <button
-              type="button"
-              aria-label="Previous track"
-              onClick={() => skip(-1)}
-              className={`${controlClass} text-brand-500 hover:text-brand-600`}
-            >
-              <svg viewBox="0 0 24 24" className={iconClass} fill="currentColor" aria-hidden="true">
-                <path d="M6 5h2v14H6zM20 5v14L9 12z" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              aria-label={playing ? "Pause" : "Play"}
+            <ControlButton label="Previous track" onClick={() => step(-1)} className={skipClass}>
+              <SkipPreviousIcon />
+            </ControlButton>
+            <ControlButton
+              label={playing ? "Pause" : "Play"}
               onClick={toggle}
-              className="inline-flex size-10 cursor-pointer items-center justify-center rounded-full bg-brand-500 text-brand-50 transition-colors duration-200 hover:bg-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
+              className="size-10 rounded-full bg-brand-500 text-brand-50 hover:bg-brand-600"
             >
-              <svg viewBox="0 0 24 24" className={iconClass} fill="currentColor" aria-hidden="true">
-                {playing ? <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" /> : <path d="M8 5v14l11-7z" />}
-              </svg>
-            </button>
-            <button
-              type="button"
-              aria-label="Next track"
-              onClick={() => skip(1)}
-              className={`${controlClass} text-brand-500 hover:text-brand-600`}
-            >
-              <svg viewBox="0 0 24 24" className={iconClass} fill="currentColor" aria-hidden="true">
-                <path d="M16 5h2v14h-2zM4 5v14l11-7z" />
-              </svg>
-            </button>
+              {playing ? <PauseIcon /> : <PlayIcon />}
+            </ControlButton>
+            <ControlButton label="Next track" onClick={() => step(1)} className={skipClass}>
+              <SkipNextIcon />
+            </ControlButton>
           </div>
         </div>
       )}

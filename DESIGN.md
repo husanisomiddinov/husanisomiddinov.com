@@ -61,7 +61,7 @@ These come from direct feedback and from what has already been judged to look ge
 - **No new colors outside the palette** (section 4), including for charts and diagrams (section 11 has the only extra palette).
 - **No box shadows on content.** The only shadow on the site is the mobile drawer.
 - **No gradients on surfaces, no glassmorphism, no emoji as decoration, no stock illustration style.**
-- **No decorative animation** (parallax, scroll-jacking, floating blobs, auto-playing carousels, typing effects). The one exception is the About page photo strip (`PhotoMarquee`): it loops slowly, pauses on hover and focus, and becomes a plain scrollable strip with reduced motion.
+- **No decorative animation** (parallax, scroll-jacking, floating blobs, auto-playing carousels, typing effects). The only ambient motion allowed is the list in section 10.
 - **No second webfont.** The heading serif is the only loaded face.
 - **No pure `#000` or `#fff`** for page, text or surfaces. Use the tokens.
 - **No hover-only information.** Anything revealed on hover must also be reachable by keyboard and touch.
@@ -335,7 +335,13 @@ Rules:
 - Hover is a color change to `brand-500`. No scale-up, no lift, no shadow.
 - Page scroll is smooth (`scroll-behavior: smooth`).
 - Loading uses reserved space (set `width`/`height` or aspect ratio), not spinners, so nothing jumps.
-- Infinite animations are allowed only in diagrams and the home page retro computer screen and the About page gramophone record (only while music plays), at low amplitude. They must not run offscreen when avoidable (3D scenes stop when offscreen; CSS loops are cheap enough to leave).
+- Infinite animations are allowed only in the places below, at low amplitude, each with a reduced-motion fallback. CSS loops are cheap enough to leave running; 3D scenes stop when offscreen.
+  - Diagrams (flow, pulse, icon loops).
+  - The home page retro computer screen (blinking cursor, faint flicker).
+  - The About page gramophone record, which spins only while music plays.
+  - The About page photo strip (`PhotoMarquee`): a slow loop that pauses on hover and focus and becomes a plain scrollable strip with reduced motion.
+- Sound: audio may autoplay only on the About page. It must fade in from silence, be pausable, and never start before the visitor has interacted if the browser blocks it.
+- Overlays drawn on top of an illustration (computer screen, record) use token colors like any other element, and their hand-measured coordinates are noted next to the code.
 
 ### Reduced motion (required)
 

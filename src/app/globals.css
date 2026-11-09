@@ -311,21 +311,17 @@ i {
 }
 
 .computer-flicker {
-  opacity: 0.06;
   animation: computer-flicker 3.2s ease-in-out infinite;
 }
 
-/* About page gramophone: the record spins, shown by moving highlights on it. */
-@keyframes gramophone-spin {
-  to {
-    transform: rotate(360deg);
-  }
+/* About page gramophone: highlights on the record spin while music plays. Reuses the diagram sweep keyframe. */
+.gramophone-spin {
+  transform-origin: 0 0;
+  animation: diagram-sweep 3.6s linear infinite paused;
 }
 
-.gramophone-spin {
-  animation-play-state: paused;
-  transform-origin: 0 0;
-  animation: gramophone-spin 3.6s linear infinite;
+.gramophone-spin[data-playing="true"] {
+  animation-play-state: running;
 }
 
 /* About page photo strip: two identical copies, slide by exactly one copy for a seamless loop. */
@@ -345,30 +341,29 @@ i {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .photo-marquee {
-    overflow-x: auto;
-  }
-  .photo-marquee-track {
-    animation: none;
-  }
-  .photo-marquee-copy {
-    display: none;
-  }
-
-  .gramophone-spin,
-  .computer-cursor,
-  .computer-flicker {
-    animation: none;
-  }
-  .computer-cursor {
-    opacity: 0.85;
-  }
-
   .diagram-flow,
   .diagram-pulse,
   .diagram-sweep,
   .diagram-scan,
-  .diagram-bar {
+  .diagram-bar,
+  .computer-cursor,
+  .computer-flicker,
+  .gramophone-spin,
+  .photo-marquee-track {
     animation: none;
+  }
+
+  /* Resting states: a steady cursor, and a strip you scroll by hand. */
+  .computer-cursor {
+    opacity: 0.85;
+  }
+  .computer-flicker {
+    opacity: 0.06;
+  }
+  .photo-marquee {
+    overflow-x: auto;
+  }
+  .photo-marquee-copy {
+    display: none;
   }
 }
