@@ -315,7 +315,20 @@ i {
   animation: computer-flicker 3.2s ease-in-out infinite;
 }
 
+/* About page gramophone: the record spins, shown by moving highlights on it. */
+@keyframes gramophone-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.gramophone-spin {
+  transform-origin: 0 0;
+  animation: gramophone-spin 3.6s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .gramophone-spin,
   .computer-cursor,
   .computer-flicker {
     animation: none;

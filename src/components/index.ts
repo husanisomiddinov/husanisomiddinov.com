@@ -12,4 +12,4 @@ export { Button } from "./Button";
 export { FeaturedProjects } from "./FeaturedProjects";
 export { FeaturedWriting } from "./FeaturedWriting";
 export { FeaturedBooks } from "./FeaturedBooks";
-export { MusicEmbed } from "./MusicEmbed";
+export { Gramophone } from "./Gramophone";
