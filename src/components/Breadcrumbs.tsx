@@ -2,7 +2,7 @@ import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
 import { siteUrl } from "@/config/site";
 
-export interface Crumb {
+interface Crumb {
   label: string;
   href: string;
 }

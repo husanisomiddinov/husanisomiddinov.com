@@ -2,7 +2,7 @@ import { useId, type ReactNode } from "react";
 
 export const INK = "#2a2925";
 export const MUTED = "#6b6a64";
-export const PAPER = "#f6f7f4";
+const PAPER = "#f6f7f4";
 const FLOW = "#e3b341";
 export const LOOP = "#9bb06a";
 const TILE = "#ecede6";

@@ -9,7 +9,7 @@ import {
   type World,
 } from "./globeTexture";
 
-export interface GlobePlace {
+interface GlobePlace {
   slug: string;
   lat: number;
   lng: number;
@@ -23,7 +23,7 @@ export interface ProjectedPlace {
   facing: boolean;
 }
 
-export interface GlobeHandlers {
+interface GlobeHandlers {
   onHover(slug: string | null): void;
   /** A click/tap on a dot, or `null` for a click on empty space. */
   onPick(slug: string | null): void;

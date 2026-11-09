@@ -33,7 +33,7 @@ export interface View {
 
 const FULL_VIEW: View = { lngMin: -180, lngMax: 180, latMin: -90, latMax: 90 };
 
-export interface LineWidths {
+interface LineWidths {
   graticule: number;
   border: number;
   coast: number;
