@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { MusicTrack } from "../../content/data/personal/about-media";
 
+const FADE_MS = 5000;
+const INTERACTION_EVENTS = ["pointerdown", "keydown", "touchstart"] as const;
 const iconClass = "size-5";
 const controlClass =
   "inline-flex size-8 cursor-pointer items-center justify-center rounded transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500";
@@ -11,10 +13,56 @@ const controlClass =
 /** Pixel gramophone whose record spins while the track plays, with previous, play/pause and next below it. */
 export function Gramophone({ tracks, className }: { tracks: MusicTrack[]; className?: string }) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const resume = useRef(false);
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
   const track = tracks[index];
+
+  // Start playing when the page loads, fading in from silence. Browsers block sound
+  // before the visitor interacts, so if that happens, wait for their first touch outside the player.
+  const hasTracks = tracks.length > 0;
+  useEffect(() => {
+    const element = audioRef.current;
+    if (!hasTracks || !element) return;
+    const audio: HTMLAudioElement = element;
+    let fade: ReturnType<typeof setInterval> | undefined;
+
+    const fadeIn = () => {
+      const start = performance.now();
+      clearInterval(fade);
+      fade = setInterval(() => {
+        const t = Math.min((performance.now() - start) / FADE_MS, 1);
+        audio.volume = t * t * (3 - 2 * t);
+        if (t === 1) clearInterval(fade);
+      }, 50);
+    };
+
+    const start = () => {
+      audio.volume = 0;
+      audio.play().then(fadeIn, waitForInteraction);
+    };
+
+    function onInteract(event: Event) {
+      if (rootRef.current?.contains(event.target as Node)) return;
+      removeListeners();
+      start();
+    }
+    function waitForInteraction() {
+      audio.volume = 1;
+      for (const type of INTERACTION_EVENTS) window.addEventListener(type, onInteract);
+    }
+    function removeListeners() {
+      for (const type of INTERACTION_EVENTS) window.removeEventListener(type, onInteract);
+    }
+
+    start();
+    return () => {
+      clearInterval(fade);
+      removeListeners();
+      audio.pause();
+    };
+  }, [hasTracks]);
 
   // Start the new track after a skip if music was already playing.
   useEffect(() => {
@@ -42,7 +90,7 @@ export function Gramophone({ tracks, className }: { tracks: MusicTrack[]; classN
   };
 
   return (
-    <div className={`flex flex-col gap-3 ${className ?? ""}`}>
+    <div ref={rootRef} className={`flex flex-col gap-3 ${className ?? ""}`}>
       <div className="relative">
         <Image
           src="/images/gramophone.webp"
