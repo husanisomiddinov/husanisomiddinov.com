@@ -17,4 +17,9 @@ export const musicTracks: MusicTrack[] = [
     artist: "Elton John",
     src: "/music/im-still-standing.mp3",
   },
+  {
+    title: "500 Miles",
+    artist: "Peter, Paul and Mary",
+    src: "/music/500-miles.mp3",
+  },
 ];
