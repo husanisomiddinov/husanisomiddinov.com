@@ -13,5 +13,4 @@ export { FeaturedProjects } from "./FeaturedProjects";
 export { FeaturedWriting } from "./FeaturedWriting";
 export { FeaturedBooks } from "./FeaturedBooks";
 export { Gramophone } from "./Gramophone";
-export { PhotoMarquee } from "./PhotoMarquee";
 export { RetroComputer } from "./RetroComputer";
