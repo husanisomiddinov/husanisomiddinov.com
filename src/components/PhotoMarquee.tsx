@@ -33,7 +33,7 @@ const PHOTO_HEIGHT = 240; // h-60
 const GAP = 12; // gap-3
 const COLUMN_WIDTH = 660; // max-w-content
 /** Lets two photos that miss the column by a few pixels still count as fitting. */
-const FIT_SLACK = 40;
+const FIT_SLACK = 60;
 
 function naturalWidth(photos: GalleryPhoto[]) {
   const widths = photos.reduce(
