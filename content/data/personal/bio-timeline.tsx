@@ -67,6 +67,12 @@ export const bioMilestones: BioMilestone[] = [
             width: 800,
             height: 1067,
           },
+          {
+            src: "/images/about/graduation-friends.webp",
+            alt: "Four of us in graduation gowns and suits in front of balloons and a Graduation 2024 sign",
+            width: 360,
+            height: 480,
+          },
         ],
       },
       {
@@ -84,21 +90,10 @@ export const bioMilestones: BioMilestone[] = [
             width: 1198,
             height: 861,
           },
-        ],
-      },
-      {
-        after: 4,
-        photos: [
           {
             src: "/images/about/graduation-caps.webp",
             alt: "Black and white photo of graduates throwing their caps into the air on stage while the crowd films",
             width: 1029,
-            height: 480,
-          },
-          {
-            src: "/images/about/graduation-friends.webp",
-            alt: "Four of us in graduation gowns and suits in front of balloons and a Graduation 2024 sign",
-            width: 360,
             height: 480,
           },
         ],
