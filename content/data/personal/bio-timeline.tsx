@@ -77,21 +77,42 @@ export const bioMilestones: BioMilestone[] = [
       },
     ],
     content: (
-      <p>
-        At 16, in high school, I studied philosophy and politics. I wanted to
-        get into Yale. Wrote a{" "}
-        <a
-          href="https://www.academia.edu/144384675/Fragments_of_Power_Foucault_and_Disruptions_and_Disjunctures_in_the_Silk_Road_Narratives?source=swp_share"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          paper
-        </a>{" "}
-        on Silk Road politics with a Virginia Tech prof (Yes, they have social
-        science professors. I didn&apos;t know that either). Dropped social
-        science months later, still 16. Realized endless bureaucracy
-        wasn&apos;t for me (as much as I like to talk a lot).
-      </p>
+      <>
+        <p>
+          At sixteen I changed schools. An English-taught place, full of
+          like-minded peers, or so I assumed. It was there that, for the first
+          time, I was asked, in complete seriousness, what I wanted to do with
+          my life. You know,
+          pick-a-major-then-pursue-it-in-college-and-then-get-a-job kind of
+          question. In most of the world a sixteen-year-old can&apos;t rent a
+          car. They can&apos;t own a house legally. Nor have the right to vote.
+          But you have to make that decision anyway, or someone else will
+          decide for you.
+        </p>
+        <p>
+          A few conversations at school, and I was swept into philosophy and
+          politics. Why? Well, first of all, it was exotic. Tell an average
+          Uzbek that you study the meaning of life and he will take you for an
+          escapee from a psychiatric clinic or someone who has watched too much{" "}
+          <em>True Detective</em> (Matthew McConaughey the goat). So philosophy
+          I studied. Explored the caves with Plato. Learnt that Hobbes thought
+          life was &ldquo;nasty, brutish, and short,&rdquo; and then lived to
+          ninety-one. And most from Europe preached about glorious purpose to
+          fulfill, but got wasted out in Bavarian bars or died in circumstances
+          their biographers describe with great tact.
+        </p>
+        <p>
+          At some point, Yale became my mission. It didn&apos;t work out.
+          Neither the admission nor, as it turned out, the politics or
+          philosophy (whichever it was). To make some reform, I&apos;d have to
+          hand my hopes to a committee of people who had collectively decided
+          to hate every Monday morning, who drank their flat whites beside
+          stacks of paper that had sat untouched for months, and who would, in
+          due course, produce a memo. I needed a field where my actions led to
+          direct results, however good or bad the output was.
+        </p>
+        <p>That summer when I graduated from high school, I dropped social science.</p>
+      </>
     ),
   },
   {
