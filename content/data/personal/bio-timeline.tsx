@@ -16,6 +16,9 @@ export interface BioMilestone {
   content: ReactNode;
   /** Optional looping photo strip under the text. Every photo is shown at the same height, at its true shape. */
   gallery?: GalleryPhoto[];
+  /** Optional photo strip placed inside the text, after paragraph number `midAfter` (1 = after the first paragraph). */
+  midGallery?: GalleryPhoto[];
+  midAfter?: number;
 }
 
 export const bioMilestones: BioMilestone[] = [
@@ -50,7 +53,8 @@ export const bioMilestones: BioMilestone[] = [
   {
     id: "high-school",
     age: 16,
-    gallery: [
+    midAfter: 2,
+    midGallery: [
       {
         src: "/images/about/high-school-pose.webp",
         alt: "Me striking a pose in front of a school banner at night",
@@ -63,6 +67,8 @@ export const bioMilestones: BioMilestone[] = [
         width: 800,
         height: 1067,
       },
+    ],
+    gallery: [
       {
         src: "/images/about/high-school-speaking.webp",
         alt: "Me speaking to a room, holding a notebook, in front of a bright window",
@@ -119,7 +125,8 @@ export const bioMilestones: BioMilestone[] = [
     id: "agora",
     age: 18,
     dateLabel: "Jan 2025",
-    gallery: [
+    midAfter: 1,
+    midGallery: [
       {
         src: "/images/about/agora/website.webp",
         alt: "The Agora website homepage",
@@ -144,6 +151,8 @@ export const bioMilestones: BioMilestone[] = [
         width: 806,
         height: 480,
       },
+    ],
+    gallery: [
       {
         src: "/images/about/agora/i-write.webp",
         alt: "Agora poster reading \"I write; therefore I am.\"",

@@ -1,8 +1,26 @@
 "use client";
 
+import { Children, isValidElement, type ReactNode } from "react";
 import { useActiveItem } from "@/lib/useActiveItem";
 import { PhotoMarquee } from "./PhotoMarquee";
 import type { BioMilestone } from "../../content/data/personal/bio-timeline";
+
+/** Puts the mid-text photo strip after the chosen paragraph. Falls back to the end when the content is not a list of paragraphs. */
+function withMidGallery(milestone: BioMilestone): ReactNode {
+  const { content, midGallery, midAfter = 1 } = milestone;
+  if (!midGallery) return content;
+  const nodes = isValidElement<{ children?: ReactNode }>(content)
+    ? Children.toArray(content.props.children)
+    : [content];
+  const at = Math.min(midAfter, nodes.length);
+  return (
+    <>
+      {nodes.slice(0, at)}
+      <PhotoMarquee photos={midGallery} className="my-4" />
+      {nodes.slice(at)}
+    </>
+  );
+}
 
 export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
   const { registerItem, activeIndex } = useActiveItem(milestones.length);
@@ -27,7 +45,7 @@ export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
                   active ? "opacity-100" : "opacity-80"
                 }`}
               >
-                {milestone.content}
+                {withMidGallery(milestone)}
               </div>
               {milestone.gallery && (
                 <PhotoMarquee photos={milestone.gallery} className="mt-3" />
