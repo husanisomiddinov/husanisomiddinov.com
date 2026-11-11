@@ -1,30 +1,22 @@
 "use client";
 
-import { Children, Fragment, isValidElement, type ReactNode } from "react";
+import { Fragment } from "react";
 import { useActiveItem } from "@/lib/useActiveItem";
 import { PhotoMarquee } from "./PhotoMarquee";
 import type { BioMilestone } from "../../content/data/personal/bio-timeline";
 
 /** Interleaves the photo strips with the paragraphs, each strip after its chosen paragraph. */
-function withInlineGalleries(milestone: BioMilestone): ReactNode {
-  const { content, inlineGalleries } = milestone;
-  if (!inlineGalleries?.length) return content;
-  const nodes = isValidElement<{ children?: ReactNode }>(content)
-    ? Children.toArray(content.props.children)
-    : [content];
-  return (
-    <>
-      {nodes.map((node, i) => {
-        const strip = inlineGalleries.find((g) => g.after === i + 1);
-        return (
-          <Fragment key={i}>
-            {node}
-            {strip && <PhotoMarquee photos={strip.photos} className="mb-5 mt-1" />}
-          </Fragment>
-        );
-      })}
-    </>
-  );
+function MilestoneText({ milestone }: { milestone: BioMilestone }) {
+  const { paragraphs, inlineGalleries = [] } = milestone;
+  return paragraphs.map((paragraph, i) => {
+    const strip = inlineGalleries.find((g) => g.after === i + 1);
+    return (
+      <Fragment key={i}>
+        {paragraph}
+        {strip && <PhotoMarquee photos={strip.photos} className="mb-5 mt-1" />}
+      </Fragment>
+    );
+  });
 }
 
 export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
@@ -50,7 +42,7 @@ export function BioTimeline({ milestones }: { milestones: BioMilestone[] }) {
                   active ? "opacity-100" : "opacity-80"
                 }`}
               >
-                {withInlineGalleries(milestone)}
+                <MilestoneText milestone={milestone} />
               </div>
               {milestone.gallery && (
                 <PhotoMarquee photos={milestone.gallery} className="mt-3" />

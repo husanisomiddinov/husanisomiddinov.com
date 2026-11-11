@@ -13,7 +13,8 @@ export interface BioMilestone {
   age: number;
   /** Shown instead of a repeated age once age stops changing. */
   dateLabel?: string;
-  content: ReactNode;
+  /** One element per paragraph, so photo strips can go between them. */
+  paragraphs: ReactNode[];
   /** Optional looping photo strip under the text. Every photo is shown at the same height, at its true shape. */
   gallery?: GalleryPhoto[];
   /** Photo strips placed between paragraphs. `after` is the paragraph number the strip follows (1 = after the first). */
@@ -24,30 +25,28 @@ export const bioMilestones: BioMilestone[] = [
   {
     id: "english",
     age: 5,
-    content: (
-      <>
-        <p>
-          I come from Samarkand, an ancient caravan city in the middle of
-          somewhere. I grew up on English cartoons. My dad started teaching me
-          the basics when I was five, and I was fluent long before the school
-          exams and the SAT thing showed up.
-        </p>
-        <p>
-          I may take this whole thing for granted at times, but believe me, it
-          was a huge privilege, and it paid off: a full merit scholarship to a
-          competitive private school in town, a few mid-ranked college
-          acceptances which I didn&apos;t pursue, and Discord, Reddit, and
-          Twitter without end. English put the whole discourse on technological,
-          philosophical, and whatever-ical thought a click away.
-        </p>
-        <p>
-          But the biggest thing it gave me was the ability to teach myself.
-          English was my caravan, a door to exploring the world far beyond the
-          reaches of my Samarkand. And that, to me, is worth more than any
-          bachelor&apos;s diploma.
-        </p>
-      </>
-    ),
+    paragraphs: [
+      <p key="1">
+        I come from Samarkand, an ancient caravan city in the middle of
+        somewhere. I grew up on English cartoons. My dad started teaching me the
+        basics when I was five, and I was fluent long before the school exams
+        and the SAT thing showed up.
+      </p>,
+      <p key="2">
+        I may take this whole thing for granted at times, but believe me, it was
+        a huge privilege, and it paid off: a full merit scholarship to a
+        competitive private school in town, a few mid-ranked college acceptances
+        which I didn&apos;t pursue, and Discord, Reddit, and Twitter without
+        end. English put the whole discourse on technological, philosophical,
+        and whatever-ical thought a click away.
+      </p>,
+      <p key="3">
+        But the biggest thing it gave me was the ability to teach myself.
+        English was my caravan, a door to exploring the world far beyond the
+        reaches of my Samarkand. And that, to me, is worth more than any
+        bachelor&apos;s diploma.
+      </p>,
+    ],
   },
   {
     id: "high-school",
@@ -88,47 +87,43 @@ export const bioMilestones: BioMilestone[] = [
         ],
       },
     ],
-    content: (
-      <>
-        <p>
-          At sixteen I changed schools. An English-taught place, full of
-          like-minded peers, or so I assumed. It was there that, for the first
-          time, I was asked, in complete seriousness, what I wanted to do with
-          my life. You know,
-          pick-a-major-then-pursue-it-in-college-and-then-get-a-job kind of
-          question. In most of the world a sixteen-year-old can&apos;t rent a
-          car. They can&apos;t own a house legally. Nor have the right to vote.
-          But you have to make that decision anyway, or someone else will decide
-          for you.
-        </p>
-        <p>
-          A few conversations at school, and I was swept into philosophy and
-          politics. Why? Well, first of all, it was exotic. Tell an average
-          Uzbek that you study the meaning of life and he will take you for an
-          escapee from a psychiatric clinic or someone who has watched too much{" "}
-          <em>True Detective</em> (Matthew McConaughey the goat). So philosophy
-          I studied. Explored the caves with Plato. Learnt that Hobbes thought
-          life was &ldquo;nasty, brutish, and short,&rdquo; and then lived to
-          ninety-one. And most from Europe preached about glorious purpose to
-          fulfill, but got wasted out in Bavarian bars or died in circumstances
-          their biographers describe with great tact.
-        </p>
-        <p>
-          At some point, Yale became my mission. It didn&apos;t work out.
-          Neither the admission nor, as it turned out, the politics or
-          philosophy (whichever it was). To make some reform, I&apos;d have to
-          hand my hopes to a committee of people who had collectively decided to
-          hate every Monday morning, who drank their flat whites beside stacks
-          of paper that had sat untouched for months, and who would, in due
-          course, produce a memo. I needed a field where my actions led to
-          direct results, however good or bad the output was.
-        </p>
-        <p>
-          That summer when I graduated from high school, I dropped social
-          science.
-        </p>
-      </>
-    ),
+    paragraphs: [
+      <p key="1">
+        At sixteen I changed schools. An English-taught place, full of
+        like-minded peers, or so I assumed. It was there that, for the first
+        time, I was asked, in complete seriousness, what I wanted to do with my
+        life. You know,
+        pick-a-major-then-pursue-it-in-college-and-then-get-a-job kind of
+        question. In most of the world a sixteen-year-old can&apos;t rent a car.
+        They can&apos;t own a house legally. Nor have the right to vote. But you
+        have to make that decision anyway, or someone else will decide for you.
+      </p>,
+      <p key="2">
+        A few conversations at school, and I was swept into philosophy and
+        politics. Why? Well, first of all, it was exotic. Tell an average Uzbek
+        that you study the meaning of life and he will take you for an escapee
+        from a psychiatric clinic or someone who has watched too much{" "}
+        <em>True Detective</em> (Matthew McConaughey the goat). So philosophy I
+        studied. Explored the caves with Plato. Learnt that Hobbes thought life
+        was &ldquo;nasty, brutish, and short,&rdquo; and then lived to
+        ninety-one. And most from Europe preached about glorious purpose to
+        fulfill, but got wasted out in Bavarian bars or died in circumstances
+        their biographers describe with great tact.
+      </p>,
+      <p key="3">
+        At some point, Yale became my mission. It didn&apos;t work out. Neither
+        the admission nor, as it turned out, the politics or philosophy
+        (whichever it was). To make some reform, I&apos;d have to hand my hopes
+        to a committee of people who had collectively decided to hate every
+        Monday morning, who drank their flat whites beside stacks of paper that
+        had sat untouched for months, and who would, in due course, produce a
+        memo. I needed a field where my actions led to direct results, however
+        good or bad the output was.
+      </p>,
+      <p key="4">
+        That summer when I graduated from high school, I dropped social science.
+      </p>,
+    ],
   },
   {
     id: "agora",
@@ -200,41 +195,39 @@ export const bioMilestones: BioMilestone[] = [
         ],
       },
     ],
-    content: (
-      <>
-        <p>
-          At 18, I had this little project called{" "}
-          <a
-            href="https://www.agorawriting.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Agora
-          </a>{" "}
-          that I founded in January 2025. Agora connected students with creative
-          writing mentors. I did everything: sales calls, custdevs, running the
-          social media page, some bit of teaching on my end, and even pushed a
-          few commits to GitHub to set up our website. Reached about 5k USD
-          revenue per month and sold it off to a bigger{" "}
-          <a
-            href="https://satashkent.uz/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            educational company
-          </a>{" "}
-          in town early 2026.
-        </p>
-        <p>
-          Agora helped me answer a question that&apos;s long been lingering in
-          my mind: what I want to do with this life as a multi-celled organism.
-          I knew I wanted to make some impact on the world (and ofc make money
-          in the process). The purpose seemed to align with whatever moral
-          compass I&apos;ve been born with. I don&apos;t know why specifically.
-          I doubt anyone does. We just — do things.
-        </p>
-      </>
-    ),
+    paragraphs: [
+      <p key="1">
+        At 18, I had this little project called{" "}
+        <a
+          href="https://www.agorawriting.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Agora
+        </a>{" "}
+        that I founded in January 2025. Agora connected students with creative
+        writing mentors. I did everything: sales calls, custdevs, running the
+        social media page, some bit of teaching on my end, and even pushed a few
+        commits to GitHub to set up our website. Reached about 5k USD revenue
+        per month and sold it off to a bigger{" "}
+        <a
+          href="https://satashkent.uz/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          educational company
+        </a>{" "}
+        in town early 2026.
+      </p>,
+      <p key="2">
+        Agora helped me answer a question that&apos;s long been lingering in my
+        mind: what I want to do with this life as a multi-celled organism. I
+        knew I wanted to make some impact on the world (and ofc make money in
+        the process). The purpose seemed to align with whatever moral compass
+        I&apos;ve been born with. I don&apos;t know why specifically. I doubt
+        anyone does. We just — do things.
+      </p>,
+    ],
   },
   {
     id: "ai500",
@@ -284,8 +277,8 @@ export const bioMilestones: BioMilestone[] = [
         height: 480,
       },
     ],
-    content: (
-      <p>
+    paragraphs: [
+      <p key="1">
         Before my Agora exit, I started getting technical. Did a few challenges
         to leaf through AI papers. Did the{" "}
         <a
@@ -297,8 +290,8 @@ export const bioMilestones: BioMilestone[] = [
         </a>{" "}
         and somehow ended up getting the first place with 20k USD and an
         agri-tech project on machine vision.
-      </p>
-    ),
+      </p>,
+    ],
   },
   {
     id: "nuu",
@@ -342,8 +335,8 @@ export const bioMilestones: BioMilestone[] = [
         height: 640,
       },
     ],
-    content: (
-      <p>
+    paragraphs: [
+      <p key="1">
         Later joined a robotics lab in a local university and researched
         wireless power transfer for moving robots, sharing a lab with{" "}
         <a
@@ -363,8 +356,8 @@ export const bioMilestones: BioMilestone[] = [
           Higgsfield
         </a>{" "}
         in my inbox: growth manager.
-      </p>
-    ),
+      </p>,
+    ],
   },
   {
     id: "higgsfield",
@@ -390,22 +383,22 @@ export const bioMilestones: BioMilestone[] = [
         height: 480,
       },
     ],
-    content: (
-      <p>
+    paragraphs: [
+      <p key="1">
         Joined Higgsfield. Worked very hard for 3 months. Hosted Iman Gadzhi in
         the office, talked about efficient computing with Yerzat Dulat (the CTO
         at Higgs), became a smoke buddy (I don&apos;t smoke. I was just
         watching) with one of the founding engineers, and burnt 100k USD in
         creator partnerships.
-      </p>
-    ),
+      </p>,
+    ],
   },
   {
     id: "quit",
     age: 19,
     dateLabel: "Sept 2026",
-    content: (
-      <p>
+    paragraphs: [
+      <p key="1">
         In short, Higgs was fun, but I quit. I was working 90-100 hours per week
         on a startup that wasn&apos;t my own. The company scaled fast, but the
         scope of my work didn&apos;t seem to challenge me enough. After all,
@@ -419,7 +412,7 @@ export const bioMilestones: BioMilestone[] = [
           π intelligence
         </a>{" "}
         papers.
-      </p>
-    ),
+      </p>,
+    ],
   },
 ];
