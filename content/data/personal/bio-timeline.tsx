@@ -29,22 +29,22 @@ export const bioMilestones: BioMilestone[] = [
       <p key="1">
         I come from Samarkand, an ancient caravan city in the middle of
         somewhere. I grew up on English cartoons. My dad started teaching me the
-        basics when I was five, and I was fluent long before the school exams
-        and the SAT thing showed up.
+        basics when I was five, and I was fluent long before all these exams and
+        the SAT thing showed up.
       </p>,
       <p key="2">
-        I may take this whole thing for granted at times, but believe me, it was
-        a huge privilege, and it paid off: a full merit scholarship to a
-        competitive private school in town, a few mid-ranked college acceptances
-        which I didn&apos;t pursue, and Discord, Reddit, and Twitter without
-        end. English put the whole discourse on technological, philosophical,
-        and whatever-ical thought a click away.
+        I may take this whole thing for granted at times, but it was a huge
+        privilege, and it paid somehow off somewhere in the middle: a full merit
+        scholarship to a competitive private school in town, a few college
+        acceptances which I didn&apos;t pursue, and Discord, Reddit, and Twitter
+        without end. English put the whole discourse on technological,
+        philosophical, and whatever-ical thought to a click away.
       </p>,
       <p key="3">
-        But the biggest thing it gave me was the ability to teach myself.
-        English was my caravan, a door to exploring the world far beyond the
-        reaches of my Samarkand. And that, to me, is worth more than any
-        bachelor&apos;s diploma.
+        But the biggest benefit it had was the ability to teach myself. English
+        was my caravan, a door to exploring the world far beyond the reaches of
+        mere Samarkand. And that, to me, is worth more than any bachelor&apos;s
+        diploma.
       </p>,
     ],
   },
