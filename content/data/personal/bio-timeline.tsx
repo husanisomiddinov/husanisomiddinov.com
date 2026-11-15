@@ -125,12 +125,12 @@ export const bioMilestones: BioMilestone[] = [
       <p key="3">
         At some point, Yale became my mission. It didn&apos;t work out. Neither
         the admission nor, as it turned out, the politics or philosophy
-        (whichever it was). To make some reform, I&apos;d have to hand my hopes
-        to a committee of people who had collectively decided to hate every
-        Monday morning, who drank their flat whites beside stacks of paper that
-        had sat untouched for months, and who would, in due course, produce a
-        memo. I needed a field where my actions led to direct results, however
-        good or bad the output was.
+        (whichever it was that occupied my teen mind). To make some reform,
+        I&apos;d have to hand my hopes to a committee of people who had
+        collectively decided to hate every Monday morning, who drank their flat
+        whites beside stacks of paper that collected dust for months untouched,
+        and who would, in due course, produce a memo. I needed a field where my
+        actions led to direct results, however good or bad the output was.
       </p>,
       <p key="4">
         That summer when I graduated from high school, I dropped social science.
