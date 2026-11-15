@@ -101,26 +101,26 @@ export const bioMilestones: BioMilestone[] = [
     ],
     paragraphs: [
       <p key="1">
-        At sixteen I changed schools. An English-taught place, full of
-        like-minded peers, or so I assumed. It was there that, for the first
-        time, I was asked, in complete seriousness, what I wanted to do with my
-        life. You know,
-        pick-a-major-then-pursue-it-in-college-and-then-get-a-job kind of
-        question. In most of the world a sixteen-year-old can&apos;t rent a car.
-        They can&apos;t own a house legally. Nor have the right to vote. But you
-        have to make that decision anyway, or someone else will decide for you.
+        At sixteen I changed schools to a new English-taught place, full of
+        like-minded peers. It was there that, for the first time, I was asked,
+        in complete seriousness, what I wanted to do with my life.
+        Pick-a-major-then-pursue-it-in-college-and-then-get-a-job kind of
+        seriousness. In most of the world a sixteen-year-old can&apos;t rent a
+        car. They can&apos;t own a house legally. Nor have the right to vote.
+        But I had to make that decision somehow, or someone else would decide
+        for me.
       </p>,
       <p key="2">
         A few conversations at school, and I was swept into philosophy and
-        politics. Why? Well, first of all, it was exotic. Tell an average Uzbek
-        that you study the meaning of life and he will take you for an escapee
-        from a psychiatric clinic or someone who has watched too much{" "}
-        <em>True Detective</em> (Matthew McConaughey the goat). So philosophy I
-        studied. Explored the caves with Plato. Learnt that Hobbes thought life
-        was &ldquo;nasty, brutish, and short,&rdquo; and then lived to
-        ninety-one. And most from Europe preached about glorious purpose to
-        fulfill, but got wasted out in Bavarian bars or died in circumstances
-        their biographers describe with great tact.
+        politics. Why? Well, first of all, Philosophy is &ldquo;exotic&rdquo;.
+        Tell an average Uzbek that you study the meaning of life and he will
+        take you for an escapee from a psychiatric clinic or for someone who has
+        watched too much <em>True Detective</em> (Matthew McConaughey the goat).
+        So philosophy I studied. Explored the caves with Plato. Learnt that
+        Hobbes thought life was &ldquo;nasty, brutish, and short,&rdquo; and
+        then lived to ninety-one. And that most from Europe preached about
+        glorious purpose to fulfill, but got wasted out in Bavarian bars or died
+        in circumstances their biographers describe with great tact.
       </p>,
       <p key="3">
         At some point, Yale became my mission. It didn&apos;t work out. Neither
