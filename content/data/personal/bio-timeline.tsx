@@ -301,8 +301,11 @@ export const bioMilestones: BioMilestone[] = [
     ],
     paragraphs: [
       <p key="1">
-        Before my Agora exit, I started getting technical. Did a few challenges
-        to leaf through AI papers. Did the{" "}
+        After Agora, AI was the obvious choice, which is just another way of
+        saying I did what everyone else was doing. A few friends and I started
+        frequenting arxiv.org, printing out AI papers and greening our GitHubs
+        with repos of experiments we (at best) half understood. The habit soon
+        turned into a weekly paper club. Somewhere in the middle, the{" "}
         <a
           href="https://hackathons.uz/en/event/?id=1048"
           target="_blank"
@@ -310,8 +313,15 @@ export const bioMilestones: BioMilestone[] = [
         >
           AI500 hackathon
         </a>{" "}
-        and somehow ended up getting the first place with 20k USD and an
-        agri-tech project on machine vision.
+        popped up. The prize pool drew us in, and we kept advancing through the
+        stages until, at some point, we actually had to make a project. We took
+        a public dataset from Kaggle, hooked it up to convolutional neural
+        networks, put a nice interface and a demo on top, and called it Apollo,
+        an agritech project on machine vision. I pitched for the first time in
+        my life, and somehow (maybe the idea fit the hackathon&apos;s theme, or
+        maybe the Uzbek startup scene was short on proper talent) we won first
+        place and the 20k USD that came with it. It sent me further into AI and
+        startups, so I started learning engineering and machine vision properly.
       </p>,
     ],
   },
