@@ -236,12 +236,11 @@ export const bioMilestones: BioMilestone[] = [
         in town. That was how I walked into business, more or less.
       </p>,
       <p key="2">
-        Agora helped me answer a question that&apos;s long been lingering in my
-        mind: what I want to do with this life as a multi-celled organism. I
-        knew I wanted to make some impact on the world (and ofc make money in
-        the process). The purpose seemed to align with whatever moral compass
-        I&apos;ve been born with. I don&apos;t know why specifically. I doubt
-        anyone does. We just — do things.
+        Agora answered a question that had been lingering in my mind for years:
+        what I want to do with this life, as a multi-celled organism. I wanted
+        to make some impact on the world and, I&apos;ll admit, some money along
+        the way. That seemed to line up with whatever moral compass I was born
+        with. I don&apos;t know why. I doubt anyone does. We just do things.
       </p>,
     ],
   },
