@@ -93,18 +93,19 @@ i {
   font-style: normal;
 }
 
+/* Blocks marked `not-prose` (the cards embedded in digest issues) opt out of every rule below. */
 /* Hand-authored prose styles, kept out of @tailwindcss/typography to avoid its opinionated defaults (max-width, code blocks, etc). */
-.prose h1,
-.prose h2,
-.prose h3,
-.prose h4,
-.prose h5,
-.prose h6 {
+.prose h1:not(:where(.not-prose, .not-prose *)),
+.prose h2:not(:where(.not-prose, .not-prose *)),
+.prose h3:not(:where(.not-prose, .not-prose *)),
+.prose h4:not(:where(.not-prose, .not-prose *)),
+.prose h5:not(:where(.not-prose, .not-prose *)),
+.prose h6:not(:where(.not-prose, .not-prose *)) {
   font-family: var(--font-heading);
   letter-spacing: var(--tracking-heading);
 }
 
-.prose h1 {
+.prose h1:not(:where(.not-prose, .not-prose *)) {
   margin-top: 2.5rem;
   margin-bottom: 0.75rem;
   color: var(--color-ink);
@@ -114,11 +115,11 @@ i {
   font-weight: 600;
 }
 
-.prose h2,
-.prose h3,
-.prose h4,
-.prose h5,
-.prose h6 {
+.prose h2:not(:where(.not-prose, .not-prose *)),
+.prose h3:not(:where(.not-prose, .not-prose *)),
+.prose h4:not(:where(.not-prose, .not-prose *)),
+.prose h5:not(:where(.not-prose, .not-prose *)),
+.prose h6:not(:where(.not-prose, .not-prose *)) {
   margin-top: 2.5rem;
   margin-bottom: 0.5rem;
   color: var(--color-ink);
@@ -127,13 +128,13 @@ i {
   font-weight: 600;
 }
 
-.prose h2:first-of-type,
-.prose h3:first-of-type,
-.prose h4:first-of-type {
+.prose h2:first-of-type:not(:where(.not-prose, .not-prose *)),
+.prose h3:first-of-type:not(:where(.not-prose, .not-prose *)),
+.prose h4:first-of-type:not(:where(.not-prose, .not-prose *)) {
   margin-top: 1rem;
 }
 
-.prose p {
+.prose p:not(:where(.not-prose, .not-prose *)) {
   margin-top: 0;
   margin-bottom: 1rem;
   @apply text-prose;
@@ -141,32 +142,32 @@ i {
   text-wrap: pretty;
 }
 
-.prose strong {
+.prose strong:not(:where(.not-prose, .not-prose *)) {
   font-weight: 600;
   color: var(--color-ink);
 }
 
-.prose ul,
-.prose ol {
+.prose ul:not(:where(.not-prose, .not-prose *)),
+.prose ol:not(:where(.not-prose, .not-prose *)) {
   margin-top: 1rem;
   margin-bottom: 1rem;
   @apply text-prose;
   color: var(--color-ink);
 }
 
-.prose ul li,
-.prose ol li {
+.prose ul li:not(:where(.not-prose, .not-prose *)),
+.prose ol li:not(:where(.not-prose, .not-prose *)) {
   margin-top: 0.3rem;
   margin-bottom: 0.3rem;
 }
 
-.prose ul li p,
-.prose ol li p {
+.prose ul li p:not(:where(.not-prose, .not-prose *)),
+.prose ol li p:not(:where(.not-prose, .not-prose *)) {
   margin-top: 0;
   margin-bottom: 0.5rem;
 }
 
-.prose a {
+.prose a:not(:where(.not-prose, .not-prose *)) {
   /* A lighter, more vivid green than brand-500 so links stand out from the
      dark body text, with a bit of extra weight but not full bold. */
   color: #6a7637;
@@ -178,21 +179,21 @@ i {
   text-underline-offset: 3px;
 }
 
-.prose a:hover {
+.prose a:hover:not(:where(.not-prose, .not-prose *)) {
   color: var(--color-brand-600);
   text-decoration-color: var(--color-brand-500);
 }
 
-.prose a:focus {
+.prose a:focus:not(:where(.not-prose, .not-prose *)) {
   box-shadow: none !important;
 }
 
-.prose pre {
+.prose pre:not(:where(.not-prose, .not-prose *)) {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 
-.prose hr {
+.prose hr:not(:where(.not-prose, .not-prose *)) {
   margin-top: 1rem;
   margin-bottom: 1rem;
   border-color: var(--color-gray-300);

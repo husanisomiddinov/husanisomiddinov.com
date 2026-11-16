@@ -276,6 +276,8 @@ The weekly digest at `/newsletter`. Dev-only until it launches, and not in the n
 - `SubscribeForm`: an email field with the primary button set inside one `rounded-lg` bordered box (`brand-50`, border turns `brand-500` on focus). After a signup it is replaced by a one-line confirmation, remembered in the browser.
 - `IssueRow`: title, summary and a `text-xs` meta line. The newest issue leads the list with a serif `text-2xl` title.
 - `CopyLinkButton`: the text button in an issue's byline bar.
+- Embeds (`embeds.tsx`): an issue can drop in `<Essay slug="..." />`, `<Book slug="..." />` and `<Project slug="..." />`. Each renders the same row that item has on its own index page (`EssayRow`, `BookCard`, `ProjectRow`), inside a `not-prose` block so the article's text styles stay off it. A wrong slug fails the build.
+- The issue title is a larger `text-3xl md:text-4xl` serif `h1` with the summary under it as a subtitle, then a byline bar between two hairlines.
 - Issues are MDX files in `content/newsletter/`. The page copy lives in `content/data/resources/newsletter.json`.
 
 ### `Prose`
@@ -532,5 +534,6 @@ Honest notes so nobody copies the wrong thing. Fix these opportunistically, and 
 - The comment above `text-prose` in `globals.css` says "Mono (the body default) is reserved for nav, dates and labels". The body default is now the system sans. The comment is stale; the rule it states (UI text vs reading text) still applies as described in section 5.
 - Diagram colors (section 11) are hex values in `FlowKit.tsx` and the older spatial diagrams rather than `@theme` tokens. If a second place needs them, promote them to tokens first.
 - `FlowKit.tsx` and the spatial diagrams repeat a few hex values (`#e3b341`, `#2a2925`). Consolidate into `FlowKit` exports when next touched.
+- Digest issue titles (`text-3xl md:text-4xl`) are a second exception to `PageTitle`, for the same reason as project pages.
 - Project page titles use `text-4xl` while every other page uses `PageTitle` (`text-xl md:text-2xl`). The larger centered title is intentional for articles but is the one exception; do not spread it.
 - Class strings for the `bg-brand-50` raised surface are repeated across figures, callouts and preview cards. A shared surface component would remove the duplication.

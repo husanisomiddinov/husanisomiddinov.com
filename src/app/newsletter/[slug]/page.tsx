@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { Breadcrumbs, PageTitle, Prose } from "@/components";
+import { BackLink, Prose } from "@/components";
 import { NewerOlderNav, type NavTarget } from "@/components/NewerOlderNav";
 import { CopyLinkButton } from "@/components/newsletter/CopyLinkButton";
 import { SubscribeForm } from "@/components/newsletter/SubscribeForm";
@@ -53,15 +53,12 @@ export default async function IssuePage({ params }: { params: Params }) {
   return (
     <div className="flex w-full flex-col items-start gap-4">
       <div className="w-full">
-        <Breadcrumbs
-          crumbs={[
-            { label: config.name, href: "/newsletter" },
-            { label: issue.title, href: `/newsletter/${slug}` },
-          ]}
-        />
-        <PageTitle className="mt-3">{issue.title}</PageTitle>
-        {issue.summary && <p className="mt-1 text-prose text-gray-600">{issue.summary}</p>}
-        <div className="mt-4 flex items-center justify-between gap-4 border-y border-gray-300 py-3">
+        <BackLink href="/newsletter">&larr; {config.name}</BackLink>
+        <h1 className="mt-4 font-heading tracking-heading text-3xl leading-tight font-bold text-balance text-gray-800 md:text-4xl">
+          {issue.title}
+        </h1>
+        {issue.summary && <p className="mt-2 text-lg leading-snug text-gray-600">{issue.summary}</p>}
+        <div className="mt-5 flex items-center justify-between gap-4 border-y border-gray-300 py-3">
           <div className="min-w-0">
             <p className="font-sans text-sm font-bold text-gray-800">{config.author}</p>
             <p className="font-sans text-xs text-gray-400">
@@ -76,7 +73,7 @@ export default async function IssuePage({ params }: { params: Params }) {
         <Prose>{content}</Prose>
       </div>
 
-      <section className="flex w-full flex-col items-center gap-3 rounded-lg border border-gray-200 bg-brand-50 px-5 py-6 text-center">
+      <section className="mt-4 flex w-full flex-col items-center gap-3 rounded-lg border border-gray-200 bg-brand-50 px-5 py-6 text-center">
         <p className="text-prose text-ink text-balance">
           Subscribe to get the next issue of {config.name} by email.
         </p>
