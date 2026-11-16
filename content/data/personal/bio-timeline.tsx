@@ -369,8 +369,9 @@ export const bioMilestones: BioMilestone[] = [
     ],
     paragraphs: [
       <p key="1">
-        Later joined a robotics lab in a local university and researched
-        wireless power transfer for moving robots, sharing a lab with{" "}
+        In the spring of 2026 I joined a robotics lab at New Uzbekistan
+        University to research wireless power transfer for moving robots, which
+        is to say charging a robot without making it stop. I shared the lab with{" "}
         <a
           href="https://newuu.uz/en/employee/view/faculty-members/209"
           target="_blank"
@@ -378,8 +379,8 @@ export const bioMilestones: BioMilestone[] = [
         >
           Professor Belov
         </a>
-        . Made some updates on my LinkedIn somewhere in the middle, and in no
-        time I had found an offer from{" "}
+        . It was a long way from sales calls. Somewhere in the middle I made a
+        few updates to my LinkedIn, and in no time there was an offer from{" "}
         <a
           href="https://higgsfield.ai/"
           target="_blank"
@@ -417,10 +418,10 @@ export const bioMilestones: BioMilestone[] = [
     ],
     paragraphs: [
       <p key="1">
-        Joined Higgsfield. Worked very hard for 3 months. Hosted Iman Gadzhi in
-        the office, talked about efficient computing with Yerzat Dulat (the CTO
-        at Higgs), became a smoke buddy (I don&apos;t smoke. I was just
-        watching) with one of the founding engineers, and burnt 100k USD in
+        I joined, and for three months I worked very hard. I hosted Iman Gadzhi
+        in the office. I talked about efficient computing with Yerzat Dulat, the
+        CTO at Higgs. I became smoke buddies with one of the founding engineers
+        (I don&apos;t smoke. I was just watching). I also burnt 100k USD in
         creator partnerships.
       </p>,
     ],
@@ -431,11 +432,12 @@ export const bioMilestones: BioMilestone[] = [
     dateLabel: "Sept 2026",
     paragraphs: [
       <p key="1">
-        In short, Higgs was fun, but I quit. I was working 90-100 hours per week
-        on a startup that wasn&apos;t my own. The company scaled fast, but the
-        scope of my work didn&apos;t seem to challenge me enough. After all,
-        Higgsfield was an AI-media company. What really fascinated me was
-        tweaking bolts on a robot part and nerding out on{" "}
+        Higgs was fun, but I quit. I was working 90 to 100 hours a week on a
+        startup that wasn&apos;t my own, and although the company scaled fast,
+        the scope of my work didn&apos;t seem to challenge me enough. That is a
+        strange complaint about a job most people would be glad to have, and I
+        know it. After all, Higgsfield was an AI-media company. What really
+        fascinated me was tweaking bolts on a robot part and nerding out on{" "}
         <a
           href="https://www.pi.website/"
           target="_blank"
