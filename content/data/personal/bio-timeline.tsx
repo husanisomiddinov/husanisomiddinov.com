@@ -209,27 +209,31 @@ export const bioMilestones: BioMilestone[] = [
     ],
     paragraphs: [
       <p key="1">
-        At 18, I had this little project called{" "}
+        A few summers later, and a few good times with me having tried my luck
+        in fields far beyond my comprehension, I still wanted something that
+        would change things right away. And I liked writing, so in January 2025 I
+        started a small project called{" "}
         <a
           href="https://www.agorawriting.com/"
           target="_blank"
           rel="noopener noreferrer"
         >
           Agora
-        </a>{" "}
-        that I founded in January 2025. Agora connected students with creative
-        writing mentors. I did everything: sales calls, custdevs, running the
-        social media page, some bit of teaching on my end, and even pushed a few
-        commits to GitHub to set up our website. Reached about 5k USD revenue
-        per month and sold it off to a bigger{" "}
+        </a>
+        , which connected students with creative writing mentors. I did
+        everything. I made the sales calls, ran the customer interviews, looked
+        after the social media page, taught a bit myself, and pushed a few
+        commits to GitHub to get the website running. Nobody wrote a memo about
+        any of it. At its best Agora made about 5k USD a month, and in early
+        2026 I sold it to a{" "}
         <a
           href="https://satashkent.uz/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          educational company
+          bigger educational company
         </a>{" "}
-        in town early 2026.
+        in town. That was how I walked into business, more or less.
       </p>,
       <p key="2">
         Agora helped me answer a question that&apos;s long been lingering in my
