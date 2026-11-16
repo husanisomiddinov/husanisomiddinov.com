@@ -276,7 +276,6 @@ The weekly digest at `/newsletter`. Dev-only until it launches, and not in the n
 - `SubscribeForm`: an email field with the primary button set inside one `rounded-lg` bordered box (`brand-50`, border turns `brand-500` on focus). After a signup it is replaced by a one-line confirmation, remembered in the browser.
 - `IssueRow`: title, summary and a `text-xs` meta line. The newest issue leads the list with a serif `text-2xl` title.
 - `CopyLinkButton`: the text button in an issue's byline bar.
-- Embeds (`embeds.tsx`): an issue can drop in `<Essay slug="..." />`, `<Book slug="..." />` and `<Project slug="..." />`. Each renders the same row that item has on its own index page (`EssayRow`, `BookCard`, `ProjectRow`), inside a `not-prose` block so the article's text styles stay off it. A wrong slug fails the build.
 - The issue title is a larger `text-3xl md:text-4xl` serif `h1` with the summary under it as a subtitle, then a byline bar between two hairlines.
 - Issues are MDX files in `content/newsletter/`. The page copy lives in `content/data/resources/newsletter.json`.
 

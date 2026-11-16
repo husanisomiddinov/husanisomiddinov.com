@@ -6,7 +6,6 @@ import type { Issue } from "@/types/content";
 import { getMdxContent } from "./mdx";
 import { readingTimeMinutes, stripMarkdown } from "./posts";
 import { MDXImage } from "@/components/MDXImage";
-import { Book, Essay, Project } from "@/components/newsletter/embeds";
 
 const ISSUES_DIR = path.join(process.cwd(), "content", "newsletter");
 const CONFIG_PATH = path.join(process.cwd(), "content", "data", "resources", "newsletter.json");
@@ -64,9 +63,6 @@ export const getAllIssues = cache((): IssuePreview[] => {
 export const getIssueContent = cache(async (slug: string): Promise<ReactNode | null> => {
   const compiled = await getMdxContent<Issue>(["newsletter", `${slug}.mdx`], {
     img: MDXImage,
-    Essay,
-    Book,
-    Project,
   });
   return compiled?.content ?? null;
 });
