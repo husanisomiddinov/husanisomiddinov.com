@@ -1,11 +1,11 @@
 import path from "path";
 import fs from "fs";
 import sizeOf from "image-size";
-import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Breadcrumbs, PageTitle, Prose } from "@/components";
 import { JsonLd } from "@/components/JsonLd";
+import { NewerOlderNav, type NavTarget } from "@/components/NewerOlderNav";
 import {
   getAllWritingMetadata,
   getAllWritingSlugs,
@@ -18,11 +18,6 @@ import { siteUrl } from "@/config/site";
 interface CoverDimensions {
   width: number;
   height: number;
-}
-
-interface NavLink {
-  title: string;
-  slug: string;
 }
 
 function getCoverDimensions(cover: string | null | undefined): CoverDimensions | null {
@@ -43,8 +38,8 @@ function getCoverDimensions(cover: string | null | undefined): CoverDimensions |
 function getNav(slug: string) {
   const all = getAllWritingMetadata();
   const idx = all.findIndex((p) => p.slug === slug);
-  const toNav = (p?: WritingPreview): NavLink | null =>
-    p ? { title: p.title, slug: p.slug } : null;
+  const toNav = (p?: WritingPreview): NavTarget | null =>
+    p ? { title: p.title, href: `/writing/${p.slug}` } : null;
   return {
     newer: idx > 0 ? toNav(all[idx - 1]) : null,
     older: idx >= 0 && idx < all.length - 1 ? toNav(all[idx + 1]) : null,
@@ -152,39 +147,7 @@ export default async function WritingPostPage({
         <Prose>{post.content}</Prose>
       </div>
 
-      {(newer || older) && (
-        <div className="w-full pt-2">
-          <hr className="mb-4 border-gray-300" />
-          <div className="flex items-start justify-between gap-6">
-            <div className="min-w-0 flex-1">
-              {newer && (
-                <Link
-                  href={`/writing/${newer.slug}`}
-                  className="group block py-2 hover:no-underline"
-                >
-                  <p className="font-sans text-sm text-gray-500">Newer</p>
-                  <p className="line-clamp-2 font-sans text-sm font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500">
-                    {newer.title}
-                  </p>
-                </Link>
-              )}
-            </div>
-            <div className="min-w-0 flex-1 text-right">
-              {older && (
-                <Link
-                  href={`/writing/${older.slug}`}
-                  className="group block py-2 hover:no-underline"
-                >
-                  <p className="font-sans text-sm text-gray-500">Older</p>
-                  <p className="line-clamp-2 font-sans text-sm font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500">
-                    {older.title}
-                  </p>
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      <NewerOlderNav newer={newer} older={older} />
     </div>
   );
 }

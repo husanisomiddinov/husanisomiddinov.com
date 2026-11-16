@@ -41,3 +41,13 @@ export interface Post {
   /** Shown in the featured writing section on the home page. */
   featured?: boolean;
 }
+
+export interface Issue {
+  title: string;
+  /** Issue number, shown as "No. 03". */
+  issue: number;
+  /** ISO date the issue went out, e.g. 2026-11-15. */
+  date: string;
+  /** One sentence shown in the archive and the feed. */
+  summary?: string;
+}

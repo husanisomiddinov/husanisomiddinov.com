@@ -267,6 +267,16 @@ A 36px logo column and a content column. Name (bold `text-lg`) and date on one b
 ### `NumberedList`
 Zero-padded index in `brand-500` (`01`, `02`), then the text in `text-prose gray-600`, hairlines between items. Used for facts and heuristics. Reuse it for any ranked or enumerated plain list instead of writing a new one.
 
+### `NewerOlderNav`
+The newer / older pair under an article, split left and right below a hairline. Shared by essays and digest issues.
+
+### Digest (`components/newsletter/`)
+The weekly digest at `/newsletter`. Dev-only until it launches, and not in the nav or the sitemap.
+- `SubscribeForm`: one underlined email field (the coffee form's input) and the primary button, with a `text-sm` note below that turns into the error message. After a signup the form is replaced by a `brand-50` confirmation block, remembered in the browser.
+- `LatestIssue`: the newest issue as a raised `brand-50` card, the one card on the page. Title, meta line, summary, then a two-column "In this issue" list that links to each section.
+- `IssueRow`: an archive row. Same shape as `EssayRow`, with the issue number ("No. 03", `brand-500`) where the thumbnail would be.
+- Issues are MDX files in `content/newsletter/`. Every `##` heading becomes a section in the "In this issue" list. The page copy lives in `content/data/resources/newsletter.json`.
+
 ### `Prose`
 Wrapper for MDX. Never put `.prose` styles on arbitrary blocks.
 

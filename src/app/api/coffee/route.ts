@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { EMAIL_PATTERN } from "@/lib/validation";
 
 const FIELDS = ["name", "email", "telegram", "about", "topic", "date", "time", "place"] as const;
 
@@ -7,7 +8,6 @@ type Fields = Record<(typeof FIELDS)[number], string>;
 const MAX_LENGTH = { about: 1000, topic: 500 } as const;
 const DEFAULT_MAX_LENGTH = 200;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function parseFields(body: unknown): Fields | null {
   if (typeof body !== "object" || body === null) return null;

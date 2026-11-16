@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect, type KeyboardEvent } from "react";
 import { Button } from "@/components";
+import { EMAIL_PATTERN } from "@/lib/validation";
 
 const STEPS = [
   { key: "name", prompt: "What's your name?", placeholder: "First name is fine" },
@@ -33,8 +34,6 @@ const MONTHS = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December",
 ];
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function isValid(key: StepKey, value: string) {
   const v = value.trim();
