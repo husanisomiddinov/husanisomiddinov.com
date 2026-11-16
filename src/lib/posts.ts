@@ -20,7 +20,7 @@ function toTimestamp(date: string, slug: string): number {
 const WORDS_PER_MINUTE = 200;
 
 /** Reduce MDX/markdown to plain prose for excerpts and word counts. */
-export function stripMarkdown(body: string): string {
+function stripMarkdown(body: string): string {
   return body
     .replace(/```[\s\S]*?```/g, " ") // fenced code
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ") // images
@@ -45,7 +45,7 @@ function buildExcerpt(text: string, max = 160): string {
   return snippet;
 }
 
-export function readingTimeMinutes(text: string): number {
+function readingTimeMinutes(text: string): number {
   const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
   return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
 }
