@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Breadcrumbs, PageTitle, Prose } from "@/components";
 import { NewerOlderNav, type NavTarget } from "@/components/NewerOlderNav";
+import { CopyLinkButton } from "@/components/newsletter/CopyLinkButton";
 import { SubscribeForm } from "@/components/newsletter/SubscribeForm";
 import { isDevOnlyAvailable } from "@/lib/dev-only";
 import { buildMetadata } from "@/lib/metadata";
@@ -58,22 +59,28 @@ export default async function IssuePage({ params }: { params: Params }) {
             { label: issue.title, href: `/newsletter/${slug}` },
           ]}
         />
-        <PageTitle className="mt-3 mb-2">{issue.title}</PageTitle>
-        <p className="font-sans text-sm text-gray-500">
-          {issueLabel(issue.number)} · {formatIssueDate(issue.date)} · {issue.readingTime} min read
-        </p>
+        <PageTitle className="mt-3">{issue.title}</PageTitle>
+        {issue.summary && <p className="mt-1 text-prose text-gray-600">{issue.summary}</p>}
+        <div className="mt-4 flex items-center justify-between gap-4 border-y border-gray-300 py-3">
+          <div className="min-w-0">
+            <p className="font-sans text-sm font-bold text-gray-800">{config.author}</p>
+            <p className="font-sans text-xs text-gray-400">
+              {formatIssueDate(issue.date)} · {issueLabel(issue.number)} · {issue.readingTime} min read
+            </p>
+          </div>
+          <CopyLinkButton />
+        </div>
       </div>
 
       <div className="w-full">
         <Prose>{content}</Prose>
       </div>
 
-      <section className="flex w-full flex-col gap-3 border-t border-gray-300 pt-8">
-        <h2 className="font-heading tracking-heading text-2xl font-bold text-gray-800">Get the next one</h2>
-        <p className="text-prose text-ink">
-          This goes out every {config.sendDay}. Leave your email and the next issue comes to you.
+      <section className="flex w-full flex-col items-center gap-3 rounded-lg border border-gray-200 bg-brand-50 px-5 py-6 text-center">
+        <p className="text-prose text-ink text-balance">
+          Subscribe to get the next issue of {config.name} by email.
         </p>
-        <SubscribeForm source={slug} sendDay={config.sendDay} />
+        <SubscribeForm source={slug} className="max-w-md" />
       </section>
 
       <NewerOlderNav newer={toNav(issues[index - 1])} older={toNav(issues[index + 1])} />

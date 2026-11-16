@@ -1,12 +1,5 @@
 {
   "name": "Weekly digest",
-  "description": "One email a week from Husan: what I wrote, read and built, plus a few links worth your time.",
-  "intro": "One email a week, every Sunday. What I wrote, what I read, what I built or broke, and a few links worth your time. It takes about five minutes to read, which is less than I spend picking the subject line.",
-  "sendDay": "Sunday",
-  "inside": [
-    "Writing: new essays, and the half-formed notes that did not make it into one.",
-    "Reading: the book or paper of the week, and whether it was worth the hours.",
-    "Building: what moved on the robots and the side projects, including what broke.",
-    "Links: three or four things from around the internet I could not stop thinking about."
-  ]
+  "description": "What I wrote, read and built this week. One email, every Sunday.",
+  "author": "Husan Isomiddinov"
 }

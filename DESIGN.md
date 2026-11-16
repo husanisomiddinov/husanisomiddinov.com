@@ -272,10 +272,11 @@ The newer / older pair under an article, split left and right below a hairline. 
 
 ### Digest (`components/newsletter/`)
 The weekly digest at `/newsletter`. Dev-only until it launches, and not in the nav or the sitemap.
-- `SubscribeForm`: one underlined email field (the coffee form's input) and the primary button, with a `text-sm` note below that turns into the error message. After a signup the form is replaced by a `brand-50` confirmation block, remembered in the browser.
-- `LatestIssue`: the newest issue as a raised `brand-50` card, the one card on the page. Title, meta line, summary, then a two-column "In this issue" list that links to each section.
-- `IssueRow`: an archive row. Same shape as `EssayRow`, with the issue number ("No. 03", `brand-500`) where the thumbnail would be.
-- Issues are MDX files in `content/newsletter/`. Every `##` heading becomes a section in the "In this issue" list. The page copy lives in `content/data/resources/newsletter.json`.
+- Modeled on a Substack publication: a centered masthead with the signup, then the list of issues, and on an issue page a byline bar and a signup box after the text.
+- `SubscribeForm`: an email field with the primary button set inside one `rounded-lg` bordered box (`brand-50`, border turns `brand-500` on focus). After a signup it is replaced by a one-line confirmation, remembered in the browser.
+- `IssueRow`: title, summary and a `text-xs` meta line. The newest issue leads the list with a serif `text-2xl` title.
+- `CopyLinkButton`: the text button in an issue's byline bar.
+- Issues are MDX files in `content/newsletter/`. The page copy lives in `content/data/resources/newsletter.json`.
 
 ### `Prose`
 Wrapper for MDX. Never put `.prose` styles on arbitrary blocks.

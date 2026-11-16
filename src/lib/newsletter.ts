@@ -6,7 +6,6 @@ import type { Issue } from "@/types/content";
 import { getMdxContent } from "./mdx";
 import { readingTimeMinutes, stripMarkdown } from "./posts";
 import { MDXImage } from "@/components/MDXImage";
-import { IssueHeading } from "@/components/newsletter/IssueHeading";
 
 const ISSUES_DIR = path.join(process.cwd(), "content", "newsletter");
 const CONFIG_PATH = path.join(process.cwd(), "content", "data", "resources", "newsletter.json");
@@ -14,16 +13,8 @@ const CONFIG_PATH = path.join(process.cwd(), "content", "data", "resources", "ne
 export interface NewsletterConfig {
   name: string;
   description: string;
-  intro: string;
-  /** Weekday the issue goes out, e.g. "Sunday". */
-  sendDay: string;
-  /** The recurring parts of every issue, one sentence each. */
-  inside: string[];
-}
-
-export interface IssueSection {
-  id: string;
-  title: string;
+  /** Shown in the byline of every issue. */
+  author: string;
 }
 
 export interface IssuePreview {
@@ -34,34 +25,16 @@ export interface IssuePreview {
   date: string;
   summary: string;
   readingTime: number;
-  /** The issue's `##` headings, in order, for the "In this issue" list. */
-  sections: IssueSection[];
 }
 
 export const getNewsletterConfig = cache(
   (): NewsletterConfig => JSON.parse(fs.readFileSync(CONFIG_PATH, "utf8")),
 );
 
-/** Anchor id for a heading. Shared by the archive's section links and the rendered `h2`. */
-export function sectionId(title: string): string {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
 /** YAML turns a bare 2026-11-15 into a Date, so bring it back to the ISO day. */
 function toIsoDay(value: unknown): string {
   if (value instanceof Date) return value.toISOString().slice(0, 10);
   return typeof value === "string" ? value : "";
-}
-
-function readSections(body: string): IssueSection[] {
-  const withoutCode = body.replace(/```[\s\S]*?```/g, "");
-  return Array.from(withoutCode.matchAll(/^##\s+(.+)$/gm), (match) => {
-    const title = stripMarkdown(match[1]);
-    return { id: sectionId(title), title };
-  });
 }
 
 function issueFiles(): string[] {
@@ -81,7 +54,6 @@ export const getAllIssues = cache((): IssuePreview[] => {
       date: toIsoDay(data.date),
       summary: frontmatter.summary ?? "",
       readingTime: readingTimeMinutes(stripMarkdown(content)),
-      sections: readSections(content),
     };
   });
 
@@ -91,7 +63,6 @@ export const getAllIssues = cache((): IssuePreview[] => {
 export const getIssueContent = cache(async (slug: string): Promise<ReactNode | null> => {
   const compiled = await getMdxContent<Issue>(["newsletter", `${slug}.mdx`], {
     img: MDXImage,
-    h2: IssueHeading,
   });
   return compiled?.content ?? null;
 });

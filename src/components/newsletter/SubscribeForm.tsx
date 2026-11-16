@@ -38,19 +38,18 @@ function save(email: string | null) {
 }
 
 const MESSAGES: Record<"invalid" | "error", string> = {
-  invalid: "That does not look like an email address.",
+  invalid: "Enter a valid email address.",
   error: "Something went wrong. Try again.",
 };
 
 interface SubscribeFormProps {
   /** Where the form sits, recorded with the signup (for example "newsletter" or an issue slug). */
   source: string;
-  /** Weekday the issue goes out, used in the confirmation. */
-  sendDay: string;
+  className?: string;
 }
 
-/** The digest signup: one email field and a button, with a confirmation that replaces the form. */
-export function SubscribeForm({ source, sendDay }: SubscribeFormProps) {
+/** The digest signup: an email field with the button set inside it, replaced by a confirmation once used. */
+export function SubscribeForm({ source, className }: SubscribeFormProps) {
   const id = useId();
   const saved = useSyncExternalStore(listen, readSaved, () => null);
   const [justSubscribed, setJustSubscribed] = useState<string | null>(null);
@@ -94,15 +93,14 @@ export function SubscribeForm({ source, sendDay }: SubscribeFormProps) {
 
   if (subscribed) {
     return (
-      <div role="status" className="rounded-md border border-gray-200 bg-brand-50 px-4 py-3">
+      <div role="status" className={`flex flex-col items-center gap-1 text-center ${className ?? ""}`}>
         <p className="text-prose-sm text-ink">
-          <strong className="font-bold">You are on the list.</strong> The next issue goes to{" "}
-          <span className="break-all">{subscribed}</span> on {sendDay}.
+          Subscribed as <strong className="font-bold break-all">{subscribed}</strong>
         </p>
         <button
           type="button"
           onClick={startOver}
-          className="mt-1 cursor-pointer rounded text-sm text-gray-500 transition-colors duration-200 hover:text-brand-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
+          className="cursor-pointer rounded text-sm text-gray-500 transition-colors duration-200 hover:text-brand-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
         >
           Use a different email
         </button>
@@ -113,11 +111,11 @@ export function SubscribeForm({ source, sendDay }: SubscribeFormProps) {
   const problem = status === "invalid" || status === "error" ? MESSAGES[status] : null;
 
   return (
-    <form onSubmit={submit} noValidate className="flex w-full flex-col gap-2">
+    <form onSubmit={submit} noValidate className={`flex w-full flex-col gap-2 ${className ?? ""}`}>
       <label htmlFor={id} className="sr-only">
         Email address
       </label>
-      <div className="flex items-end gap-3">
+      <div className="flex items-center gap-1 rounded-lg border border-gray-300 bg-brand-50 p-1 transition-colors duration-200 focus-within:border-brand-500">
         <input
           id={id}
           type="email"
@@ -125,23 +123,23 @@ export function SubscribeForm({ source, sendDay }: SubscribeFormProps) {
           autoComplete="email"
           inputMode="email"
           required
-          placeholder="you@example.com"
+          placeholder="Type your email..."
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
             if (problem) setStatus("idle");
           }}
           aria-invalid={status === "invalid"}
-          aria-describedby={`${id}-note`}
-          className="min-w-0 flex-1 border-b-2 border-gray-300 bg-transparent pb-2 text-base text-gray-800 outline-none transition-colors duration-200 placeholder:text-gray-400 focus:border-brand-500"
+          aria-describedby={problem ? `${id}-problem` : undefined}
+          className="min-w-0 flex-1 bg-transparent px-3 py-1.5 text-base text-gray-800 outline-none placeholder:text-gray-400"
         />
         <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
         <Button type="submit" disabled={status === "submitting"} className="shrink-0">
           {status === "submitting" ? "Subscribing..." : "Subscribe"}
         </Button>
       </div>
-      <p id={`${id}-note`} aria-live="polite" className={`text-sm ${problem ? "text-red-600" : "text-gray-500"}`}>
-        {problem ?? "Free. One email a week. Leave whenever."}
+      <p id={`${id}-problem`} aria-live="polite" className="text-center text-sm text-red-600 empty:hidden">
+        {problem}
       </p>
     </form>
   );
