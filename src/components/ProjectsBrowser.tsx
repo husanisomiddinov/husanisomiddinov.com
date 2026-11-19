@@ -8,11 +8,14 @@ import type { Project, ProjectKind } from "@/types";
 const KIND_ORDER: ProjectKind[] = ["robotics", "ml", "web"];
 const KIND_LABEL: Record<ProjectKind, string> = {
   robotics: "Robotics",
-  ml: "Machine Learning",
+  ml: "Machine learning",
   web: "Web",
 };
 
 type Filter = "all" | ProjectKind;
+
+/** Filters on a short list read as product UI, so they only appear once there is enough to sort. */
+const MIN_PROJECTS_FOR_FILTERS = 8;
 
 function formatDate(date?: string): string | undefined {
   if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
@@ -24,12 +27,10 @@ function formatDate(date?: string): string | undefined {
 
 function FilterTab({
   label,
-  count,
   isActive,
   onClick,
 }: {
   label: string;
-  count: number;
   isActive: boolean;
   onClick: () => void;
 }) {
@@ -45,7 +46,6 @@ function FilterTab({
       }`}
     >
       {label}
-      <span className="ml-1.5 font-normal text-gray-400">{count}</span>
     </button>
   );
 }
@@ -135,28 +135,32 @@ export function ProjectsBrowser({ projects }: { projects: Project[] }) {
   const kinds = KIND_ORDER.filter((kind) =>
     projects.some((p) => p.kind === kind),
   );
+  const showFilters =
+    projects.length >= MIN_PROJECTS_FOR_FILTERS && kinds.length > 1;
   const visible =
-    filter === "all" ? projects : projects.filter((p) => p.kind === filter);
+    !showFilters || filter === "all"
+      ? projects
+      : projects.filter((p) => p.kind === filter);
 
   return (
     <div className="flex w-full flex-col gap-6">
-      <div className="flex flex-wrap gap-x-6 gap-y-2">
-        <FilterTab
-          label="All"
-          count={projects.length}
-          isActive={filter === "all"}
-          onClick={() => setFilter("all")}
-        />
-        {kinds.map((kind) => (
+      {showFilters && (
+        <div className="flex flex-wrap gap-x-6 gap-y-2">
           <FilterTab
-            key={kind}
-            label={KIND_LABEL[kind]}
-            count={projects.filter((p) => p.kind === kind).length}
-            isActive={filter === kind}
-            onClick={() => setFilter(kind)}
+            label="All"
+            isActive={filter === "all"}
+            onClick={() => setFilter("all")}
           />
-        ))}
-      </div>
+          {kinds.map((kind) => (
+            <FilterTab
+              key={kind}
+              label={KIND_LABEL[kind]}
+              isActive={filter === kind}
+              onClick={() => setFilter(kind)}
+            />
+          ))}
+        </div>
+      )}
 
       <ul key={filter} className="flex w-full flex-col">
         {visible.map((project, i) => (

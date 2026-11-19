@@ -3,9 +3,17 @@ import type { ReadingShelfBook } from "@/types";
 
 const DOT = <span className="text-gray-400">·</span>;
 
+/** "January 22, 2026" -> "Jan 2026". Anything unparseable is shown as written. */
+function shortMonthYear(date: string): string {
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) return date;
+  return parsed.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+}
+
 /**
- * "line" (default): the "Read: date · Rating: n/10" paragraph under a book's title.
- * "inline": the same facts as bare spans, for placing inside a parent flex row.
+ * "line" (default): a short "Read Jan 2026 · 9/10" line under a book's title in lists.
+ * "inline": the same facts with the full date, as bare spans inside a parent flex row
+ * on the book page.
  */
 export function BookStatus({
   book,
@@ -20,22 +28,22 @@ export function BookStatus({
     return read ? (
       <>
         {DOT}
-        <span>Read: {book.date}</span>
+        <span>Read {book.date}</span>
         {book.rating != null && (
           <>
             {DOT}
-            <span className="font-bold text-gray-800">Rating: {book.rating}/10</span>
+            <span className="text-gray-800">{book.rating}/10</span>
           </>
         )}
       </>
     ) : (
       <>
         {DOT}
-        <span className="font-bold text-brand-500">Currently Reading</span>
+        <span className="text-brand-500">Reading now</span>
         {book.started && (
           <>
             {DOT}
-            <span>Started: {book.started}</span>
+            <span>since {book.started}</span>
           </>
         )}
       </>
@@ -45,27 +53,19 @@ export function BookStatus({
   if (!read) {
     return (
       <p className="font-sans text-sm text-gray-600">
-        <span className="font-bold text-brand-500">Currently Reading</span>
-        {book.started && (
-          <>
-            {" "}
-            {DOT} Started: {book.started}
-          </>
-        )}
+        <span className="text-brand-500">Reading now</span>
+        {book.started && <>, since {shortMonthYear(book.started)}</>}
       </p>
     );
   }
 
   return (
     <p className="font-sans text-sm text-gray-600">
-      Read: {book.date}
+      Read {shortMonthYear(book.date!)}
       {book.rating != null && (
         <>
           {" "}
-          {DOT}{" "}
-          <span className="font-bold text-gray-800">
-            Rating: {book.rating}/10
-          </span>
+          {DOT} <span className="text-gray-800">{book.rating}/10</span>
         </>
       )}
     </p>

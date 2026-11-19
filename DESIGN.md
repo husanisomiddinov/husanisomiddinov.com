@@ -259,7 +259,7 @@ Optional serif title, one short paragraph, one primary button, optional illustra
 A row for writing: 52/60px thumbnail (cover image, or a first-letter placeholder on `brand-50`), bold title with date at the right, a two-line excerpt, reading time. The whole row is a link; title turns `brand-500` on group hover.
 
 ### `ProjectRow` / `ProjectsBrowser` / `FeaturedProjects`
-A row with bold title, month-year date, three-line summary, optional live diagram previews, then the tech line joined with ` · `. The whole row is clickable through an `after:absolute after:inset-0` overlay on the title link. Rows fade up on entry (`.project-enter`), staggered 80ms per index. Filter tabs above the list are underline tabs (`border-b`), `brand-500` when active, with a muted count.
+A row with bold title, month-year date, three-line summary, optional live diagram previews, then the tech line joined with ` · `. The whole row is clickable through an `after:absolute after:inset-0` overlay on the title link. Rows fade up on entry (`.project-enter`), staggered 80ms per index. Filter tabs above the list are underline tabs (`border-b`), `brand-500` when active, with no counts. They only appear once there are 8 or more projects across more than one kind; a short list is just a list.
 
 ### `Experiences` / `ExperienceRow`
 A 36px logo column and a content column. Name (bold `text-lg`) and date on one baseline, role in `text-sm gray-500`, description in `text-prose`. Optional photo gallery in a `rounded-lg` frame with `gray-200` border.
@@ -303,7 +303,7 @@ Three.js scenes (`Bookshelf`, `VisitGlobe`). They use the site's tokens through 
 Intro prose, a CTA with illustration, social icons, a hairline, then featured sections (experiences, projects, writing, books) separated by hairlines, a closing CTA and a footer. Each featured section ends in one button to its full page.
 
 ### Index pages (writing, projects, reading)
-No decorative header. Optional filter tabs or year headings (`text-sm font-semibold gray-500`), then the list of rows. Writing is grouped by year. Projects are filterable by kind.
+No decorative header. Optional filter tabs or year headings (`text-sm font-semibold gray-500`), then the list of rows. Writing is grouped by year. Projects are filterable by kind once the list is long enough (see `ProjectsBrowser`).
 
 ### Detail pages (essay, book, project)
 BackLink or Breadcrumbs, the title, a meta line (date, links, tech) in `text-sm gray-500`, then the article. Project pages add a `brand-50` summary block with a numbered table of contents, numbered `h2` sections, diagrams inline, and the progress bar.
@@ -432,7 +432,8 @@ The site speaks in first person, plainly, with dry humor and honesty. It reads l
 - **Be honest about limits.** Say when something is a schematic, a demo, or a planned project.
 - **Buttons and links:** verb or destination, three words or fewer where possible. "Read about me", "For a coffee chat".
 - **Lists:** parallel structure, no trailing periods on short fragments, periods on full sentences.
-- **Dates:** `May 2026` on lists, `May 12, 2026` on detail pages, `May 12` on essay rows. Always through the existing `formatDate` helpers, never hand-typed.
+- **Dates:** `May 2026` on lists, `May 12, 2026` on detail pages, `May 12` on essay rows. Always through the existing `formatDate` helpers, never hand-typed. Ranges are short and use "to": `Jun to Sep 2026`, `Jan 2025 to May 2026`.
+- **Book status:** `Read Jan 2026 · 9/10` on lists, `Reading now, since Oct 2026` for current books. No "Read:" or "Rating:" field labels.
 - **Tech lists:** joined with ` · ` (middle dot with spaces).
 - **Metadata:** every page has a title and a one-sentence description through `buildMetadata`.
 - **Writing for the site's content files:** project descriptions use `##` for numbered sections, `###` for sub-sections, `- ` lists, backticks for code, `**bold**` for emphasis, and `[[diagram:name]]` for diagrams. Nothing else is parsed.
