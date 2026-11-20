@@ -17,18 +17,20 @@ const GAZEBO_X = 318;
 const GAZEBO_W = 116;
 const MAPS_X = 630;
 const MAPS_W = 120;
+/** The packet's trip: four steps along the row, then two legs back around the loop. */
+const LEGS = 6;
 
 /** A lidar puck: the sweep line turns while Gazebo streams scans. */
 function Lidar({ cx, cy }: { cx: number; cy: number }) {
   return (
     <g>
-      <circle cx={cx} cy={cy} r={7} fill="none" stroke="#a89a5b" strokeWidth={1.25} />
+      <circle cx={cx} cy={cy} r={7} fill="none" stroke={MUTED} strokeWidth={1} />
       <line
         x1={cx}
         y1={cy}
         x2={cx + 7}
         y2={cy}
-        stroke="#8a6d1a"
+        stroke={INK}
         strokeWidth={1.5}
         strokeLinecap="round"
         className="diagram-sweep"
@@ -50,23 +52,25 @@ function Scene({ wide }: { wide?: boolean }) {
     >
       <Group x={142} y={22} w={468} h={126} title="Docker container" sub="ROS2 Humble" />
 
-      <Tile x={14} y={ROW_Y} w={96} title="docker" sub="compose up" />
-      <Tile x={158} y={ROW_Y} w={116} title="colcon build" sub="md25010_nav" />
-      <Tile x={GAZEBO_X} y={ROW_Y} w={GAZEBO_W} title="Gazebo" sub="TurtleBot3 sim">
+      <Tile x={14} y={ROW_Y} w={96} title="docker" sub="compose up" tone="infra" />
+      <Tile x={158} y={ROW_Y} w={116} title="colcon build" sub="md25010_nav" tone="infra" />
+      <Tile x={GAZEBO_X} y={ROW_Y} w={GAZEBO_W} title="Gazebo" sub="TurtleBot3 sim" tone="source">
         <Lidar cx={GAZEBO_X + 16} cy={ROW_Y + 16} />
       </Tile>
-      <Tile x={478} y={ROW_Y} w={116} title="SLAM Toolbox" sub="lifelong mode" hot />
-      <Tile x={MAPS_X} y={ROW_Y} w={MAPS_W} title="maps/ volume" sub=".pgm .yaml .csv" />
+      <Tile x={478} y={ROW_Y} w={116} title="SLAM Toolbox" sub="lifelong mode" tone="key" />
+      <Tile x={MAPS_X} y={ROW_Y} w={MAPS_W} title="maps/ volume" sub=".pgm .yaml .csv" tone="output" />
 
-      <HArrow x1={110} x2={158} y={ROW_MID} />
-      <HArrow x1={274} x2={GAZEBO_X} y={ROW_MID} />
-      <HArrow x1={434} x2={478} y={ROW_MID} label="scan" />
-      <HArrow x1={594} x2={MAPS_X} y={ROW_MID} />
+      <HArrow x1={110} x2={158} y={ROW_MID} leg={{ step: 0, of: LEGS }} />
+      <HArrow x1={274} x2={GAZEBO_X} y={ROW_MID} leg={{ step: 1, of: LEGS }} />
+      <HArrow x1={434} x2={478} y={ROW_MID} label="scan" leg={{ step: 2, of: LEGS }} />
+      <HArrow x1={594} x2={MAPS_X} y={ROW_MID} leg={{ step: 3, of: LEGS }} />
 
       {/* Back around the bottom: Nav2 loads the saved map and drives the goals in Gazebo. */}
       <FlowArrow
         color={LOOP}
+        dashed
         head={false}
+        leg={{ step: 4, of: LEGS }}
         points={[
           [mapsMid, ROW_Y + 56 + 8],
           [mapsMid, LOOP_Y],
@@ -75,16 +79,18 @@ function Scene({ wide }: { wide?: boolean }) {
       />
       <FlowArrow
         color={LOOP}
+        dashed
+        leg={{ step: 5, of: LEGS }}
         points={[
           [404, LOOP_Y],
           [gazeboMid, LOOP_Y],
           [gazeboMid, ROW_Y + 56 + 6],
         ]}
       />
-      <text x={492} y={LOOP_Y - 2} textAnchor="middle" fontSize={13} fontWeight={700} fill={INK} className="font-mono">
+      <text x={492} y={LOOP_Y - 2} textAnchor="middle" fontSize={13} fontWeight={600} fill={INK}>
         Navigate
       </text>
-      <text x={492} y={LOOP_Y + 16} textAnchor="middle" fontSize={10.5} fill={MUTED} className="font-mono">
+      <text x={492} y={LOOP_Y + 16} textAnchor="middle" fontSize={11} fill={MUTED}>
         Nav2 loads the map, drives 5 goals
       </text>
     </DiagramSvg>

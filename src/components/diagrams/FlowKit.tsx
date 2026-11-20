@@ -1,16 +1,32 @@
-import { useId, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export const INK = "#2a2925";
 export const MUTED = "#6b6a64";
 const PAPER = "#f6f7f4";
-const FLOW = "#e3b341";
-export const LOOP = "#9bb06a";
-const TILE = "#ecede6";
-const TILE_EDGE = "#d3d5c8";
-const HOT = "#f5d56f";
-const HOT_EDGE = "#c9a93a";
+/** Arrows are drawn in a soft ink, like pen lines. */
+const LINE = "#8f9085";
+/** The return loop: a dashed teal line, "this goes back around". */
+export const LOOP = "#4f9d91";
+/** The one moving thing: a terracotta dot carrying the data from step to step. */
+const PACKET = "#c2562f";
 
-const HEAD = 14;
+/**
+ * Tile tints, like highlighter on paper. Each one means a kind of step, so a reader can
+ * group the flow at a glance. `key` is the step the diagram is about.
+ */
+const TONES = {
+  plain: { fill: "#eff0e8", edge: "#d3d5c8", text: INK },
+  infra: { fill: "#e6ecf3", edge: "#a9bdd4", text: "#3f5f86" },
+  source: { fill: "#f5ecd7", edge: "#d9bf86", text: "#7d5f1f" },
+  output: { fill: "#f6e5de", edge: "#dba896", text: "#9a4a2e" },
+  key: { fill: "#e8ebe0", edge: "#5b6529", text: "#5b6529" },
+} as const;
+
+export type Tone = keyof typeof TONES;
+
+const HEAD = 8;
+/** Seconds the packet takes to cross one arrow. */
+const STEP_S = 0.9;
 
 /** Rounded so server and browser print the same digits and hydration stays quiet. */
 const r1 = (n: number) => Math.round(n * 10) / 10;
@@ -44,43 +60,94 @@ function shaftPath(points: Point[], radius: number, head: boolean) {
   return { d, tip: [ex, ey] as Point, degrees: r1((angle * 180) / Math.PI) };
 }
 
-/** A thick arrow with a lighter dash stream running along it, so it reads as data in motion. */
+/** Which leg of the packet's trip an arrow is: leg `step` of `of`. */
+export type Leg = { step: number; of: number };
+
+const t3 = (n: number) => n.toFixed(3);
+
+/**
+ * The packet crossing one arrow. Every packet shares one cycle length, so legs stay in order
+ * and only one is visible at a time. Hidden under reduced motion (globals.css).
+ */
+function Packet({ d, leg }: { d: string; leg: Leg }) {
+  const cycle = `${r1(leg.of * STEP_S)}s`;
+  const start = leg.step / leg.of;
+  const end = (leg.step + 1) / leg.of;
+  const fade = Math.min(0.15 / leg.of, (end - start) / 4);
+  return (
+    <circle r={3.5} fill={PACKET} opacity={0} className="diagram-packet">
+      <animateMotion
+        path={d}
+        dur={cycle}
+        repeatCount="indefinite"
+        calcMode="linear"
+        keyPoints="0;0;1;1"
+        keyTimes={`0;${t3(start)};${t3(end)};1`}
+      />
+      <animate
+        attributeName="opacity"
+        dur={cycle}
+        repeatCount="indefinite"
+        values="0;0;1;1;0;0"
+        keyTimes={`0;${t3(start)};${t3(start + fade)};${t3(end - fade)};${t3(end)};1`}
+      />
+    </circle>
+  );
+}
+
+/** A thin pen-line arrow. Give it a `leg` and the packet crosses it in turn. */
 export function FlowArrow({
   points,
-  color = FLOW,
-  radius = 16,
+  color = LINE,
+  radius = 14,
   head = true,
+  dashed = false,
+  leg,
 }: {
   points: Point[];
   color?: string;
   radius?: number;
   head?: boolean;
+  dashed?: boolean;
+  leg?: Leg;
 }) {
   const { d, tip, degrees } = shaftPath(points, radius, head);
   return (
     <g>
-      <path d={d} fill="none" stroke={color} strokeWidth={5} strokeLinecap="butt" />
       <path
         d={d}
         fill="none"
-        stroke={PAPER}
-        strokeWidth={1.6}
-        strokeDasharray="6 16"
-        className="diagram-flow"
+        stroke={color}
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeDasharray={dashed ? "4 5" : undefined}
       />
       {head && (
         <polygon
-          points={`0,0 ${-HEAD},${-HEAD * 0.6} ${-HEAD},${HEAD * 0.6}`}
+          points={`0,0 ${-HEAD},${-HEAD * 0.55} ${-HEAD},${HEAD * 0.55}`}
           fill={color}
           transform={`translate(${r1(tip[0])} ${r1(tip[1])}) rotate(${degrees})`}
         />
       )}
+      {leg && <Packet d={d} leg={leg} />}
     </g>
   );
 }
 
 /** A straight horizontal arrow with an optional caption above it. */
-export function HArrow({ x1, x2, y, label }: { x1: number; x2: number; y: number; label?: string }) {
+export function HArrow({
+  x1,
+  x2,
+  y,
+  label,
+  leg,
+}: {
+  x1: number;
+  x2: number;
+  y: number;
+  label?: string;
+  leg?: Leg;
+}) {
   return (
     <g>
       <FlowArrow
@@ -88,9 +155,10 @@ export function HArrow({ x1, x2, y, label }: { x1: number; x2: number; y: number
           [x1 + 4, y],
           [x2 - 4, y],
         ]}
+        leg={leg}
       />
       {label && (
-        <text x={(x1 + x2) / 2} y={y - 16} textAnchor="middle" fontSize={11} fill={INK} className="font-mono">
+        <text x={(x1 + x2) / 2} y={y - 10} textAnchor="middle" fontSize={11} fill={MUTED}>
           {label}
         </text>
       )}
@@ -105,7 +173,7 @@ export function Tile({
   h = 56,
   title,
   sub,
-  hot,
+  tone = "plain",
   children,
 }: {
   x: number;
@@ -113,48 +181,37 @@ export function Tile({
   w: number;
   h?: number;
   title: string;
+  /** One small fact, set in mono because it is data (`224x224x3`, `.pgm .yaml`). */
   sub?: string;
-  hot?: boolean;
+  /** What kind of step this is. Use `key` once per diagram, for the step it is about. */
+  tone?: Tone;
   children?: ReactNode;
 }) {
+  const { fill, edge, text } = TONES[tone];
   return (
     <g>
-      {hot && (
-        <rect
-          x={x - 4}
-          y={y - 4}
-          width={w + 8}
-          height={h + 8}
-          rx={13}
-          fill="none"
-          stroke={HOT_EDGE}
-          strokeWidth={2}
-          className="diagram-pulse"
-        />
-      )}
       <rect
         x={x}
         y={y}
         width={w}
         height={h}
-        rx={10}
-        fill={hot ? HOT : TILE}
-        stroke={hot ? HOT_EDGE : TILE_EDGE}
-        strokeWidth={1.25}
+        rx={8}
+        fill={fill}
+        stroke={edge}
+        strokeWidth={tone === "key" ? 1.5 : 1}
       />
       <text
         x={x + w / 2}
-        y={y + h / 2 + (sub ? -2 : 4)}
+        y={y + h / 2 + (sub ? -3 : 4)}
         textAnchor="middle"
-        fontSize={12.5}
-        fontWeight={700}
-        fill={INK}
-        className="font-mono"
+        fontSize={13}
+        fontWeight={600}
+        fill={text}
       >
         {title}
       </text>
       {sub && (
-        <text x={x + w / 2} y={y + h / 2 + 15} textAnchor="middle" fontSize={10.5} fill={MUTED} className="font-mono">
+        <text x={x + w / 2} y={y + h / 2 + 14} textAnchor="middle" fontSize={10} fill={MUTED} className="font-mono">
           {sub}
         </text>
       )}
@@ -186,27 +243,26 @@ export function Group({
         y={y}
         width={w}
         height={h}
-        rx={16}
+        rx={12}
         fill="none"
-        stroke="#bfc2b2"
-        strokeWidth={1.5}
-        strokeDasharray="5 5"
+        stroke="#c4c6b8"
+        strokeWidth={1}
+        strokeDasharray="4 5"
       />
       <text
-        x={x + 20}
+        x={x + 18}
         y={y + 4}
-        fontSize={14}
-        fontWeight={700}
+        fontSize={13}
+        fontWeight={600}
         fill={INK}
         stroke={PAPER}
         strokeWidth={10}
         paintOrder="stroke"
-        className="font-mono"
       >
         {title}
       </text>
       {sub && (
-        <text x={x + 20} y={y + 26} fontSize={10.5} fill={MUTED} className="font-mono">
+        <text x={x + 18} y={y + 24} fontSize={11} fill={MUTED}>
           {sub}
         </text>
       )}
@@ -217,13 +273,13 @@ export function Group({
 /** Bold caption above an icon at the edge of a flow. */
 export function EndLabel({ x, y, children }: { x: number; y: number; children: string }) {
   return (
-    <text x={x} y={y} textAnchor="middle" fontSize={12.5} fontWeight={700} fill={INK} className="font-mono">
+    <text x={x} y={y} textAnchor="middle" fontSize={13} fontWeight={600} fill={INK}>
       {children}
     </text>
   );
 }
 
-/** The svg frame shared by every diagram: a faint dot grid behind the content. */
+/** The svg frame shared by every diagram: plain paper, sans text. */
 export function DiagramSvg({
   width,
   height,
@@ -238,7 +294,6 @@ export function DiagramSvg({
   wide?: boolean;
   children: ReactNode;
 }) {
-  const dots = useId();
   return (
     <svg
       viewBox={`0 0 ${width} ${height}`}
@@ -246,12 +301,6 @@ export function DiagramSvg({
       aria-label={label}
       className={`mx-auto h-auto w-full font-sans ${wide ? "min-w-[560px]" : ""}`}
     >
-      <defs>
-        <pattern id={dots} width={16} height={16} patternUnits="userSpaceOnUse">
-          <circle cx={2} cy={2} r={0.9} fill="#d9dccf" />
-        </pattern>
-      </defs>
-      <rect width={width} height={height} fill={`url(#${dots})`} />
       {children}
     </svg>
   );

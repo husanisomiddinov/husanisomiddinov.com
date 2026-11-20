@@ -219,20 +219,10 @@ i {
   }
 }
 
-/* Diagram motion: arrows carry dashes along their length, hot tiles breathe, small icons loop. */
+/* Diagram motion: one packet travels the flow (SMIL, in FlowKit), a few small icons loop. */
 @keyframes diagram-flow {
   to {
     stroke-dashoffset: -22;
-  }
-}
-
-@keyframes diagram-pulse {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.55;
   }
 }
 
@@ -252,22 +242,8 @@ i {
   }
 }
 
-@keyframes diagram-bar {
-  0%,
-  100% {
-    transform: scaleY(0.55);
-  }
-  50% {
-    transform: scaleY(1);
-  }
-}
-
 .diagram-flow {
   animation: diagram-flow 1.4s linear infinite;
-}
-
-.diagram-pulse {
-  animation: diagram-pulse 2.8s ease-in-out infinite;
 }
 
 .diagram-sweep {
@@ -276,12 +252,6 @@ i {
 
 .diagram-scan {
   animation: diagram-scan 2.6s ease-in-out infinite;
-}
-
-.diagram-bar {
-  transform-box: fill-box;
-  transform-origin: bottom;
-  animation: diagram-bar 2.4s ease-in-out infinite;
 }
 
 /* About page gramophone: highlights on the record spin while music plays. Reuses the diagram sweep keyframe. */
@@ -307,15 +277,17 @@ i {
 
 @media (prefers-reduced-motion: reduce) {
   .diagram-flow,
-  .diagram-pulse,
   .diagram-sweep,
   .diagram-scan,
-  .diagram-bar,
   .gramophone-spin,
   .photo-marquee-track {
     animation: none;
   }
 
+  /* SMIL ignores the animation rule, so the packet is hidden outright. */
+  .diagram-packet {
+    display: none;
+  }
   /* Resting state: a strip you scroll by hand. */
   .photo-marquee {
     overflow-x: auto;

@@ -335,8 +335,7 @@ Motion is slow, soft and meaningful. If you cannot say what an animation communi
 | Drawers, overlays | `duration-300` | default |
 | Content entering (`project-enter`) | 500ms | `ease-out`, from `opacity 0, translateY(10px)` |
 | List stagger | 80ms per item | |
-| Diagram flow stream | 1.4s | linear, infinite |
-| Diagram pulse | 2.8s | ease-in-out, infinite |
+| Diagram packet | 0.9s per arrow, one cycle for the whole route | linear, infinite (SMIL) |
 | Diagram icon loops | 2.4s to 3.2s | |
 
 Rules:
@@ -365,42 +364,48 @@ Diagrams are first-class content on project pages. They follow the Pi (pi.websit
 Code lives in `src/components/diagrams/`. Shared pieces are in `FlowKit.tsx`, hooks in `motion.ts`, the registry in `index.tsx`.
 
 ### Anatomy of the standard flow diagram
-- A faint dot grid behind everything (`DiagramSvg`).
-- Rounded **tiles** (`Tile`) for steps: bold mono title, muted mono subtitle.
-- Thick **arrows** (`FlowArrow`, `HArrow`) with a light dash stream moving along them.
+Drawn like a sketch in a notebook: plain paper, pen-line arrows, tinted tiles. Not a dashboard.
+- Plain paper behind everything (`DiagramSvg`). No dot grid.
+- Rounded **tiles** (`Tile`) for steps: sans title (600 weight), one mono subtitle for data. Each tile has a `tone` for what kind of step it is.
+- Thin 1.5px **arrows** (`FlowArrow`, `HArrow`) in soft ink with a small solid head.
+- One **packet**: a terracotta dot that crosses the arrows one at a time, in the order the data moves. Give each arrow on the route a `leg={{ step, of }}`. It is the only moving part of a flow, and it is hidden under reduced motion.
 - A dashed **group box** (`Group`) for a boundary (a container, a service), with its title breaking the line.
 - Bold **end labels** (`EndLabel`) above icons at the start and end of the flow.
-- One **hot tile** per diagram: the step the story is about. It is yellow and pulses softly.
-- An optional **return loop** in green for "repeat" or "feedback" paths, with its label sitting in a gap in the line.
+- One **key tile** per diagram (`tone="key"`): the step the story is about, olive edge and title. It never glows or pulses.
+- An optional **return loop**: dashed teal line for "repeat" or "feedback" paths, with its label sitting in a gap in the line.
 - A caption below in the figure (`DiagramFigure`), `text-sm gray-600`, with the key phrase in bold.
 
 ### Diagram palette
-Diagrams are the one place with extra colors. They stay within this set.
+Diagrams are the one place with extra colors. Colors mean something, so the reader can group the flow at a glance. They stay within this set.
 
-| Role | Value |
+| Role | Fill / edge / text |
 | --- | --- |
-| Figure background | `brand-50` (via the figure), dots `#d9dccf` |
-| Tile fill / edge | `#ecede6` / `#d3d5c8` |
-| Hot tile fill / edge | `#f5d56f` / `#c9a93a` |
-| Flow arrow | `#e3b341` |
-| Return loop | `#9bb06a` |
-| Group dashed edge | `#bfc2b2` |
+| Figure background | `brand-50` (via the figure) |
+| `plain` tile | `#eff0e8` / `#d3d5c8` / ink |
+| `infra` tile (build, API, preprocessing) | `#e6ecf3` / `#a9bdd4` / `#3f5f86` |
+| `source` tile (simulator, app, where data comes from) | `#f5ecd7` / `#d9bf86` / `#7d5f1f` |
+| `output` tile (saved files, results) | `#f6e5de` / `#dba896` / `#9a4a2e` |
+| `key` tile | `#e8ebe0` / `#5b6529` / `#5b6529` |
+| Arrow | `#8f9085` |
+| Packet | `#c2562f` |
+| Return loop | `#4f9d91`, dashed `4 5` |
+| Group dashed edge | `#c4c6b8` |
 | Ink / muted | `#2a2925` / `#6b6a64` |
 | Spatial schematics (robot, laser, sampled data) | scan teal `#2f9e8f`, olive `#5b6529`, robot wedge blue `#5b84b8`, plus crop-condition colors for sample cards |
 
-Use color to mean something: yellow is "the data in motion" and "the step that matters", green is "the loop back", olive is "reached or done". Do not add a new hue to a diagram without a meaning.
+Do not add a new tone or hue without a meaning. Tone names live in `FlowKit` (`TONES`).
 
 ### Rules
-1. **Static layout.** Nothing moves position except what the story needs to move (a robot driving, a scan line, flow dashes). Boxes never shift.
+1. **Static layout.** Nothing moves position except what the story needs to move (a robot driving, a scan line, the packet). Boxes never shift.
 2. **One idea per diagram.** If it needs a legend of more than six items, split it.
-3. **Mono for labels, sentence case, short.** Titles are the thing's name (`POST /predict`, `colcon build`), subtitles are one small fact (`224x224x3`). Mono is acceptable here because these are data labels, not decorative tags. No all-caps.
-4. **Direction is always visible.** Every arrow has a head and a flow stream.
+3. **Sans for names, mono for data, sentence case, short.** Titles are the thing's name (`POST /predict`, `colcon build`) in sans; subtitles are one small fact (`224x224x3`) in mono. No all-caps.
+4. **Direction is always visible.** Every arrow has a head; the packet shows the order.
 5. **Labels never collide.** Give arrow labels a clear gap, or leave the arrow unlabeled. If a label touches a tile, drop it.
-6. **Gaps in loop lines are for their label**, and the label is bold title plus a mono subtitle, centered in the gap.
+6. **Gaps in loop lines are for their label**, and the label is a bold title plus a muted sans line, centered in the gap.
 7. **Responsive.** Diagrams use `viewBox`, `h-auto w-full`, and a `min-w-[560px]` on the full-size version inside an `overflow-x-auto` figure so they scroll sideways on phones instead of shrinking to illegibility.
 8. **Hydration safe.** Round computed coordinates (`Math.round(n * 10) / 10`) so server and client print identical digits.
 9. **Accessible.** The `svg` has `role="img"` and an `aria-label` that states what the diagram shows in one sentence. Previews on cards are `aria-hidden`.
-10. **Reduced motion** collapses flow, pulse, sweep and scan animations (global CSS) and stops timer loops (`useAnimationsEnabled`).
+10. **Reduced motion** hides the packet, collapses the sweep and scan animations (global CSS) and stops timer loops (`useAnimationsEnabled`).
 11. **Numbers come from the real work.** Spatial and metric diagrams use real coordinates, times and errors, and the caption says which parts are schematic.
 
 ### Adding a diagram
@@ -412,7 +417,7 @@ Use color to mean something: yellow is "the data in motion" and "the step that m
 6. Check it at phone width, with reduced motion on, and in the card preview.
 
 ### Keyframes
-Defined once in `globals.css`: `diagram-flow` (dash offset, period 22 to match `strokeDasharray="6 16"`), `diagram-pulse`, `diagram-sweep`, `diagram-scan`, `diagram-bar`. Reuse them. If you change a dash pattern, keep its period equal to the `diagram-flow` offset or the stream will stutter.
+Defined once in `globals.css`: `diagram-sweep`, `diagram-scan`, and `diagram-flow` (dash offset, period 22 to match `strokeDasharray="6 16"`, still used by the navigation results diagram). Reuse them. The flow packet is SMIL inside `FlowKit`, so reduced motion hides it with `.diagram-packet { display: none }` instead of `animation: none`.
 
 ## 12. Imagery
 

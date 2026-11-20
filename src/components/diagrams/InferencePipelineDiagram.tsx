@@ -12,6 +12,8 @@ import {
 const ROW_Y = 150;
 const ROW_MID = ROW_Y + 28;
 const LEAF = "M0-15 Q14-8 11 8 Q6 18 0 20 Q-6 18-11 8 Q-14-8 0-15Z";
+/** The packet's trip: from the photo into the API, then through each step to the diagnosis. */
+const LEGS = 4;
 const SCORES = [0.3, 0.18, 0.92, 0.22, 0.12, 0.26];
 
 /** A stack of photos with a scan line crossing the front one. */
@@ -31,8 +33,8 @@ function PhotoStack({ cx, cy }: { cx: number; cy: number }) {
           y1={-22}
           x2={20}
           y2={-22}
-          stroke="#d4573b"
-          strokeWidth={2}
+          stroke="#5b6529"
+          strokeWidth={1.5}
           strokeLinecap="round"
           className="diagram-scan"
         />
@@ -58,12 +60,10 @@ function Diagnosis({ cx, cy }: { cx: number; cy: number }) {
           width={8}
           height={score * 34}
           rx={2}
-          fill={i === 2 ? "#e3b341" : "#cfd1c4"}
-          className="diagram-bar"
-          style={{ animationDelay: `${i * 0.25}s` }}
+          fill={i === 2 ? "#c2562f" : "#d3d5c8"}
         />
       ))}
-      <text x={cx} y={cy + 56} textAnchor="middle" fontSize={10.5} fill={INK} className="font-mono">
+      <text x={cx} y={cy + 56} textAnchor="middle" fontSize={11} fill={INK}>
         Tomato, Early Blight
       </text>
     </g>
@@ -85,7 +85,7 @@ function Scene({ wide }: { wide?: boolean }) {
       <EndLabel x={690} y={126}>Diagnosis</EndLabel>
       <Diagnosis cx={690} cy={ROW_MID + 4} />
 
-      <Tile x={120} y={74} w={150} h={36} title="Web | Telegram bot" />
+      <Tile x={120} y={74} w={150} h={36} title="Web | Telegram bot" tone="source" />
       <FlowArrow
         points={[
           [195, 114],
@@ -93,14 +93,14 @@ function Scene({ wide }: { wide?: boolean }) {
         ]}
       />
 
-      <Tile x={134} y={ROW_Y} w={122} title="POST /predict" sub="image upload" />
-      <Tile x={300} y={ROW_Y} w={122} title="Preprocess" sub="224x224x3" />
-      <Tile x={466} y={ROW_Y} w={122} title="ResNet-18" sub="ONNX Runtime" hot />
+      <Tile x={134} y={ROW_Y} w={122} title="POST /predict" sub="image upload" tone="infra" />
+      <Tile x={300} y={ROW_Y} w={122} title="Preprocess" sub="224x224x3" tone="infra" />
+      <Tile x={466} y={ROW_Y} w={122} title="ResNet-18" sub="ONNX Runtime" tone="key" />
 
-      <HArrow x1={98} x2={134} y={ROW_MID} />
-      <HArrow x1={256} x2={300} y={ROW_MID} />
-      <HArrow x1={422} x2={466} y={ROW_MID} />
-      <HArrow x1={588} x2={636} y={ROW_MID} />
+      <HArrow x1={98} x2={134} y={ROW_MID} leg={{ step: 0, of: LEGS }} />
+      <HArrow x1={256} x2={300} y={ROW_MID} leg={{ step: 1, of: LEGS }} />
+      <HArrow x1={422} x2={466} y={ROW_MID} leg={{ step: 2, of: LEGS }} />
+      <HArrow x1={588} x2={636} y={ROW_MID} leg={{ step: 3, of: LEGS }} />
     </DiagramSvg>
   );
 }
