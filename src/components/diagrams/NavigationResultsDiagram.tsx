@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { DiagramFigure } from "./FlowKit";
 import { useAnimationsEnabled, useTick } from "./motion";
@@ -427,21 +426,5 @@ export function NavigationResultsDiagram() {
       <Loop />
       <Legend />
     </DiagramFigure>
-  );
-}
-
-/** Project-card thumbnail: a still 3D render of the robot instead of the live schematic. */
-export function NavigationResultsPreview() {
-  return (
-    <div className="flex h-full w-full items-center justify-center">
-      <Image
-        src="/images/rover.webp"
-        alt=""
-        width={512}
-        height={486}
-        sizes="144px"
-        className="h-auto w-36"
-      />
-    </div>
   );
 }

@@ -406,7 +406,7 @@ Use color to mean something: yellow is "the data in motion" and "the step that m
 ### Adding a diagram
 1. Create `FooDiagram.tsx` in `src/components/diagrams/`. Export `FooDiagram` (the full figure) and `FooPreview` (the card version, same scene without the figure chrome).
 2. Build it from `FlowKit` primitives. Add a primitive to `FlowKit` if you need the same thing twice.
-3. Register it in `index.tsx`: `DIAGRAMS` for the page embed, `DIAGRAM_PREVIEWS` with the correct `aspect` (width / height of the viewBox). Use `bare: true` only for small still images that keep a compact slot.
+3. Register it in `index.tsx`: `DIAGRAMS` for the page embed, `DIAGRAM_PREVIEWS` with the correct `aspect` (width / height of the viewBox). Project cards show only diagram previews, never illustrations.
 4. Embed it in a project description with a line `[[diagram:name]]` on its own.
 5. Add its name to the project's `previews` array in `content/data/portfolio/projects.json` to show it on the projects index.
 6. Check it at phone width, with reduced motion on, and in the card preview.
@@ -416,7 +416,7 @@ Defined once in `globals.css`: `diagram-flow` (dash offset, period 22 to match `
 
 ## 12. Imagery
 
-- **Style of illustration:** small objects on transparent backgrounds (`samarkand.webp`, `rover.webp`, `plant.webp`, `coffee-cup.png`). They are objects, not scenes, shown small (`w-28 sm:w-36`). Prefer objects that are personal to the author (Samarkand's Sher-Dor madrasa on the home page) over generic picks. CTA illustrations sit on a 500x500 transparent canvas, trimmed so the object fills it.
+- **Style of illustration:** small objects on transparent backgrounds (`samarkand.webp`, `coffee-cup.png`), used only beside CTAs. They are objects, not scenes, shown small (`w-28 sm:w-36`). Prefer objects that are personal to the author (Samarkand's Sher-Dor madrasa on the home page) over generic picks. CTA illustrations sit on a 500x500 transparent canvas, trimmed so the object fills it.
 - **Photos:** shown at their true aspect ratio in a `rounded-lg` frame with a `gray-200` border. Never cropped to a decorative shape. Galleries solve for equal heights so nothing is cropped (see `Experiences`).
 - **Covers and thumbnails:** square 52/60px, `rounded-lg`, `gray-200` border. Without a cover, a first-letter placeholder on `brand-50` with a `brand-100` border.
 - **Format and loading:** use `next/image` with explicit `width`/`height` and a correct `sizes`. Prefer `webp`. Optimize with `yarn optimize-images`. Lazy by default; `loading="eager"` only for above-the-fold logos.

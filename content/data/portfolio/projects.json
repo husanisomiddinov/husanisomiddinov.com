@@ -19,8 +19,7 @@
       "github": "https://github.com/husanisomiddinov/md25010-ros2-slam"
     },
     "previews": [
-      "execution-flow",
-      "navigation-results"
+      "execution-flow"
     ]
   },
   {
@@ -46,8 +45,7 @@
       "github": "https://github.com/bilalsea2/apollo-ai"
     },
     "previews": [
-      "inference-pipeline",
-      "crop-classification"
+      "inference-pipeline"
     ]
   }
 ]

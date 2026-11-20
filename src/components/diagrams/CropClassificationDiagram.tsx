@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { DiagramFigure } from "./FlowKit";
 import { startMotion, useAnimationsEnabled, useTick } from "./motion";
@@ -211,21 +210,5 @@ export function CropClassificationDiagram() {
     >
       <Loop />
     </DiagramFigure>
-  );
-}
-
-/** Project-card thumbnail: a still 3D render of a plant instead of the live schematic. */
-export function CropClassificationPreview() {
-  return (
-    <div className="flex h-full w-full items-center justify-center">
-      <Image
-        src="/images/plant.webp"
-        alt=""
-        width={512}
-        height={467}
-        sizes="144px"
-        className="h-auto w-36"
-      />
-    </div>
   );
 }

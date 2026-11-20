@@ -5,7 +5,6 @@ import {
 } from "./ExecutionFlowDiagram";
 import {
   NavigationResultsDiagram,
-  NavigationResultsPreview,
 } from "./NavigationResultsDiagram";
 import {
   InferencePipelineDiagram,
@@ -13,7 +12,6 @@ import {
 } from "./InferencePipelineDiagram";
 import {
   CropClassificationDiagram,
-  CropClassificationPreview,
 } from "./CropClassificationDiagram";
 
 /** Diagrams a project description can embed with a `[[diagram:name]]` line. */
@@ -24,24 +22,14 @@ export const DIAGRAMS: Record<string, ComponentType> = {
   "crop-classification": CropClassificationDiagram,
 };
 
-/** Auto-playing, non-interactive versions for project cards; aspect is width / height. `bare` drops the card chrome. */
+/** Auto-playing, non-interactive versions for project cards; aspect is width / height. */
 export const DIAGRAM_PREVIEWS: Record<
   string,
-  { Component: ComponentType; aspect: number; bare?: boolean }
+  { Component: ComponentType; aspect: number }
 > = {
   "execution-flow": { Component: ExecutionFlowPreview, aspect: 760 / 290 },
-  "navigation-results": {
-    Component: NavigationResultsPreview,
-    aspect: 440 / 330,
-    bare: true,
-  },
   "inference-pipeline": {
     Component: InferencePipelinePreview,
     aspect: 760 / 270,
-  },
-  "crop-classification": {
-    Component: CropClassificationPreview,
-    aspect: 440 / 352,
-    bare: true,
   },
 };
