@@ -11,6 +11,8 @@ const GOAL_MS = 2600;
 const OLIVE = "#5b6529";
 const SCAN = "#2f9e8f";
 const SCALE = 75;
+/** Just the room (2.1 m each side of the centre, plus the wall stroke), for the project card. */
+const COMPACT_VIEWBOX = "58 3 324 324";
 const CX = 220;
 const CY = 165;
 
@@ -175,7 +177,18 @@ function Robot({ x, y, heading }: { x: number; y: number; heading: number }) {
   );
 }
 
-function Scene({ active, epoch, animate }: { active: number; epoch: number; animate: boolean }) {
+function Scene({
+  active,
+  epoch,
+  animate,
+  compact,
+}: {
+  active: number;
+  epoch: number;
+  animate: boolean;
+  /** Card version: crops to the room and drops the goal list. */
+  compact?: boolean;
+}) {
   const { s, heading } = useRobot(CUMULATIVE[active + 1], animate, epoch);
   const robot = positionAt(s);
 
@@ -195,7 +208,7 @@ function Scene({ active, epoch, animate }: { active: number; epoch: number; anim
   return (
     <>
     <svg
-      viewBox="0 0 440 330"
+      viewBox={compact ? COMPACT_VIEWBOX : "0 0 440 330"}
       role="img"
       aria-label="Schematic of the test room with the robot driving to five navigation goals"
       className="mx-auto h-auto w-full max-w-[440px] font-sans"
@@ -328,6 +341,7 @@ function Scene({ active, epoch, animate }: { active: number; epoch: number; anim
 
       <Robot x={robot.x} y={robot.y} heading={heading} />
     </svg>
+    {!compact && (
     <ul className="mx-auto mt-4 grid max-w-[440px] gap-1 font-mono text-xs text-gray-600">
       {GOALS.map((goal, i) => {
         const reached = s >= CUMULATIVE[i + 1] - 0.5;
@@ -346,6 +360,7 @@ function Scene({ active, epoch, animate }: { active: number; epoch: number; anim
         );
       })}
     </ul>
+    )}
     </>
   );
 }
@@ -407,10 +422,17 @@ function Legend() {
 }
 
 /** Drives the five goals in a loop; the start is also goal 5, so the run wraps without a jump. */
-function Loop() {
+function Loop({ compact }: { compact?: boolean }) {
   const animate = useAnimationsEnabled();
   const tick = useTick(animate, GOAL_MS);
-  return <Scene active={tick % GOALS.length} epoch={Math.floor(tick / GOALS.length)} animate={animate} />;
+  return (
+    <Scene
+      active={tick % GOALS.length}
+      epoch={Math.floor(tick / GOALS.length)}
+      animate={animate}
+      compact={compact}
+    />
+  );
 }
 
 export function NavigationResultsDiagram() {
@@ -427,4 +449,9 @@ export function NavigationResultsDiagram() {
       <Legend />
     </DiagramFigure>
   );
+}
+
+/** Project-card version: the same live run, without the legend and caption. */
+export function NavigationResultsPreview() {
+  return <Loop compact />;
 }

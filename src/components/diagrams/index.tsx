@@ -5,6 +5,7 @@ import {
 } from "./ExecutionFlowDiagram";
 import {
   NavigationResultsDiagram,
+  NavigationResultsPreview,
 } from "./NavigationResultsDiagram";
 import {
   InferencePipelineDiagram,
@@ -12,6 +13,7 @@ import {
 } from "./InferencePipelineDiagram";
 import {
   CropClassificationDiagram,
+  CropClassificationPreview,
 } from "./CropClassificationDiagram";
 
 /** Diagrams a project description can embed with a `[[diagram:name]]` line. */
@@ -32,4 +34,6 @@ export const DIAGRAM_PREVIEWS: Record<
     Component: InferencePipelinePreview,
     aspect: 760 / 270,
   },
+  "navigation-results": { Component: NavigationResultsPreview, aspect: 1 },
+  "crop-classification": { Component: CropClassificationPreview, aspect: 440 / 352 },
 };

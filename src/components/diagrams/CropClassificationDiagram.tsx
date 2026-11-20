@@ -212,3 +212,8 @@ export function CropClassificationDiagram() {
     </DiagramFigure>
   );
 }
+
+/** Project-card version: the same live classification loop, without the caption. */
+export function CropClassificationPreview() {
+  return <Loop />;
+}

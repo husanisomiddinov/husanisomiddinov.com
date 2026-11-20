@@ -366,12 +366,12 @@ Code lives in `src/components/diagrams/`. Shared pieces are in `FlowKit.tsx`, ho
 ### Anatomy of the standard flow diagram
 Drawn like a sketch in a notebook: plain paper, pen-line arrows, tinted tiles. Not a dashboard.
 - Plain paper behind everything (`DiagramSvg`). No dot grid.
-- Rounded **tiles** (`Tile`) for steps: sans title (600 weight), one mono subtitle for data. Each tile has a `tone` for what kind of step it is.
-- Thin 1.5px **arrows** (`FlowArrow`, `HArrow`) in soft ink with a small solid head.
+- Rounded **tiles** (`Tile`) for steps: sans title (600 weight), one mono subtitle for data. Each tile has a `tone` for what kind of step it is, in clear marker colors, not pastels.
+- Thin 1.75px **arrows** (`FlowArrow`, `HArrow`) in soft ink with a small solid head.
 - One **packet**: a terracotta dot that crosses the arrows one at a time, in the order the data moves. Give each arrow on the route a `leg={{ step, of }}`. It is the only moving part of a flow, and it is hidden under reduced motion.
 - A dashed **group box** (`Group`) for a boundary (a container, a service), with its title breaking the line.
 - Bold **end labels** (`EndLabel`) above icons at the start and end of the flow.
-- One **key tile** per diagram (`tone="key"`): the step the story is about, olive edge and title. It never glows or pulses.
+- One **key tile** per diagram (`tone="key"`): the step the story is about, solid olive with paper text. It never glows or pulses.
 - An optional **return loop**: dashed teal line for "repeat" or "feedback" paths, with its label sitting in a gap in the line.
 - A caption below in the figure (`DiagramFigure`), `text-sm gray-600`, with the key phrase in bold.
 
@@ -381,12 +381,12 @@ Diagrams are the one place with extra colors. Colors mean something, so the read
 | Role | Fill / edge / text |
 | --- | --- |
 | Figure background | `brand-50` (via the figure) |
-| `plain` tile | `#eff0e8` / `#d3d5c8` / ink |
-| `infra` tile (build, API, preprocessing) | `#e6ecf3` / `#a9bdd4` / `#3f5f86` |
-| `source` tile (simulator, app, where data comes from) | `#f5ecd7` / `#d9bf86` / `#7d5f1f` |
-| `output` tile (saved files, results) | `#f6e5de` / `#dba896` / `#9a4a2e` |
-| `key` tile | `#e8ebe0` / `#5b6529` / `#5b6529` |
-| Arrow | `#8f9085` |
+| `plain` tile | `#eff0e8` / `#c4c6b8` / ink |
+| `infra` tile (build, API, preprocessing) | `#d5e1ef` / `#7d9cc2` / `#2f4d73` |
+| `source` tile (simulator, app, where data comes from) | `#f6dfa6` / `#cf9f3c` / `#6b4a0e` |
+| `output` tile (saved files, results) | `#f2cfbf` / `#cc7f62` / `#843a20` |
+| `key` tile | solid `#5b6529` / `#4d5628` / `#f6f7f4` |
+| Arrow | `#6b6a64`, 1.75px |
 | Packet | `#c2562f` |
 | Return loop | `#4f9d91`, dashed `4 5` |
 | Group dashed edge | `#c4c6b8` |
@@ -411,7 +411,7 @@ Do not add a new tone or hue without a meaning. Tone names live in `FlowKit` (`T
 ### Adding a diagram
 1. Create `FooDiagram.tsx` in `src/components/diagrams/`. Export `FooDiagram` (the full figure) and `FooPreview` (the card version, same scene without the figure chrome).
 2. Build it from `FlowKit` primitives. Add a primitive to `FlowKit` if you need the same thing twice.
-3. Register it in `index.tsx`: `DIAGRAMS` for the page embed, `DIAGRAM_PREVIEWS` with the correct `aspect` (width / height of the viewBox). Project cards show only diagram previews, never illustrations.
+3. Register it in `index.tsx`: `DIAGRAMS` for the page embed, `DIAGRAM_PREVIEWS` with the correct `aspect` (width / height of the viewBox). Project cards show only diagram previews, never illustrations. A card pairs the flowchart with the project's own live scene (the robot room, the leaf cards), so each project looks like itself and not like every other row of boxes. Scenes take a `compact` card mode that drops legends and lists.
 4. Embed it in a project description with a line `[[diagram:name]]` on its own.
 5. Add its name to the project's `previews` array in `content/data/portfolio/projects.json` to show it on the projects index.
 6. Check it at phone width, with reduced motion on, and in the card preview.

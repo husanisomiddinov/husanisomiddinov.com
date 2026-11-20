@@ -4,22 +4,22 @@ export const INK = "#2a2925";
 export const MUTED = "#6b6a64";
 const PAPER = "#f6f7f4";
 /** Arrows are drawn in a soft ink, like pen lines. */
-const LINE = "#8f9085";
+const LINE = "#6b6a64";
 /** The return loop: a dashed teal line, "this goes back around". */
 export const LOOP = "#4f9d91";
 /** The one moving thing: a terracotta dot carrying the data from step to step. */
 const PACKET = "#c2562f";
 
 /**
- * Tile tints, like highlighter on paper. Each one means a kind of step, so a reader can
+ * Tile colors, like marker on paper. Each one means a kind of step, so a reader can
  * group the flow at a glance. `key` is the step the diagram is about.
  */
 const TONES = {
-  plain: { fill: "#eff0e8", edge: "#d3d5c8", text: INK },
-  infra: { fill: "#e6ecf3", edge: "#a9bdd4", text: "#3f5f86" },
-  source: { fill: "#f5ecd7", edge: "#d9bf86", text: "#7d5f1f" },
-  output: { fill: "#f6e5de", edge: "#dba896", text: "#9a4a2e" },
-  key: { fill: "#e8ebe0", edge: "#5b6529", text: "#5b6529" },
+  plain: { fill: "#eff0e8", edge: "#c4c6b8", text: INK, sub: MUTED },
+  infra: { fill: "#d5e1ef", edge: "#7d9cc2", text: "#2f4d73", sub: "#4a6687" },
+  source: { fill: "#f6dfa6", edge: "#cf9f3c", text: "#6b4a0e", sub: "#7d5f1f" },
+  output: { fill: "#f2cfbf", edge: "#cc7f62", text: "#843a20", sub: "#8f4f37" },
+  key: { fill: "#5b6529", edge: "#4d5628", text: "#f6f7f4", sub: "#dfe4cc" },
 } as const;
 
 export type Tone = keyof typeof TONES;
@@ -75,7 +75,7 @@ function Packet({ d, leg }: { d: string; leg: Leg }) {
   const end = (leg.step + 1) / leg.of;
   const fade = Math.min(0.15 / leg.of, (end - start) / 4);
   return (
-    <circle r={3.5} fill={PACKET} opacity={0} className="diagram-packet">
+    <circle r={4.5} fill={PACKET} opacity={0} className="diagram-packet">
       <animateMotion
         path={d}
         dur={cycle}
@@ -118,7 +118,7 @@ export function FlowArrow({
         d={d}
         fill="none"
         stroke={color}
-        strokeWidth={1.5}
+        strokeWidth={1.75}
         strokeLinecap="round"
         strokeDasharray={dashed ? "4 5" : undefined}
       />
@@ -187,7 +187,7 @@ export function Tile({
   tone?: Tone;
   children?: ReactNode;
 }) {
-  const { fill, edge, text } = TONES[tone];
+  const { fill, edge, text, sub: subColor } = TONES[tone];
   return (
     <g>
       <rect
@@ -198,7 +198,7 @@ export function Tile({
         rx={8}
         fill={fill}
         stroke={edge}
-        strokeWidth={tone === "key" ? 1.5 : 1}
+        strokeWidth={1.25}
       />
       <text
         x={x + w / 2}
@@ -211,7 +211,7 @@ export function Tile({
         {title}
       </text>
       {sub && (
-        <text x={x + w / 2} y={y + h / 2 + 14} textAnchor="middle" fontSize={10} fill={MUTED} className="font-mono">
+        <text x={x + w / 2} y={y + h / 2 + 14} textAnchor="middle" fontSize={10} fill={subColor} className="font-mono">
           {sub}
         </text>
       )}
