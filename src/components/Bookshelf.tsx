@@ -132,6 +132,7 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
       <div className="my-1 flex items-center gap-3">
         <Button
           size="icon"
+          variant="secondary"
           aria-label="Previous book"
           disabled={selected === 0}
           onClick={() => select(selected - 1)}
@@ -151,6 +152,7 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
         />
         <Button
           size="icon"
+          variant="secondary"
           aria-label="Next book"
           disabled={selected === books.length - 1}
           onClick={() => select(selected + 1)}

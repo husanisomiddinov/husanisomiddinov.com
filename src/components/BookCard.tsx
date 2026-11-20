@@ -18,36 +18,47 @@ export function buildSummaryExcerpt(summaryContent?: string): string {
     .trim();
 }
 
-export function BookCard({ book, index }: { book: ListingBook; index: number }) {
+/** One book in a list: small cover, title, author, status and the first lines of my notes. */
+export function BookCard({
+  book,
+  index,
+  divider = index > 0,
+  heading: Heading = "h2",
+}: {
+  book: ListingBook;
+  /** Position in the whole page, used to load the first covers eagerly. */
+  index: number;
+  /** Hairline above the row. Defaults to every row but the first. */
+  divider?: boolean;
+  heading?: "h2" | "h3";
+}) {
   return (
-    <div className="flex flex-col gap-5 scroll-mt-20">
-      {index > 0 && <hr className="mb-3 w-full border-gray-300" />}
+    <div className="scroll-mt-20">
+      {divider && <hr className="border-gray-300" />}
       <Link
         href={book.slug}
-        className="group relative flex flex-row items-start gap-6 py-2 hover:no-underline"
+        className="group relative flex flex-row items-start gap-4 py-4 hover:no-underline sm:gap-5"
       >
-        <div className="relative h-[100px] w-[66px] shrink-0 overflow-hidden rounded-lg border border-gray-200 sm:h-[140px] sm:w-[93px] md:h-[160px] md:w-[107px]">
+        <div className="relative h-[90px] w-[60px] shrink-0 overflow-hidden rounded-lg border border-gray-200 sm:h-[105px] sm:w-[70px]">
           <NextImage
             src={book.coverImage}
-            alt={book.title}
+            alt=""
             fill
-            sizes="(max-width: 480px) 66px, (max-width: 768px) 93px, 107px"
+            sizes="(max-width: 640px) 60px, 70px"
             loading={index < 6 ? "eager" : "lazy"}
             priority={index < 3}
             style={{ objectFit: "cover" }}
             quality={85}
           />
         </div>
-        <div className="flex grow flex-col items-start gap-2">
-          <div className="flex w-full items-start justify-between gap-3">
-            <h2 className="text-base leading-snug font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500">
-              {book.title}
-            </h2>
-          </div>
-          <p className="font-sans text-base text-gray-500">{book.author}</p>
+        <div className="flex min-w-0 grow flex-col items-start gap-1">
+          <Heading className="text-base leading-snug font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500">
+            {book.title}
+          </Heading>
+          <p className="font-sans text-sm text-gray-500">{book.author}</p>
           <BookStatus book={book} />
           {book.summaryExcerpt && (
-            <p className="line-clamp-4 text-prose-sm text-gray-700">
+            <p className="mt-1 line-clamp-2 text-prose-sm text-gray-600">
               {book.summaryExcerpt}
             </p>
           )}

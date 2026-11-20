@@ -16,7 +16,7 @@ export function FeaturedBooks({
 
   return (
     <section className="mt-6 border-t border-gray-300 pt-4">
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col">
         {books.map(({ summaryContent, ...book }, index) => (
           <BookCard
             key={book.slug}
