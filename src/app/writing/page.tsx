@@ -34,12 +34,12 @@ export default function WritingPage() {
     <div className="flex w-full flex-col items-stretch gap-8">
       {groups.map((group) => (
         <div key={group.year}>
-          <p className="mb-4 font-sans text-sm font-semibold text-gray-500">{group.year}</p>
-          <div className="flex w-full flex-col items-stretch gap-5">
+          <h2 className="mb-2 font-sans text-sm font-semibold text-gray-500">{group.year}</h2>
+          <ul className="flex w-full flex-col">
             {group.posts.map((post) => (
               <EssayRow key={post.slug} post={post} />
             ))}
-          </div>
+          </ul>
         </div>
       ))}
     </div>

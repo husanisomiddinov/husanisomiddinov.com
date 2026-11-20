@@ -16,11 +16,11 @@ export function FeaturedWriting({
 
   return (
     <section className="mt-6 border-t border-gray-300 pt-4">
-      <div className="flex w-full flex-col items-stretch gap-5">
+      <ul className="flex w-full flex-col">
         {posts.map((post) => (
           <EssayRow key={post.slug} post={post} />
         ))}
-      </div>
+      </ul>
       <MoreLink href="/writing" className="mt-5">
         All {total} posts
       </MoreLink>
