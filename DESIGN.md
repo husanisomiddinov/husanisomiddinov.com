@@ -273,9 +273,6 @@ A 36px logo column and a content column. Name (bold `text-lg`) and date on one b
 ### `NumberedList`
 Zero-padded index in `brand-500` (`01`, `02`), then the text in `text-prose gray-600`, hairlines between items. Used for facts and heuristics. Reuse it for any ranked or enumerated plain list instead of writing a new one.
 
-### `NewerOlderNav`
-The newer / older pair under an article, split left and right below a hairline. Used on essay pages.
-
 ### `Prose`
 Wrapper for MDX. Never put `.prose` styles on arbitrary blocks.
 

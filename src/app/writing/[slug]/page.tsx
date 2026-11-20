@@ -5,12 +5,10 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Breadcrumbs, PageTitle, Prose } from "@/components";
 import { JsonLd } from "@/components/JsonLd";
-import { NewerOlderNav, type NavTarget } from "@/components/NewerOlderNav";
 import {
   getAllWritingMetadata,
   getAllWritingSlugs,
   getWritingBySlug,
-  type WritingPreview,
 } from "@/lib/posts";
 import { buildMetadata } from "@/lib/metadata";
 import { siteUrl } from "@/config/site";
@@ -33,18 +31,6 @@ function getCoverDimensions(cover: string | null | undefined): CoverDimensions |
     // Fall through to the `fill` + fixed-aspect-ratio rendering path.
   }
   return null;
-}
-
-function getNav(slug: string) {
-  const all = getAllWritingMetadata();
-  const idx = all.findIndex((p) => p.slug === slug);
-  const toNav = (p?: WritingPreview): NavTarget | null =>
-    p ? { title: p.title, href: `/writing/${p.slug}` } : null;
-  return {
-    newer: idx > 0 ? toNav(all[idx - 1]) : null,
-    older: idx >= 0 && idx < all.length - 1 ? toNav(all[idx + 1]) : null,
-    readingTime: idx >= 0 ? all[idx].readingTime : null,
-  };
 }
 
 export function generateStaticParams() {
@@ -81,8 +67,8 @@ export default async function WritingPostPage({
   }
 
   const coverDimensions = getCoverDimensions(post.cover);
-  const { newer, older, readingTime } = getNav(slug);
   const preview = getAllWritingMetadata().find((p) => p.slug === slug);
+  const readingTime = preview?.readingTime;
   const pageUrl = `${siteUrl}/writing/${slug}`;
 
   return (
@@ -146,8 +132,6 @@ export default async function WritingPostPage({
       <div className="w-full">
         <Prose>{post.content}</Prose>
       </div>
-
-      <NewerOlderNav newer={newer} older={older} />
     </div>
   );
 }
