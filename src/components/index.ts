@@ -13,3 +13,4 @@ export { FeaturedProjects } from "./FeaturedProjects";
 export { FeaturedWriting } from "./FeaturedWriting";
 export { FeaturedBooks } from "./FeaturedBooks";
 export { Gramophone } from "./Gramophone";
+export { MoreLink } from "./MoreLink";

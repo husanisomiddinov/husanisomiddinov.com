@@ -1,8 +1,15 @@
-import { Button } from "@/components/Button";
+import { MoreLink } from "@/components/MoreLink";
 import { BookCard, buildSummaryExcerpt } from "@/components/BookCard";
 import type { Book } from "@/types/content";
 
-export function FeaturedBooks({ books }: { books: Book[] }) {
+export function FeaturedBooks({
+  books,
+  total,
+}: {
+  books: Book[];
+  /** Size of the full list, shown in the link to it. */
+  total: number;
+}) {
   if (books.length === 0) {
     return null;
   }
@@ -18,9 +25,9 @@ export function FeaturedBooks({ books }: { books: Book[] }) {
           />
         ))}
       </div>
-      <Button href="/reading" className="mt-4">
-        All books &rarr;
-      </Button>
+      <MoreLink href="/reading" className="mt-5">
+        All {total} books
+      </MoreLink>
     </section>
   );
 }

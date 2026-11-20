@@ -206,7 +206,7 @@ Use Tailwind's 4px scale and stay on these steps. Spacing communicates grouping:
 | `mt-6` / `mt-8` / `mt-12` | Between home page sections. Sections are separated by a `border-t border-gray-300` plus `pt-2` to `pt-8`. |
 | `py-3` to `py-5` | Vertical padding inside a list row. |
 
-Sections on the home page follow one rhythm: a hairline, some space, the content, a button. Do not give a section its own background band.
+Sections on the home page follow one rhythm: a hairline, some space, the content, a `MoreLink`. Do not give a section its own background band.
 
 ### Dividers
 
@@ -244,7 +244,10 @@ The only button style. Olive filled (`primary`) or outlined (`secondary`). Sizes
 - Primary: `bg-brand-500 text-brand-50`, hover `bg-brand-600`.
 - Secondary: `border-gray-300`, hover border and text `brand-500`.
 - Focus: 2px `brand-500` outline with 2px offset.
-- One primary button per view. Labels are sentence case, short and specific ("Read about me", "For a coffee chat", "All projects →"). The arrow is the `&rarr;` entity, placed after the label, only for "go to the full list" buttons.
+- One primary button per view. Labels are sentence case, short and specific ("Read about me", "For a coffee chat"). "Go to the full list" is never a button; use `MoreLink`.
+
+### `MoreLink`
+The "All 7 posts →" link that ends a home page section: `font-medium` sans, `gray-600`, hover `brand-500`, arrow after the label. Always includes the real count, passed in as `total`. A link, not a button, so the page keeps one primary button.
 
 ### `BackLink`
 The one "back to X" link: `text-sm text-gray-500`, no underline, hover `brand-500`. Sits at the top of detail pages. Not a button.
@@ -300,7 +303,7 @@ Three.js scenes (`Bookshelf`, `VisitGlobe`). They use the site's tokens through 
 ## 9. Page patterns
 
 ### Home
-Intro prose, a CTA with illustration, social icons, a hairline, then featured sections (experiences, projects, writing, books) separated by hairlines, a closing CTA and a footer. Each featured section ends in one button to its full page.
+Intro prose, a CTA with illustration, social icons, a hairline, then featured sections (experiences, projects, writing, books) separated by hairlines, a closing CTA and a footer. Each featured section ends in a `MoreLink` to its full page, with the count. The CTAs are the only buttons.
 
 ### Index pages (writing, projects, reading)
 No decorative header. Optional filter tabs or year headings (`text-sm font-semibold gray-500`), then the list of rows. Writing is grouped by year. Projects are filterable by kind once the list is long enough (see `ProjectsBrowser`).

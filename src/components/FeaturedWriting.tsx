@@ -1,8 +1,15 @@
-import { Button } from "@/components/Button";
+import { MoreLink } from "@/components/MoreLink";
 import { EssayRow } from "@/components/EssayRow";
 import type { WritingPreview } from "@/lib/posts";
 
-export function FeaturedWriting({ posts }: { posts: WritingPreview[] }) {
+export function FeaturedWriting({
+  posts,
+  total,
+}: {
+  posts: WritingPreview[];
+  /** Size of the full list, shown in the link to it. */
+  total: number;
+}) {
   if (posts.length === 0) {
     return null;
   }
@@ -14,9 +21,9 @@ export function FeaturedWriting({ posts }: { posts: WritingPreview[] }) {
           <EssayRow key={post.slug} post={post} />
         ))}
       </div>
-      <Button href="/writing" className="mt-4">
-        All writing &rarr;
-      </Button>
+      <MoreLink href="/writing" className="mt-5">
+        All {total} posts
+      </MoreLink>
     </section>
   );
 }
