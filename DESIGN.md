@@ -309,7 +309,7 @@ Three.js scenes (`Bookshelf`, `VisitGlobe`). They use the site's tokens through 
 Intro prose, a CTA with illustration, social icons, a hairline, then featured sections (experiences, projects, writing, books) separated by hairlines, a closing CTA and a footer. Each featured section ends in a `MoreLink` to its full page, with the count. The CTAs are the only buttons.
 
 ### Index pages (writing, projects, reading)
-No decorative header. Optional filter tabs or year headings (`text-sm font-semibold gray-500`), then the list of rows. Writing is grouped by year. Reading is the shelf, a `MoreLink` to the searchable collection, then "Reading now" and one group per year read, with compact `BookCard` rows (70px cover, two-line excerpt). Projects are filterable by kind once the list is long enough (see `ProjectsBrowser`).
+No decorative header. Optional filter tabs or year headings (`text-sm font-semibold gray-500`), then the list of rows. Writing is grouped by year. Reading is the shelf, a `MoreLink` to the searchable collection, then one flat list of compact `BookCard` rows (70px cover, two-line excerpt), newest first. No year or status headings. Projects are filterable by kind once the list is long enough (see `ProjectsBrowser`).
 
 ### Detail pages (essay, book, project)
 BackLink or Breadcrumbs, the title, a meta line (date, links, tech) in `text-sm gray-500`, then the article. Project pages add a `brand-50` summary block with a numbered table of contents, numbered `h2` sections, diagrams inline, and the progress bar.
