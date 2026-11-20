@@ -340,11 +340,10 @@ Rules:
 - Loading uses reserved space (set `width`/`height` or aspect ratio), not spinners, so nothing jumps.
 - Infinite animations are allowed only in the places below, at low amplitude, each with a reduced-motion fallback. CSS loops are cheap enough to leave running; 3D scenes stop when offscreen.
   - Diagrams (flow, pulse, icon loops).
-  - The home page retro computer screen (blinking cursor, faint flicker).
   - The About page gramophone record, which spins only while music plays.
   - The About page photo strip (`PhotoMarquee`): a slow loop that keeps moving on hover and becomes a plain scrollable strip with reduced motion.
 - Sound: audio may autoplay only on the About page. It must fade in from silence, be pausable, and never start before the visitor has interacted if the browser blocks it.
-- Overlays drawn on top of an illustration (computer screen, record) use token colors like any other element, and their hand-measured coordinates are noted next to the code.
+- Overlays drawn on top of an illustration (the gramophone record) use token colors like any other element, and their hand-measured coordinates are noted next to the code.
 
 ### Reduced motion (required)
 
@@ -411,7 +410,7 @@ Defined once in `globals.css`: `diagram-flow` (dash offset, period 22 to match `
 
 ## 12. Imagery
 
-- **Style of illustration:** small, soft 3D-rendered objects on transparent backgrounds (`rover.webp`, `plant.webp`, `coffee-cup.png`, `retro-computer.png`). They are objects, not scenes, shown small (`w-28 sm:w-36`).
+- **Style of illustration:** small objects on transparent backgrounds (`samarkand.webp`, `rover.webp`, `plant.webp`, `coffee-cup.png`). They are objects, not scenes, shown small (`w-28 sm:w-36`). Prefer objects that are personal to the author (Samarkand's Sher-Dor madrasa on the home page) over generic picks. CTA illustrations sit on a 500x500 transparent canvas, trimmed so the object fills it.
 - **Photos:** shown at their true aspect ratio in a `rounded-lg` frame with a `gray-200` border. Never cropped to a decorative shape. Galleries solve for equal heights so nothing is cropped (see `Experiences`).
 - **Covers and thumbnails:** square 52/60px, `rounded-lg`, `gray-200` border. Without a cover, a first-letter placeholder on `brand-50` with a `brand-100` border.
 - **Format and loading:** use `next/image` with explicit `width`/`height` and a correct `sizes`. Prefer `webp`. Optimize with `yarn optimize-images`. Lazy by default; `loading="eager"` only for above-the-fold logos.
