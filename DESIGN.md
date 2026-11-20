@@ -76,7 +76,7 @@ Defined as `@theme` tokens in `src/app/globals.css`. Use the Tailwind utility na
 | Token | Value | Use |
 | --- | --- | --- |
 | `page-bg` | `#eff0e8` | The page, nav bars, the mobile drawer. Slightly lighter than masonjwang.com's. |
-| `brand-50` | `#f6f7f4` | Raised surfaces: diagram figures, callout blocks, placeholder thumbnails, preview cards. One step lighter than the page. |
+| `brand-50` | `#f6f7f4` | Raised surfaces: diagram figures, callout blocks, preview cards. One step lighter than the page. |
 | `brand-100` | `#e8ebe0` | Soft olive tint: thumbnail borders, tinted fills. |
 
 A raised surface is `bg-brand-50`, a half step lighter than the page. Never darker, never white.
@@ -150,7 +150,7 @@ Use these. Do not add sizes.
 | Nav (desktop) | `text-base` | |
 | Nav (mobile drawer) | `text-lg` | |
 | Meta | `text-sm` | Dates, roles, tech lines, breadcrumbs, captions. |
-| Fine print | `text-xs` | Short dates, reading time, footer, legends. |
+| Fine print | `text-xs` | Footer, legends. |
 
 Weights in use: 400 (body), 500 (`font-medium` on tabs and numerals), 600/700 (`font-bold`, `font-semibold`). Do not use 300 or 800+.
 
@@ -262,7 +262,7 @@ Optional serif title, one short paragraph, one primary button, optional illustra
 A row for a book: 66/93/107px cover (2:3), bold title, author, the `BookStatus` line, then a two-line excerpt of the notes. The whole row is a link. Hairlines between rows come from the `divider` prop, so a grouped list does not draw one above a group's first row.
 
 ### `EssayRow`
-A row for writing: the title in the heading serif at reading size (17px, regular weight) as an olive `brand-500` link, the full date (`May 12, 2026`) under it in the serif at `text-sm gray-500`, and a hairline above each row except the first. No thumbnail, excerpt or reading time. The writing index is one flat list, newest first, with no year headings. This is the one place the serif is used below heading size, on purpose: the list should read like a printed table of contents.
+A row for writing: the title in the heading serif at reading size (17px, regular weight) as an olive `brand-500` link, the full date (`May 12, 2026`) under it in the sans at `text-sm gray-500`, and a hairline above each row except the first. No thumbnail, excerpt or reading time. The writing index is one flat list, newest first, with no year headings. The title is the one place the serif is used below heading size, on purpose: the list should read like a printed table of contents.
 
 ### `ProjectRow` / `ProjectsBrowser` / `FeaturedProjects`
 A row with bold title, month-year date, three-line summary, optional live diagram previews, then the tech line joined with ` · `. The whole row is clickable through an `after:absolute after:inset-0` overlay on the title link. Rows fade up on entry (`.project-enter`), staggered 80ms per index. Filter tabs above the list are underline tabs (`border-b`), `brand-500` when active, with no counts. They only appear once there are 8 or more projects across more than one kind; a short list is just a list.
@@ -306,7 +306,7 @@ Three.js scenes (`Bookshelf`, `VisitGlobe`). They use the site's tokens through 
 Intro prose, a CTA with illustration, social icons, a hairline, then featured sections (experiences, projects, writing, books) separated by hairlines, a closing CTA and a footer. Each featured section ends in a `MoreLink` to its full page, with the count. The CTAs are the only buttons.
 
 ### Index pages (writing, projects, reading)
-No decorative header. Optional filter tabs or year headings (`text-sm font-semibold gray-500`), then the list of rows. Writing is one flat list of `EssayRow`s. Reading is the shelf, a `MoreLink` to the searchable collection, then one flat list of `BookCard` rows (107px cover, two-line excerpt), newest first. No year or status headings. Projects are filterable by kind once the list is long enough (see `ProjectsBrowser`).
+No decorative header. Optional filter tabs, then the list of rows. No year or status headings. Writing is one flat list of `EssayRow`s. Reading is the shelf, a `MoreLink` to the searchable collection, then one flat list of `BookCard` rows (107px cover, two-line excerpt), newest first. No year or status headings. Projects are filterable by kind once the list is long enough (see `ProjectsBrowser`).
 
 ### Detail pages (essay, book, project)
 BackLink (essays: "← Writing") or Breadcrumbs (projects), the title, a meta line (date, links, tech) in `text-sm gray-500`, then the article. Project pages add a `brand-50` summary block with a numbered table of contents, numbered `h2` sections, diagrams inline, and the progress bar.
@@ -420,7 +420,7 @@ Defined once in `globals.css`: `diagram-sweep`, `diagram-scan`, and `diagram-flo
 
 - **Style of illustration:** small objects on transparent backgrounds (`samarkand.webp`, `coffee-cup.png`), used only beside CTAs. They are objects, not scenes, shown small (`w-28 sm:w-36`). Prefer objects that are personal to the author (Samarkand's Sher-Dor madrasa on the home page) over generic picks. CTA illustrations sit on a 500x500 transparent canvas, trimmed so the object fills it.
 - **Photos:** shown at their true aspect ratio in a `rounded-lg` frame with a `gray-200` border. Never cropped to a decorative shape. Galleries solve for equal heights so nothing is cropped (see `Experiences`).
-- **Covers and thumbnails:** square 52/60px, `rounded-lg`, `gray-200` border. Without a cover, a first-letter placeholder on `brand-50` with a `brand-100` border.
+- **Book covers:** 2:3, 66/93/107px wide in `BookCard`, `rounded-lg`, `gray-200` border. Writing lists have no thumbnails; an essay's cover shows only on its own page, at its natural proportions.
 - **Format and loading:** use `next/image` with explicit `width`/`height` and a correct `sizes`. Prefer `webp`. Optimize with `yarn optimize-images`. Lazy by default; `loading="eager"` only for above-the-fold logos.
 - **Photo strips (About page):** photos are pre-sized to 480px tall webp in `public/images/about/`, served as is (`unoptimized`), and load eagerly at low priority so they are ready before the strip scrolls to them.
 - **Alt text:** meaningful for content images, empty (`alt=""`) for decorative ones, and `aria-hidden` on repeated gallery thumbnails.
@@ -529,8 +529,7 @@ Run this before you commit anything visible.
 
 Honest notes so nobody copies the wrong thing. Fix these opportunistically, and delete the entry when fixed.
 
-- The comment above `text-prose` in `globals.css` says "Mono (the body default) is reserved for nav, dates and labels". The body default is now the system sans. The comment is stale; the rule it states (UI text vs reading text) still applies as described in section 5.
 - Diagram colors (section 11) are hex values in `FlowKit.tsx` and the older spatial diagrams rather than `@theme` tokens. If a second place needs them, promote them to tokens first.
-- `FlowKit.tsx` and the spatial diagrams repeat a few hex values (`#e3b341`, `#2a2925`). Consolidate into `FlowKit` exports when next touched.
+- The spatial diagrams (navigation results, crop classification) define their own hex values (`#e3b341`, `#2a2925`, `#37352f`) instead of importing `INK` and friends from `FlowKit`. Consolidate when next touched.
 - Project page titles use `text-4xl` while every other page uses `PageTitle` (`text-xl md:text-2xl`). The larger centered title is intentional for articles but is the one exception; do not spread it.
 - Class strings for the `bg-brand-50` raised surface are repeated across figures, callouts and preview cards. A shared surface component would remove the duplication.

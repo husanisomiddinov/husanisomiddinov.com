@@ -17,9 +17,7 @@ function toTimestamp(date: string, slug: string): number {
   return time;
 }
 
-const WORDS_PER_MINUTE = 200;
-
-/** Reduce MDX/markdown to plain prose for excerpts and word counts. */
+/** Reduce MDX/markdown to plain prose for the excerpt (used as the page description). */
 function stripMarkdown(body: string): string {
   return body
     .replace(/```[\s\S]*?```/g, " ") // fenced code
@@ -45,19 +43,12 @@ function buildExcerpt(text: string, max = 160): string {
   return snippet;
 }
 
-function readingTimeMinutes(text: string): number {
-  const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
-  return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
-}
-
 export interface WritingPreview {
   title: string;
   date: string;
-  tag: "essay" | "note";
   slug: string;
-  cover: string | null;
+  /** First sentence of the post, for the meta description. */
   excerpt: string;
-  readingTime: number;
   featured: boolean;
 }
 
@@ -71,11 +62,8 @@ export const getAllWritingMetadata = cache((): WritingPreview[] => {
     return {
       title: data.title ?? "",
       date: data.date ?? "",
-      tag: (data.tag as "essay" | "note") || "essay",
       slug: file.replace(/\.mdx$/, ""),
-      cover: data.cover ?? null,
       excerpt: buildExcerpt(plain),
-      readingTime: readingTimeMinutes(plain),
       featured: data.featured === true,
     };
   });

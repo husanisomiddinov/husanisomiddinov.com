@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import Image from "next/image";
 import { Button } from "./Button";
 
@@ -7,25 +6,13 @@ interface CtaSectionProps {
   text: string;
   href: string;
   buttonLabel: string;
-  /** Optional still illustration shown on the right, from a path under /public. */
+  /** Optional still illustration shown on the right, from a path under /public (500x500 canvas). */
   image?: string;
-  /** Optional custom illustration on the right (for example an animated one). Wins over `image`. */
-  illustration?: ReactNode;
   className?: string;
 }
 
-const illustrationSize = "w-28 shrink-0 sm:w-36";
-
 /** Heading, short text and a green button, with an optional illustration on the right. */
-export function CtaSection({
-  title,
-  text,
-  href,
-  buttonLabel,
-  image,
-  illustration,
-  className,
-}: CtaSectionProps) {
+export function CtaSection({ title, text, href, buttonLabel, image, className }: CtaSectionProps) {
   return (
     <section
       className={`flex items-center justify-between gap-6 ${className ?? ""}`}
@@ -41,17 +28,16 @@ export function CtaSection({
           {buttonLabel}
         </Button>
       </div>
-      {illustration ??
-        (image && (
-          <Image
-            src={image}
-            alt=""
-            width={500}
-            height={500}
-            sizes="(max-width: 640px) 112px, 144px"
-            className={`h-auto ${illustrationSize}`}
-          />
-        ))}
+      {image && (
+        <Image
+          src={image}
+          alt=""
+          width={500}
+          height={500}
+          sizes="(max-width: 640px) 112px, 144px"
+          className="h-auto w-28 shrink-0 sm:w-36"
+        />
+      )}
     </section>
   );
 }

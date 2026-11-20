@@ -8,7 +8,7 @@ export function isBookRead(book: Pick<ReadingShelfBook, "date">): boolean {
 export function readingStatusLabel(
   book: Pick<ReadingShelfBook, "date" | "rating">,
 ): string {
-  if (!isBookRead(book)) return "Currently reading";
+  if (!isBookRead(book)) return "Reading now";
   const readDate = `Read ${book.date}`;
   return book.rating == null ? readDate : `${book.rating}/10 · ${readDate}`;
 }

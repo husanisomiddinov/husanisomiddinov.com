@@ -7,7 +7,7 @@ function formatLongDate(date: string): string {
   return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 }
 
-/** One post in a list: the title in the heading serif as a link, the full date under it, a hairline above. */
+/** One post in a list: the title in the heading serif as a link, the full date under it in sans, a hairline above. */
 export function EssayRow({ post }: { post: WritingPreview }) {
   return (
     <li className="border-t border-gray-300">
@@ -18,7 +18,7 @@ export function EssayRow({ post }: { post: WritingPreview }) {
         <span className="font-heading tracking-heading text-[1.0625rem] leading-snug text-brand-500 transition-colors duration-200 group-hover:text-brand-600">
           {post.title}
         </span>
-        <span className="font-heading text-sm text-gray-500">{formatLongDate(post.date)}</span>
+        <span className="font-sans text-sm text-gray-500">{formatLongDate(post.date)}</span>
       </Link>
     </li>
   );

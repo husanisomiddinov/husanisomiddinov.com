@@ -49,8 +49,8 @@
   --max-width-content: 41.25rem;
 }
 
-/* Reading text. Mono (the body default) is reserved for nav, dates and
-   labels; anything meant to be read as sentences uses one of these. */
+/* Reading text. UI text (nav, dates, labels) uses the body default;
+   anything meant to be read as sentences uses one of these. */
 @utility text-prose {
   font-family: var(--font-body);
   font-size: 1.0625rem;

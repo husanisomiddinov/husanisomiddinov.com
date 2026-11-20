@@ -22,7 +22,7 @@ const TONES = {
   key: { fill: "#5b6529", edge: "#4d5628", text: "#f6f7f4", sub: "#dfe4cc" },
 } as const;
 
-export type Tone = keyof typeof TONES;
+type Tone = keyof typeof TONES;
 
 const HEAD = 8;
 /** Seconds the packet takes to cross one arrow. */
@@ -61,7 +61,7 @@ function shaftPath(points: Point[], radius: number, head: boolean) {
 }
 
 /** Which leg of the packet's trip an arrow is: leg `step` of `of`. */
-export type Leg = { step: number; of: number };
+type Leg = { step: number; of: number };
 
 const t3 = (n: number) => n.toFixed(3);
 
