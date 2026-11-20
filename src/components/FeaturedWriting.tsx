@@ -16,7 +16,7 @@ export function FeaturedWriting({
 
   return (
     <section className="mt-6 border-t border-gray-300 pt-4">
-      <ul className="flex w-full flex-col">
+      <ul className="flex w-full flex-col [&>li:first-child]:border-t-0">
         {posts.map((post) => (
           <EssayRow key={post.slug} post={post} />
         ))}

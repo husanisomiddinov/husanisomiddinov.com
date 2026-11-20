@@ -262,7 +262,7 @@ Optional serif title, one short paragraph, one primary button, optional illustra
 A row for a book: 66/93/107px cover (2:3), bold title, author, the `BookStatus` line, then a two-line excerpt of the notes. The whole row is a link. Hairlines between rows come from the `divider` prop, so a grouped list does not draw one above a group's first row.
 
 ### `EssayRow`
-A row for writing, like a notebook index: the title in `text-prose` ink on the left, the short date (`May 12`) in `text-sm gray-400` on the right. No thumbnail, excerpt or reading time. Rows sit in a `ul`; the title turns `brand-500` on hover.
+A row for writing: the title in the heading serif (`font-heading text-xl`, regular weight) as an olive `brand-500` link, the full date (`May 12, 2026`) under it in the serif at `gray-500`, and a hairline above each row except the first. No thumbnail, excerpt or reading time. The writing index is one flat list, newest first, with no year headings. This is the one place the serif is used below heading size, on purpose: the list should read like a printed table of contents.
 
 ### `ProjectRow` / `ProjectsBrowser` / `FeaturedProjects`
 A row with bold title, month-year date, three-line summary, optional live diagram previews, then the tech line joined with ` · `. The whole row is clickable through an `after:absolute after:inset-0` overlay on the title link. Rows fade up on entry (`.project-enter`), staggered 80ms per index. Filter tabs above the list are underline tabs (`border-b`), `brand-500` when active, with no counts. They only appear once there are 8 or more projects across more than one kind; a short list is just a list.
@@ -306,7 +306,7 @@ Three.js scenes (`Bookshelf`, `VisitGlobe`). They use the site's tokens through 
 Intro prose, a CTA with illustration, social icons, a hairline, then featured sections (experiences, projects, writing, books) separated by hairlines, a closing CTA and a footer. Each featured section ends in a `MoreLink` to its full page, with the count. The CTAs are the only buttons.
 
 ### Index pages (writing, projects, reading)
-No decorative header. Optional filter tabs or year headings (`text-sm font-semibold gray-500`), then the list of rows. Writing is grouped by year. Reading is the shelf, a `MoreLink` to the searchable collection, then one flat list of `BookCard` rows (107px cover, two-line excerpt), newest first. No year or status headings. Projects are filterable by kind once the list is long enough (see `ProjectsBrowser`).
+No decorative header. Optional filter tabs or year headings (`text-sm font-semibold gray-500`), then the list of rows. Writing is one flat list of `EssayRow`s. Reading is the shelf, a `MoreLink` to the searchable collection, then one flat list of `BookCard` rows (107px cover, two-line excerpt), newest first. No year or status headings. Projects are filterable by kind once the list is long enough (see `ProjectsBrowser`).
 
 ### Detail pages (essay, book, project)
 BackLink (essays: "← Writing") or Breadcrumbs (projects), the title, a meta line (date, links, tech) in `text-sm gray-500`, then the article. Project pages add a `brand-50` summary block with a numbered table of contents, numbered `h2` sections, diagrams inline, and the progress bar.
