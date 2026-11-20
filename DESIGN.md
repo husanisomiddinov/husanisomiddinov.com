@@ -259,7 +259,7 @@ The one "back to X" link: `text-sm text-gray-500`, no underline, hover `brand-50
 Optional serif title, one short paragraph, one primary button, optional illustration on the right (`w-28 sm:w-36`, 500x500 source, `sizes` set). Text left, image right, `gap-6`. Closing CTAs get `border-t border-gray-300 pt-8`.
 
 ### `BookCard`
-A row for a book: 60/70px cover, bold title, author, the `BookStatus` line, then a two-line excerpt of the notes. The whole row is a link. Hairlines between rows come from the `divider` prop, so a grouped list does not draw one above a group's first row.
+A row for a book: 66/93/107px cover (2:3), bold title, author, the `BookStatus` line, then a two-line excerpt of the notes. The whole row is a link. Hairlines between rows come from the `divider` prop, so a grouped list does not draw one above a group's first row.
 
 ### `EssayRow`
 A row for writing: 52/60px thumbnail (cover image, or a first-letter placeholder on `brand-50`), bold title with date at the right, a two-line excerpt, reading time. The whole row is a link; title turns `brand-500` on group hover.
@@ -309,7 +309,7 @@ Three.js scenes (`Bookshelf`, `VisitGlobe`). They use the site's tokens through 
 Intro prose, a CTA with illustration, social icons, a hairline, then featured sections (experiences, projects, writing, books) separated by hairlines, a closing CTA and a footer. Each featured section ends in a `MoreLink` to its full page, with the count. The CTAs are the only buttons.
 
 ### Index pages (writing, projects, reading)
-No decorative header. Optional filter tabs or year headings (`text-sm font-semibold gray-500`), then the list of rows. Writing is grouped by year. Reading is the shelf, a `MoreLink` to the searchable collection, then one flat list of compact `BookCard` rows (70px cover, two-line excerpt), newest first. No year or status headings. Projects are filterable by kind once the list is long enough (see `ProjectsBrowser`).
+No decorative header. Optional filter tabs or year headings (`text-sm font-semibold gray-500`), then the list of rows. Writing is grouped by year. Reading is the shelf, a `MoreLink` to the searchable collection, then one flat list of `BookCard` rows (107px cover, two-line excerpt), newest first. No year or status headings. Projects are filterable by kind once the list is long enough (see `ProjectsBrowser`).
 
 ### Detail pages (essay, book, project)
 BackLink or Breadcrumbs, the title, a meta line (date, links, tech) in `text-sm gray-500`, then the article. Project pages add a `brand-50` summary block with a numbered table of contents, numbered `h2` sections, diagrams inline, and the progress bar.

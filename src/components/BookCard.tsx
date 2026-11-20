@@ -37,14 +37,14 @@ export function BookCard({
       {divider && <hr className="border-gray-300" />}
       <Link
         href={book.slug}
-        className="group relative flex flex-row items-start gap-4 py-4 hover:no-underline sm:gap-5"
+        className="group relative flex flex-row items-start gap-6 py-4 hover:no-underline"
       >
-        <div className="relative h-[90px] w-[60px] shrink-0 overflow-hidden rounded-lg border border-gray-200 sm:h-[105px] sm:w-[70px]">
+        <div className="relative h-[100px] w-[66px] shrink-0 overflow-hidden rounded-lg border border-gray-200 sm:h-[140px] sm:w-[93px] md:h-[160px] md:w-[107px]">
           <NextImage
             src={book.coverImage}
             alt=""
             fill
-            sizes="(max-width: 640px) 60px, 70px"
+            sizes="(max-width: 640px) 66px, (max-width: 768px) 93px, 107px"
             loading={index < 6 ? "eager" : "lazy"}
             priority={index < 3}
             style={{ objectFit: "cover" }}
