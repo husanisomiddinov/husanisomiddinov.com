@@ -46,7 +46,7 @@ export default async function Home() {
       <CtaSection
         className="mt-12 border-t border-gray-300 pt-8"
         title="Talk with me"
-        text="The most fruitful and natural exercise of our minds is, in my opinion, conversation. Oh, that's not me. Copied it from Montaigne. Anyways, let's grab a coffee"
+        text="The most fruitful and natural exercise of our minds is, in my opinion, conversation. I copied the quote from Montaigne to sound fancy when I invite someone for a coffeechat. Anyways, let's grab something together!"
         href="/studio/coffee"
         buttonLabel="For a coffee chat"
         image="/images/coffee-cup.png"
