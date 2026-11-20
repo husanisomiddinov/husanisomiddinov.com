@@ -13,7 +13,6 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
 import type { ReadingShelfBook } from "@/types";
 import type { ShelfScene } from "./bookshelf/createShelfScene";
 import styles from "./bookshelf/Bookshelf.module.css";
-import { BookStatus } from "@/components/BookStatus";
 import { Button } from "@/components/Button";
 
 interface BookshelfProps {
@@ -172,7 +171,6 @@ function Shelf({ books, currentSlug }: BookshelfProps) {
             {book.title}
           </h2>
           <p className="font-sans text-sm text-gray-500">{book.author}</p>
-          <BookStatus book={book} />
         </div>
       )}
     </section>
