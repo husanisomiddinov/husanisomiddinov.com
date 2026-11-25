@@ -95,23 +95,24 @@ function Packet({ d, leg }: { d: string; leg: Leg }) {
   );
 }
 
+/** Corner radius where an arrow's path turns. */
+const ARROW_RADIUS = 14;
+
 /** A thin pen-line arrow. Give it a `leg` and the packet crosses it in turn. */
 export function FlowArrow({
   points,
   color = LINE,
-  radius = 14,
   head = true,
   dashed = false,
   leg,
 }: {
   points: Point[];
   color?: string;
-  radius?: number;
   head?: boolean;
   dashed?: boolean;
   leg?: Leg;
 }) {
-  const { d, tip, degrees } = shaftPath(points, radius, head);
+  const { d, tip, degrees } = shaftPath(points, ARROW_RADIUS, head);
   return (
     <g>
       <path

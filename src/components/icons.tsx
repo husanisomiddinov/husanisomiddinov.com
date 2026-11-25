@@ -4,7 +4,7 @@ import type { SVGProps } from "react";
  * Shared inline SVG icons drawn on a 24x24 grid, mostly in a single stroke style
  * (the player transport icons are solid fills). Each accepts
  * standard SVG props, so callers can override size/color via className
- * (e.g. <SearchIcon className="size-4 text-gray-400" />). The `className`
+ * (e.g. <ChevronLeftIcon className="size-4 text-gray-400" />). The `className`
  * default matches each icon's original call sites.
  */
 

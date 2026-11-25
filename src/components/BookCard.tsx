@@ -22,19 +22,14 @@ export function buildSummaryExcerpt(summaryContent?: string): string {
 export function BookCard({
   book,
   index,
-  divider = index > 0,
-  heading: Heading = "h2",
 }: {
   book: ListingBook;
-  /** Position in the whole page, used to load the first covers eagerly. */
+  /** Position in the list: loads the first covers eagerly and puts a hairline above every row but the first. */
   index: number;
-  /** Hairline above the row. Defaults to every row but the first. */
-  divider?: boolean;
-  heading?: "h2" | "h3";
 }) {
   return (
     <div className="scroll-mt-20">
-      {divider && <hr className="border-gray-300" />}
+      {index > 0 && <hr className="border-gray-300" />}
       <Link
         href={book.slug}
         className="group relative flex flex-row items-start gap-6 py-4 hover:no-underline"
@@ -48,9 +43,9 @@ export function BookCard({
           className="w-[72px] sm:w-[99px] md:w-[113px]"
         />
         <div className="flex min-w-0 grow flex-col items-start gap-1">
-          <Heading className="text-base leading-snug font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500">
+          <h2 className="text-base leading-snug font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500">
             {book.title}
-          </Heading>
+          </h2>
           <p className="font-sans text-sm text-gray-500">{book.author}</p>
           <BookStatus book={book} />
           {book.summaryExcerpt && (

@@ -259,7 +259,7 @@ The one "back to X" link: `text-sm text-gray-500`, no underline, hover `brand-50
 Optional serif title, one short paragraph, one primary button, optional illustration on the right (`w-28 sm:w-36`, 500x500 source, `sizes` set). Text left, image right, `gap-6`. Closing CTAs get `border-t border-gray-300 pt-8`.
 
 ### `BookCard`
-A row for a book: a `BookCover` (66/93/107px wide, 2:3), bold title, author, the `BookStatus` line, then a two-line excerpt of the notes. The whole row is a link. Hairlines between rows come from the `divider` prop, so a grouped list does not draw one above a group's first row.
+A row for a book: a `BookCover` (66/93/107px wide, 2:3), bold title, author, the `BookStatus` line, then a two-line excerpt of the notes. The whole row is a link. A hairline sits above every row but the first.
 
 ### `BookCover`
 The one way to show an upright book cover: the image plus page edges along the right and bottom. Used by `BookCard`. The 3D shelf draws its own covers.
