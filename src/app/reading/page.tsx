@@ -1,5 +1,5 @@
 import { getAllBooks } from "@/lib/books";
-import { Bookshelf, MoreLink } from "@/components";
+import { Bookshelf } from "@/components";
 import { BookCard, buildSummaryExcerpt, type ListingBook } from "@/components/BookCard";
 import { buildMetadata } from "@/lib/metadata";
 
@@ -19,12 +19,7 @@ export default function ReadingPage() {
 
   return (
     <div className="flex w-full flex-col items-stretch gap-8">
-      <div className="flex flex-col items-stretch gap-4">
-        <Bookshelf books={books} />
-        <MoreLink href="/reading/collection" className="self-start">
-          Search all {books.length} books
-        </MoreLink>
-      </div>
+      <Bookshelf books={books} />
 
       <div>
         {books.map((book, index) => (

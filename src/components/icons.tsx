@@ -67,62 +67,6 @@ export function MenuIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
   );
 }
 
-export function SearchIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={mergeClassName("size-4", className)}
-      {...props}
-    >
-      <path
-        d="M21 21l-4.3-4.3M11 18a7 7 0 100-14 7 7 0 000 14z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-export function GridIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={mergeClassName("size-4", className)}
-      {...props}
-    >
-      <path
-        d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-export function ListIcon({ className, ...props }: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={mergeClassName("size-4", className)}
-      {...props}
-    >
-      <path
-        d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 function SolidIcon({ d, className, ...props }: { d: string } & SVGProps<SVGSVGElement>) {
   return (
     <svg

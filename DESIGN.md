@@ -262,7 +262,7 @@ Optional serif title, one short paragraph, one primary button, optional illustra
 A row for a book: a `BookCover` (66/93/107px wide, 2:3), bold title, author, the `BookStatus` line, then a two-line excerpt of the notes. The whole row is a link. Hairlines between rows come from the `divider` prop, so a grouped list does not draw one above a group's first row.
 
 ### `BookCover`
-The one way to show an upright book cover: the image plus page edges along the right and bottom. Used by `BookCard` and the collection grid. The 3D shelf draws its own covers.
+The one way to show an upright book cover: the image plus page edges along the right and bottom. Used by `BookCard`. The 3D shelf draws its own covers.
 
 ### `EssayRow`
 A row for writing: the title in the heading serif at reading size (17px, regular weight) as an olive `brand-500` link, the full date (`May 12, 2026`) under it in the sans at `text-sm gray-500`, and a hairline above each row except the first. No thumbnail, excerpt or reading time. The writing index is one flat list, newest first, with no year headings. The title is the one place the serif is used below heading size, on purpose: the list should read like a printed table of contents.
@@ -309,7 +309,7 @@ Three.js scenes (`Bookshelf`, `VisitGlobe`). They use the site's tokens through 
 Intro prose, a CTA with illustration, social icons, a hairline, then featured sections (experiences, projects, writing, books) separated by hairlines, a closing CTA and a footer. Each featured section ends in a `MoreLink` to its full page, with the count. The CTAs are the only buttons.
 
 ### Index pages (writing, projects, reading)
-No decorative header. Optional filter tabs, then the list of rows. No year or status headings. Writing is one flat list of `EssayRow`s. Reading is the shelf, a `MoreLink` to the searchable collection, then one flat list of `BookCard` rows (107px cover, two-line excerpt), newest first. No year or status headings. Projects are filterable by kind once the list is long enough (see `ProjectsBrowser`).
+No decorative header. Optional filter tabs, then the list of rows. No year or status headings. Writing is one flat list of `EssayRow`s. Reading is the shelf, then one flat list of `BookCard` rows (107px cover, two-line excerpt), newest first. No year or status headings. Projects are filterable by kind once the list is long enough (see `ProjectsBrowser`).
 
 ### Detail pages (essay, book, project)
 BackLink (essays: "← Writing") or Breadcrumbs (projects), the title, a meta line (date, links, tech) in `text-sm gray-500`, then the article. Project pages add a `brand-50` summary block with a numbered table of contents, numbered `h2` sections, diagrams inline, and the progress bar.
@@ -423,7 +423,7 @@ Defined once in `globals.css`: `diagram-sweep`, `diagram-scan`, and `diagram-flo
 
 - **Style of illustration:** small objects on transparent backgrounds (`samarkand.webp`, `coffee-cup.png`), used only beside CTAs. They are objects, not scenes, shown small (`w-28 sm:w-36`). Prefer objects that are personal to the author (Samarkand's Sher-Dor madrasa on the home page) over generic picks. CTA illustrations sit on a 500x500 transparent canvas, trimmed so the object fills it.
 - **Photos:** shown at their true aspect ratio in a `rounded-lg` frame with a `gray-200` border. Never cropped to a decorative shape. Galleries solve for equal heights so nothing is cropped (see `Experiences`).
-- **Book covers:** always through `BookCover`: 2:3, `rounded-sm`, `gray-200` border, with three page edges (`brand-50` fill, `gray-300` lines) peeking out 6px on the right and 3px on the bottom so the cover reads as a closed paperback. The deepest page edge casts one soft ink shadow down and to the right (`3px 5px 10px -2px`, ink at 22%). No hover lift. 66/93/107px wide in `BookCard`, full grid cell in the collection. Writing lists have no thumbnails; an essay's cover shows only on its own page, at its natural proportions.
+- **Book covers:** always through `BookCover`: 2:3, `rounded-sm`, `gray-200` border, with three page edges (`brand-50` fill, `gray-300` lines) peeking out 6px on the right and 3px on the bottom so the cover reads as a closed paperback. The deepest page edge casts one soft ink shadow down and to the right (`3px 5px 10px -2px`, ink at 22%). No hover lift. 66/93/107px wide in `BookCard`. Writing lists have no thumbnails; an essay's cover shows only on its own page, at its natural proportions.
 - **Format and loading:** use `next/image` with explicit `width`/`height` and a correct `sizes`. Prefer `webp`. Optimize with `yarn optimize-images`. Lazy by default; `loading="eager"` only for above-the-fold logos.
 - **Photo strips (About page):** photos are pre-sized to 480px tall webp in `public/images/about/`, served as is (`unoptimized`), and load eagerly at low priority so they are ready before the strip scrolls to them.
 - **Alt text:** meaningful for content images, empty (`alt=""`) for decorative ones, and `aria-hidden` on repeated gallery thumbnails.

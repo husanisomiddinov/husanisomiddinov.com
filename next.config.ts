@@ -39,6 +39,12 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        // The collection page was removed; send old links to the reading list.
+        source: "/reading/collection",
+        destination: "/reading",
+        permanent: true,
+      },
+      {
         source: "/ai-projects",
         destination: "/projects#ai-projects",
         permanent: true,
