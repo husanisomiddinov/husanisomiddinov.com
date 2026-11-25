@@ -1,6 +1,6 @@
 import Link from "next/link";
-import NextImage from "next/image";
 import type { ReadingShelfBook } from "@/types";
+import { BookCover } from "@/components/BookCover";
 import { BookStatus } from "@/components/BookStatus";
 
 export type ListingBook = ReadingShelfBook & {
@@ -39,18 +39,14 @@ export function BookCard({
         href={book.slug}
         className="group relative flex flex-row items-start gap-6 py-4 hover:no-underline"
       >
-        <div className="relative h-[100px] w-[66px] shrink-0 overflow-hidden rounded-lg border border-gray-200 sm:h-[140px] sm:w-[93px] md:h-[160px] md:w-[107px]">
-          <NextImage
-            src={book.coverImage}
-            alt=""
-            fill
-            sizes="(max-width: 640px) 66px, (max-width: 768px) 93px, 107px"
-            loading={index < 6 ? "eager" : "lazy"}
-            priority={index < 3}
-            style={{ objectFit: "cover" }}
-            quality={85}
-          />
-        </div>
+        <BookCover
+          src={book.coverImage}
+          alt=""
+          sizes="(max-width: 640px) 66px, (max-width: 768px) 93px, 107px"
+          eager={index < 6}
+          priority={index < 3}
+          className="w-[72px] sm:w-[99px] md:w-[113px]"
+        />
         <div className="flex min-w-0 grow flex-col items-start gap-1">
           <Heading className="text-base leading-snug font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500">
             {book.title}

@@ -2,7 +2,7 @@
 
 import { useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
-import NextImage from "next/image";
+import { BookCover } from "@/components/BookCover";
 import {
   GridIcon,
   ListIcon,
@@ -82,20 +82,13 @@ function GridCard({ book, eager }: { book: CollectionBook; eager: boolean }) {
       className="group block hover:no-underline"
     >
       <div className="flex flex-col items-start gap-2">
-        <div
-          className="relative w-full overflow-hidden rounded-lg border border-gray-200"
-          style={{ aspectRatio: "2 / 3" }}
-        >
-          <NextImage
-            src={book.coverImage}
-            alt={book.title}
-            fill
-            sizes="(max-width: 480px) 45vw, (max-width: 768px) 30vw, 160px"
-            loading={eager ? "eager" : "lazy"}
-            style={{ objectFit: "cover" }}
-            quality={85}
-          />
-        </div>
+        <BookCover
+          src={book.coverImage}
+          alt={book.title}
+          sizes="(max-width: 480px) 45vw, (max-width: 768px) 30vw, 160px"
+          eager={eager}
+          className="w-full"
+        />
         <div className="w-full">
           <p className="line-clamp-2 font-sans text-sm leading-snug font-bold text-gray-800 transition-colors duration-200 group-hover:text-brand-500">
             {book.title}

@@ -259,7 +259,10 @@ The one "back to X" link: `text-sm text-gray-500`, no underline, hover `brand-50
 Optional serif title, one short paragraph, one primary button, optional illustration on the right (`w-28 sm:w-36`, 500x500 source, `sizes` set). Text left, image right, `gap-6`. Closing CTAs get `border-t border-gray-300 pt-8`.
 
 ### `BookCard`
-A row for a book: 66/93/107px cover (2:3), bold title, author, the `BookStatus` line, then a two-line excerpt of the notes. The whole row is a link. Hairlines between rows come from the `divider` prop, so a grouped list does not draw one above a group's first row.
+A row for a book: a `BookCover` (66/93/107px wide, 2:3), bold title, author, the `BookStatus` line, then a two-line excerpt of the notes. The whole row is a link. Hairlines between rows come from the `divider` prop, so a grouped list does not draw one above a group's first row.
+
+### `BookCover`
+The one way to show an upright book cover: the image plus page edges along the right and bottom. Used by `BookCard` and the collection grid. The 3D shelf draws its own covers.
 
 ### `EssayRow`
 A row for writing: the title in the heading serif at reading size (17px, regular weight) as an olive `brand-500` link, the full date (`May 12, 2026`) under it in the sans at `text-sm gray-500`, and a hairline above each row except the first. No thumbnail, excerpt or reading time. The writing index is one flat list, newest first, with no year headings. The title is the one place the serif is used below heading size, on purpose: the list should read like a printed table of contents.
@@ -420,7 +423,7 @@ Defined once in `globals.css`: `diagram-sweep`, `diagram-scan`, and `diagram-flo
 
 - **Style of illustration:** small objects on transparent backgrounds (`samarkand.webp`, `coffee-cup.png`), used only beside CTAs. They are objects, not scenes, shown small (`w-28 sm:w-36`). Prefer objects that are personal to the author (Samarkand's Sher-Dor madrasa on the home page) over generic picks. CTA illustrations sit on a 500x500 transparent canvas, trimmed so the object fills it.
 - **Photos:** shown at their true aspect ratio in a `rounded-lg` frame with a `gray-200` border. Never cropped to a decorative shape. Galleries solve for equal heights so nothing is cropped (see `Experiences`).
-- **Book covers:** 2:3, 66/93/107px wide in `BookCard`, `rounded-lg`, `gray-200` border. Writing lists have no thumbnails; an essay's cover shows only on its own page, at its natural proportions.
+- **Book covers:** always through `BookCover`: 2:3, `rounded-sm`, `gray-200` border, with three page edges (`brand-50` fill, `gray-300` lines) peeking out 6px on the right and 3px on the bottom so the cover reads as a closed paperback. Depth comes from the page edges only, no shadow. 66/93/107px wide in `BookCard`, full grid cell in the collection. Writing lists have no thumbnails; an essay's cover shows only on its own page, at its natural proportions.
 - **Format and loading:** use `next/image` with explicit `width`/`height` and a correct `sizes`. Prefer `webp`. Optimize with `yarn optimize-images`. Lazy by default; `loading="eager"` only for above-the-fold logos.
 - **Photo strips (About page):** photos are pre-sized to 480px tall webp in `public/images/about/`, served as is (`unoptimized`), and load eagerly at low priority so they are ready before the strip scrolls to them.
 - **Alt text:** meaningful for content images, empty (`alt=""`) for decorative ones, and `aria-hidden` on repeated gallery thumbnails.
