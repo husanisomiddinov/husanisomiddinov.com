@@ -59,7 +59,7 @@ These come from direct feedback and from what has already been judged to look ge
 - **No em dashes or en dashes** in copy, comments or content. Use a comma, a period, a colon, or a plain hyphen for label-style separators ("Merch - Agora Runs"). Number ranges use "to" or a hyphen.
 - **No templated section formula.** Do not default to "big heading + one accent-colored word + two-column split + scroll reveal". Vary structure, and match the plainer native pages.
 - **No new colors outside the palette** (section 4), including for charts and diagrams (section 11 has the only extra palette).
-- **No box shadows on content.** The only shadow on the site is the mobile drawer.
+- **No box shadows on content.** The only shadows on the site are the mobile drawer and the soft one under each `BookCover`.
 - **No gradients on surfaces, no glassmorphism, no emoji as decoration, no stock illustration style.**
 - **No decorative animation** (parallax, scroll-jacking, floating blobs, auto-playing carousels, typing effects). The only ambient motion allowed is the list in section 10.
 - **No second webfont.** The heading serif is the only loaded face.
@@ -229,7 +229,7 @@ Three radii, used by size: bigger objects get the bigger radius. Do not use `rou
 
 Borders are 1px. `gray-300` for structure, `gray-200` for the faintest frame (around images and preview cards), `brand-100` for tinted frames. No double borders, no thick borders on content (the only 2px strokes are focus outlines and diagram strokes).
 
-Elevation: **none.** Surfaces are separated by tone (`page-bg` vs `brand-50`) and hairlines. The only shadow is `shadow-xl` on the mobile drawer, which genuinely floats. Do not add `shadow-sm`, `shadow-md` or hover-lift effects.
+Elevation: **none.** Surfaces are separated by tone (`page-bg` vs `brand-50`) and hairlines. The only shadows are `shadow-xl` on the mobile drawer, which genuinely floats, and the soft shadow under `BookCover`, which makes the cover read as a physical book. Do not add `shadow-sm`, `shadow-md` or hover-lift effects.
 
 ## 8. Components
 
@@ -423,7 +423,7 @@ Defined once in `globals.css`: `diagram-sweep`, `diagram-scan`, and `diagram-flo
 
 - **Style of illustration:** small objects on transparent backgrounds (`samarkand.webp`, `coffee-cup.png`), used only beside CTAs. They are objects, not scenes, shown small (`w-28 sm:w-36`). Prefer objects that are personal to the author (Samarkand's Sher-Dor madrasa on the home page) over generic picks. CTA illustrations sit on a 500x500 transparent canvas, trimmed so the object fills it.
 - **Photos:** shown at their true aspect ratio in a `rounded-lg` frame with a `gray-200` border. Never cropped to a decorative shape. Galleries solve for equal heights so nothing is cropped (see `Experiences`).
-- **Book covers:** always through `BookCover`: 2:3, `rounded-sm`, `gray-200` border, with three page edges (`brand-50` fill, `gray-300` lines) peeking out 6px on the right and 3px on the bottom so the cover reads as a closed paperback. Depth comes from the page edges only, no shadow. 66/93/107px wide in `BookCard`, full grid cell in the collection. Writing lists have no thumbnails; an essay's cover shows only on its own page, at its natural proportions.
+- **Book covers:** always through `BookCover`: 2:3, `rounded-sm`, `gray-200` border, with three page edges (`brand-50` fill, `gray-300` lines) peeking out 6px on the right and 3px on the bottom so the cover reads as a closed paperback. The deepest page edge casts one soft ink shadow down and to the right (`3px 5px 10px -2px`, ink at 22%). No hover lift. 66/93/107px wide in `BookCard`, full grid cell in the collection. Writing lists have no thumbnails; an essay's cover shows only on its own page, at its natural proportions.
 - **Format and loading:** use `next/image` with explicit `width`/`height` and a correct `sizes`. Prefer `webp`. Optimize with `yarn optimize-images`. Lazy by default; `loading="eager"` only for above-the-fold logos.
 - **Photo strips (About page):** photos are pre-sized to 480px tall webp in `public/images/about/`, served as is (`unoptimized`), and load eagerly at low priority so they are ready before the strip scrolls to them.
 - **Alt text:** meaningful for content images, empty (`alt=""`) for decorative ones, and `aria-hidden` on repeated gallery thumbnails.
@@ -504,7 +504,7 @@ Run this before you commit anything visible.
 - [ ] No all-caps, no wide tracking.
 - [ ] No em or en dashes in copy or comments.
 - [ ] Not the "big heading + accent word + two columns" formula.
-- [ ] No shadow, gradient or new color.
+- [ ] No shadow (outside the drawer and `BookCover`), gradient or new color.
 
 **Tokens**
 - [ ] Colors are tokens, by role (section 4).
